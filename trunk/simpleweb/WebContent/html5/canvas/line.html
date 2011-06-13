@@ -4,25 +4,18 @@
 		<script type="text/javascript">
 			//Global variables
 			var myImage = new Image(); // Create a new blank image.
-
 			// Load the image and display it.
 			function displayImage() {
-
 				// Get the canvas element.
 				canvas = document.getElementById("myCanvas");
-
 				// Make sure you got it.
 				if (canvas.getContext) {
-
 					// Specify 2d canvas type.
 					ctx = canvas.getContext("2d");
-
 					// When the image is loaded, draw it.
 					myImage.onload = function() {
-
 						// Load the image into the context.
 						ctx.drawImage(myImage, 0, 0);
-
 						// Get and modify the image data.
 						changeImage();
 					}
