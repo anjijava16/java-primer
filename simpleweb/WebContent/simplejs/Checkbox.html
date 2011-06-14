@@ -27,6 +27,7 @@ span.all{
 	
 	var op = {
 		shiftKey : '',
+		selectAllFlag : false,
 		addBoxListener : function(){
 			//$(':checkbox') is equivalent to $('[type=checkbox]'). 
 			var boxs = $(':checkbox');
@@ -38,26 +39,72 @@ span.all{
 						//alert(this)
 						var currId = parseInt(this.id);
 						var nextDownId = currId + 1;
+						var flag = 0;
 						while(true){
 							var nextDownItem = $('#' + nextDownId);
 							if(nextDownItem.length == 0){
 								break;
 							}
 							if(nextDownItem[0].checked){
+								flag = 1;    //向后遍历，如果有被选中的checkbox,flag 置1;
 								break;
 							}
 							nextDownId++;
 						}
 						
-						for(var i = currId + 1; i <= nextDownId; i++){
-							var nextDownItem = $('#' + i);
-							nextDownItem[0].checked = true; 
+						if(!flag){
+							var prevDownItemId = currId -1;
+							while(true){
+								var prevDownItem = $('#' + prevDownItemId);
+								if(prevDownItem.length == 0){
+									break;
+								}
+								if(prevDownItem[0].checked){
+									flag = 2;   ////向前遍历，如果有被选中的checkbox,flag 置2;
+									break;
+								}
+								prevDownItemId--;
+							}
+						}
+						
+						var index = 0;
+						var initVal = 0;
+						switch(flag){
+							case 0:
+								break;
+							case 1:
+								index = nextDownId;
+								initVal = currId + 1;
+								break;
+							case 2:
+								index = prevDownItemId;
+								initVal = currId -1;
+						}
+						if(flag != 0){
+							for(var i = initVal; i <= index; i++){
+								var item = $('#' + i);
+								item[0].checked = true; 
+							}
 						}
 					}else{
 						new op.debugInfo('not have shift key' + "  checkbox id is " + this.id);
 					}
 				}
 			); 			
+		},
+		selectAll : function(){
+			var itemAll = $('#itemAll');
+			itemAll.click(
+				function(){
+					var value = itemAll[0].checked;
+					var newVal = !value;
+				    $("input[@type='checkbox[]']").each(function() {
+				    $(this).attr("checked", newVal);
+				  })					
+				}
+			);
+			op.selectAllFlag;
+			
 		},
 		addKeyListener : function(){
 			$(document).keydown(function(event){
@@ -88,7 +135,7 @@ span.all{
 </script>
 </head>
 <body>
-	<span class="all"><input id="1" type="checkbox" name="itemAll"/>全选</span>
+	<span class="all"><input id="itemAll" type="checkbox" name="itemAll"/>全选</span>
 	<ul id='ul' class="base">
 		<li><input id="1" type="checkbox" name="item"/></li>
 		<li><input id="2" type="checkbox" name="item"/></li>
