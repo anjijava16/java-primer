@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>checkbox test</title>
+
+<script type="text/javascript" src="../jslib/jquery-1.6.1.js"></script>
+<style type="text/css">
+.base {
+	list-style: none;
+	border: 1px solid #000;
+	width: 30em;
+	margin-left: 2em;
+	margin-top: 0px;
+	padding-left: 5px;
+}
+
+span.all{
+	margin-left: 2em;
+}
+</style>
+<script>
+	$(document).ready(function (){ 
+		new op.addBoxListener();
+		new op.addKeyListener();
+	}); 
+	
+	var op = {
+		shiftKey : '',
+		addBoxListener : function(){
+			//$(':checkbox') is equivalent to $('[type=checkbox]'). 
+			var boxs = $(':checkbox');
+			boxs.click(
+				function(){
+					//alert(op.shiftKey);
+					if(op.shiftKey){
+						new op.debugInfo('shift key down ' + "  checkbox id is " + this.id);
+						//alert(this)
+						var currId = parseInt(this.id);
+						var nextDownId = currId + 1;
+						while(true){
+							var nextDownItem = $('#' + nextDownId);
+							if(nextDownItem.length == 0){
+								break;
+							}
+							if(nextDownItem[0].checked){
+								break;
+							}
+							nextDownId++;
+						}
+						
+						for(var i = currId + 1; i <= nextDownId; i++){
+							var nextDownItem = $('#' + i);
+							nextDownItem[0].checked = true; 
+						}
+					}else{
+						new op.debugInfo('not have shift key' + "  checkbox id is " + this.id);
+					}
+				}
+			); 			
+		},
+		addKeyListener : function(){
+			$(document).keydown(function(event){
+				//16 = Shift_L
+				if(event.keyCode == 16){
+					//new op.debugInfo('keydown-->' + event.keyCode);
+					op.shiftKey = true;
+				}
+			});
+			
+			$(document).keyup(function(event){
+				if(event.keyCode == 16){
+					new op.debugInfo('keyup-->' + event.keyCode);
+				}
+				op.shiftKey = false;
+			}); 			
+		},
+		debugInfo : function(text){
+			var ul = $('#info')[0];
+			var date = new Date();
+			//new Date().toLocaleString()->2011年6月14日 17:12:50
+			var formatDate = date.toTimeString();
+			
+			var info = formatDate + ":" + text;
+			$("<li/>").css("border","solid 1px #FF0000").html(info).appendTo(ul);
+		}
+	};
+</script>
+</head>
+<body>
+	<span class="all"><input id="1" type="checkbox" name="itemAll"/>全选</span>
+	<ul id='ul' class="base">
+		<li><input id="1" type="checkbox" name="item"/></li>
+		<li><input id="2" type="checkbox" name="item"/></li>
+		<li><input id="3" type="checkbox" name="item"/></li>
+		<li><input id="4" type="checkbox" name="item"/></li>
+		<li><input id="5" type="checkbox" name="item"/></li>
+		<li><input id="6" type="checkbox" name="item"/></li>
+		<li><input id="7" type="checkbox" name="item"/></li>
+		<li><input id="8" type="checkbox" name="item"/></li>
+		<li><input id="9" type="checkbox" name="item"/></li>
+		<li><input id="10" type="checkbox" name="item"/></li>
+		<li><input id="11" type="checkbox" name="item"/></li>
+		<li><input id="12" type="checkbox" name="item"/></li>
+		<li><input id="13" type="checkbox" name="item"/></li>
+		<li><input id="14"  type="checkbox" name="item"/></li>
+	</ul>
+	<ul id='info' class="base"></ul>
+</body>
+</html>
