@@ -2,7 +2,14 @@
 <html>
 	<head>
 		<script type="text/javascript">
+			window.onload = function(){
+				var photo = document.getElementById('myPhoto');
+				photo.src = imgUrl;
+				displayImage();
+				loadImage1();
+			};
 			//Global variables
+			var imgUrl = "../../img/kestral.png";
 			var myImage = new Image(); // Create a new blank image.
 			// Load the image and display it.
 			function displayImage() {
@@ -20,7 +27,7 @@
 						changeImage();
 					}
 					// Define the source of the image.
-					myImage.src = "http://samples.msdn.microsoft.com/workshop/samples/canvas/kestral.png";
+					myImage.src = imgUrl;
 				}
 			}
 
@@ -32,18 +39,26 @@
 				ctx.closePath();
 				ctx.stroke();
 			}
+			
+			function loadImage1(){
+				var img_src = 'data:image/gif;base64,R0lGODlhCwALAIAAAAAA3pn/ZiH5BAEAAAEALAAAAAALAAsAAAIUhA+hkcuO4lmNVindo7qyrIXiGBYAOw==';				
+				var img = new Image();   // Create new Image object
+				img.onload = function(){
+					 // execute drawImage statements here
+				}
+
+				img.src = img_src; // Set source path
+				var body = document.getElementById('body');
+				body.appendChild(img);
+			}
+				
 		</script>
 	</head>
-	<body onload="displayImage()">
+	<body id="body">
 		<h1> American Kestral</h1>
-		<p>
-			The original image is on the left and the modified image is on the right.
-		</p>
+		<p>The original image is on the left and the modified image is on the right.</p>
 		<img id="myPhoto" src="http://samples.msdn.microsoft.com/workshop/samples/canvas/kestral.png">
-		<canvas id="myCanvas" width="200" height="200">
-		</canvas>
-		<p>
-			Public domain image courtesy of U.S. Fish and Wildlife Service.
-		</p>
+		<canvas id="myCanvas" width="200" height="200"></canvas>
+				
 	</body>
 </html>
