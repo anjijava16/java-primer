@@ -23,6 +23,7 @@ span.all{
 	$(document).ready(function (){ 
 		new op.addBoxListener();
 		new op.addKeyListener();
+		new op.selectAll();
 	}); 
 	
 	var op = {
@@ -30,7 +31,7 @@ span.all{
 		selectAllFlag : false,
 		addBoxListener : function(){
 			//$(':checkbox') is equivalent to $('[type=checkbox]'). 
-			var boxs = $(':checkbox');
+			var boxs = $(':checkbox:[name="item"]');
 			boxs.click(
 				function(){
 					//alert(op.shiftKey);
@@ -75,16 +76,20 @@ span.all{
 							case 1:
 								index = nextDownId;
 								initVal = currId + 1;
+								for(var i = initVal; i <= index; i++){
+									var item = $('#' + i);
+									item[0].checked = true; 
+								}
+								
 								break;
 							case 2:
 								index = prevDownItemId;
 								initVal = currId -1;
-						}
-						if(flag != 0){
-							for(var i = initVal; i <= index; i++){
-								var item = $('#' + i);
-								item[0].checked = true; 
-							}
+								for(var i = initVal; i >= index; i--){
+									var item = $('#' + i);
+									item[0].checked = true; 
+								}
+								
 						}
 					}else{
 						new op.debugInfo('not have shift key' + "  checkbox id is " + this.id);
@@ -96,14 +101,14 @@ span.all{
 			var itemAll = $('#itemAll');
 			itemAll.click(
 				function(){
-					var value = itemAll[0].checked;
-					var newVal = !value;
-				    $("input[@type='checkbox[]']").each(function() {
-				    $(this).attr("checked", newVal);
-				  })					
+					op.selectAllFlag = !op.selectAllFlag;
+					itemAll[0].checked = op.selectAllFlag;
+					
+				    $("input[type='checkbox']").each(function() {
+				    	$(this).attr("checked", op.selectAllFlag);
+				  	})					
 				}
 			);
-			op.selectAllFlag;
 			
 		},
 		addKeyListener : function(){
@@ -121,6 +126,25 @@ span.all{
 				}
 				op.shiftKey = false;
 			}); 			
+		},
+		checkboxScopeSelect : function(){
+			//用户用鼠标拖动一个矩形范围，就可以选中，范围内的checkbox.
+			/*   
+			var x=window.event.clientX;     
+			var y=window.event.clientY;     
+			var str='';
+			
+			for(i=0;i<document.body.children.length;i++){     
+				var obj=document.body.children[i];     
+				if(x>obj.offsetLeft&&x<(obj.offsetLeft+obj.clientWidth)&&y>obj.offsetTop&&y<(obj.offsetTop+obj.clientHeight))  
+				{  
+				  str+='<鼠标位于层'+obj.id+'范围之内>\n';     
+				}else{     
+				    str+='<鼠标位于层'+obj.id+'范围之外>\n';     
+				}     
+			}     
+			alert(str);     
+			*/     			
 		},
 		debugInfo : function(text){
 			var ul = $('#info')[0];
