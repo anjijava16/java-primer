@@ -25,6 +25,8 @@ canvas {
 	<canvas id="bei" width="150" height="150"></canvas>
 	<canvas id="canvas1" width="190" height="175"></canvas>
 
+	<canvas id="color" width="150" height="150"></canvas>
+	
 	<script type="text/javascript">
 		window.onload = function() {
 			new op.draw();
@@ -33,6 +35,7 @@ canvas {
 			new op.tripleBezierCurve();
 			new op.clutterDraw();
 			new op.drawStatImg();
+			new op.color();
 		}
 
 		var $ = function(id) {
@@ -99,6 +102,17 @@ canvas {
 					ctx.quadraticCurveTo(125, 100, 125, 62.5);
 					ctx.quadraticCurveTo(125, 25, 75, 25);
 					ctx.stroke();
+					
+					var array = [
+									[25, 25  ],[25, 62.5],
+									[25, 100 ],[50, 100],
+									[50, 120 ],[30, 125],
+									[60, 120 ],[65, 100],
+									[125, 100],[125, 62.5],
+									[125, 25 ],[75, 25]
+								];
+					
+					new op.observeDrawBezierCurve(ctx,array);
 				}
 			},
 			tripleBezierCurve : function() { // drwa Heart
@@ -117,7 +131,27 @@ canvas {
 					ctx.bezierCurveTo(85, 25, 75, 37, 75, 40);
 					ctx.fill();
 
+					var array = [
+									[75, 37  ],[70, 25  ],[50, 25],
+									[20, 25  ],[20, 62.5],[20, 62.5],
+									[20, 80  ],[40, 102 ],[75, 120],
+									[110,102 ],[130, 80 ],[130, 62.5],
+									[130,62.5],[130, 25 ],[100, 25],
+									[85, 25  ],[75, 37  ],[75, 40]
+								];
+					
+					new op.observeDrawBezierCurve(ctx,array);
 				}
+			},
+			observeDrawBezierCurve : function(ctx,array){
+				ctx.beginPath();
+				ctx.fillStyle = "rgb(255,6,2)";
+				for(var i = 0; i < array.length; i++){
+					var val = array[i];
+					ctx.moveTo(val[0], val[1]);
+					ctx.arc(val[0], val[1], 1, 0, Math.PI * 2, true);					
+				}
+				ctx.stroke();
 			},
 			clutterDraw : function() {
 				var ctx = document.getElementById('canvas1').getContext('2d');
@@ -199,11 +233,11 @@ canvas {
 				
 				var ctx = lineStat.getContext('2d');
 				var img = new Image();
-				//img.paddingLeft = 5;
-				//img.paddingTop = 5;
 				img.src = '../../img/backdrop.png';
 				img.onload = function() {
 					ctx.drawImage(img, 10, 10);
+					//rgba() 方法与 rgb() 方法类似，就多了一个用于设置色彩透明度的参数。它的有效范围是从 0.0（完全透明）到 1.0（完全不透明）。
+					ctx.strokeStyle = "rgba(255,0,0,0.2)";
 					ctx.beginPath();
 					ctx.moveTo(38, 105);
 					ctx.lineTo(75, 96);
@@ -226,6 +260,29 @@ canvas {
 					ctx.arc(170, 15, 1, 0, Math.PI * 2, true);
 					ctx.stroke();
 				}
+			},
+			color : function(){
+				var ctx = document.getElementById('color').getContext('2d');
+				  // draw background
+				  ctx.fillStyle = '#FD0';
+				  ctx.fillRect(0,0,75,75);
+				  ctx.fillStyle = '#6C0';
+				  ctx.fillRect(75,0,75,75);
+				  ctx.fillStyle = '#09F)';
+				  ctx.fillRect(0,75,75,75);
+				  ctx.fillStyle = '#F30';
+				  ctx.fillRect(75,75,150,150);
+				  ctx.fillStyle = '#FFF';
+
+				  // set transparency value
+				  ctx.globalAlpha = 0.2;
+
+				  // Draw semi transparent circles
+				  for (i=0;i<7;i++){
+				      ctx.beginPath();
+				      ctx.arc(75,75,10+10*i,0,Math.PI*2,true);
+				      ctx.fill();
+				  }				
 			}
 		};
 	</script>
