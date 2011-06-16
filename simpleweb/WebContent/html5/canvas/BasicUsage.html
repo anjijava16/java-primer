@@ -3,6 +3,24 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>html5 canvas test</title>
+<script type="text/javascript" src="../../jslib/jquery-1.6.1.js"></script>
+<script>
+window.onload = function() {
+	new op.draw();
+	new op.drawTriangle();
+	new op.twiceBeisaierCurve();  //带尾巴的椭圆
+	new op.tripleBezierCurve();   //红心
+	new op.clutterDraw();   //
+	new op.drawStatImg();   //折线统计图
+	new op.color();    //四等分为正方形，再做圆的渐变
+	
+	new op.drawCircle();  //各种圆弧
+	new op.rectanglesColor(); //四等分为平水矩形，再做垂直矩形的渐变
+	
+	new op.drawWord();
+}
+</script>
+
 <style type="text/css">
 canvas {
 	border: 1px solid black;
@@ -30,24 +48,9 @@ canvas {
 	<br/>
 	<canvas id="canv" width="150" height="200"></canvas>
 	<script type="text/javascript">
-		window.onload = function() {
-			new op.draw();
-			new op.drawTriangle();
-			new op.twiceBeisaierCurve();
-			new op.tripleBezierCurve();
-			new op.clutterDraw();
-			new op.drawStatImg();
-			new op.color();
-			
-			new op.drawCircle();
-		}
-
-		var $ = function(id) {
-			return document.getElementById(id);
-		}
 		var op = {
 			draw : function() {
-				var canvas = $('tutorial');
+				var canvas = $('#tutorial')[0];
 				var ctx = canvas.getContext("2d");
 				if (ctx) {
 					ctx.fillStyle = "rgb(200,0,0)";
@@ -61,7 +64,7 @@ canvas {
 				}
 			},
 			drawTriangle : function() {
-				var canvas = $('triangle');
+				var canvas = $('#triangle')[0];
 				var ctx = canvas.getContext("2d");
 				if (ctx) {
 					//钝角三角形
@@ -93,7 +96,7 @@ canvas {
 				}
 			},
 			twiceBeisaierCurve : function() {
-				var canvas = $('clock');
+				var canvas = $('#clock')[0];
 				var ctx = canvas.getContext('2d');
 				if (ctx) {
 					// Quadratric curves example
@@ -121,7 +124,7 @@ canvas {
 			},
 			tripleBezierCurve : function() { // drwa Heart
 				// Bezier curves example
-				var bei = $('bei');
+				var bei = $('#bei')[0];
 				var ctx = bei.getContext('2d');
 				if (ctx) {
 					ctx.beginPath();
@@ -158,7 +161,7 @@ canvas {
 				ctx.stroke();
 			},
 			clutterDraw : function() {
-				var ctx = document.getElementById('canvas1').getContext('2d');
+				var ctx = $('#canvas1')[0].getContext('2d');
 				new op.roundedRect(ctx, 12, 12, 150, 150, 15);
 				new op.roundedRect(ctx, 19, 19, 150, 150, 9);
 				new op.roundedRect(ctx, 53, 53, 49, 33, 10);
@@ -229,13 +232,13 @@ canvas {
 			},
 
 			drawStatImg : function() {
-				var lineStat = document.createElement("canvas");
-				lineStat.id = "lineStat";
-				lineStat.width = 200;
-				lineStat.height = 150;
-				document.body.appendChild(lineStat);
+				$("<canvas/>")
+					.attr("height","150px")
+					.attr("width","200px")
+					.attr("id","lineStat")
+					.appendTo(document.body);				
 				
-				var ctx = lineStat.getContext('2d');
+				var ctx = $('#lineStat')[0].getContext('2d');
 				var img = new Image();
 				img.src = '../../img/backdrop.png';
 				img.onload = function() {
@@ -266,7 +269,7 @@ canvas {
 				}
 			},
 			color : function(){
-				var ctx = document.getElementById('color').getContext('2d');
+				var ctx = $('#color')[0].getContext('2d');
 				  // draw background
 				  ctx.fillStyle = '#FD0';
 				  ctx.fillRect(0,0,75,75);
@@ -289,7 +292,7 @@ canvas {
 				  }				
 			},
 			drawCircle : function(){
-				var canvas = $("canv");
+				var canvas = $("#canv")[0];
 				
 				// Make sure we don't execute when canvas isn't supported
 				if (canvas.getContext){
@@ -319,6 +322,51 @@ canvas {
 				} else {
 					alert('You need Safari or Firefox 1.5+ to see this demo.');
 				}
+			},
+			//矩形颜色渐变
+			rectanglesColor : function(){
+				var c = $("<canvas/>")
+				.attr("id","rectColor")
+				.attr("width","150px").attr("height","150px").css("margin-left","10px")
+				.appendTo(document.body);
+				
+				var ctx = c[0].getContext('2d')
+				
+				if(ctx){
+					 // Draw background
+					 ctx.fillStyle = 'rgb(255,221,0)';
+					 ctx.fillRect(0,0,150,37.5);
+					 ctx.fillStyle = 'rgb(102,204,0)';
+					 ctx.fillRect(0,37.5,150,37.5);
+					 ctx.fillStyle = 'rgb(0,153,255)';
+					 ctx.fillRect(0,75,150,37.5);
+					 ctx.fillStyle = 'rgb(255,51,0)';
+					 ctx.fillRect(0,112.5,150,37.5);
+					 
+					  // Draw semi transparent rectangles
+					 for (var i=0;i<10;i++){
+					    ctx.fillStyle = 'rgba(255,255,255,'+(i+1)/10+')';
+					    for (var j=0;j<4;j++){
+					      ctx.fillRect(5+i*14,5+j*37.5,14,27.5)
+					    }
+					 }
+				}
+			},
+			drawWord : function(){
+				var c = $("<canvas/>")
+				.attr("id","word")
+				.attr("width","150px").attr("height","150px").css("margin-left","10px")
+				.appendTo(document.body);
+				
+				var ctx = c[0].getContext('2d')						 
+				ctx.shadowOffsetX = 2;
+				ctx.shadowOffsetY = 2;
+				ctx.shadowBlur = 2;
+				ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+				  
+				ctx.font = "20px Times New Roman";
+				ctx.fillStyle = "Black";
+				ctx.fillText("Sample String", 5, 30);
 			}
 		};
 	</script>
