@@ -24,6 +24,8 @@ public class ProxyTest {
 			IAnimal animalProxy = (IAnimal) proxyObj;// proxyObj与animal都实现了IAnimal接口
 
 			animalProxy.info();// 像普通animal对象一样使用(通过handler的invoke方法执行)
+			
+			animalProxy.otherInfo();
 		} else {
 			System.out.println("the proxyObj isn't an animal!");
 		}
