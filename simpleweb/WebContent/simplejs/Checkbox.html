@@ -15,6 +15,27 @@
 	padding-left: 5px;
 }
 
+.base li{
+	margin-top: 1px;
+}
+.x7,.zE{
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-image: none;
+    background-origin: padding-box;
+    background-position: 0 0;
+    background-repeat: repeat;
+    background-size: auto auto;
+}
+.x7 {
+    background-color: #FFFFCC;   /*yellow color*/
+    color: #222222;
+}
+.zE {
+    background-color: #FFFFFF;
+    color: #000000;
+}
+
 span.all{
 	margin-left: 2em;
 }
@@ -24,6 +45,7 @@ span.all{
 		new op.addBoxListener();
 		new op.addKeyListener();
 		new op.selectAll();
+		new op.checkboxScopeSelect();
 	}); 
 	
 	var op = {
@@ -97,6 +119,16 @@ span.all{
 				}
 			); 			
 		},
+		select : function(checkbox){
+	    	var obj = checkbox.parentNode;
+	    	var objName = obj.nodeName;
+	    	if(objName == 'LI'){
+		    	$(checkbox).attr("checked", op.selectAllFlag);
+		    	
+		    	$(obj).removeClass(!op.selectAllFlag ? 'x7' : 'zE')
+		    		  .addClass(op.selectAllFlag ? 'x7' : 'zE');
+	    	}			
+		},
 		selectAll : function(){
 			var itemAll = $('#itemAll');
 			itemAll.click(
@@ -105,7 +137,7 @@ span.all{
 					itemAll[0].checked = op.selectAllFlag;
 					
 				    $("input[type='checkbox']").each(function() {
-				    	$(this).attr("checked", op.selectAllFlag);
+				    	new op.select(this);
 				  	})					
 				}
 			);
@@ -128,24 +160,30 @@ span.all{
 			}); 			
 		},
 		checkboxScopeSelect : function(){
-			//用户用鼠标拖动一个矩形范围，就可以选中，范围内的checkbox.
-			/*   
-			var x=window.event.clientX;     
-			var y=window.event.clientY;     
-			var str='';
+			var dx,dy,ux,uy;
 			
-			for(i=0;i<document.body.children.length;i++){     
-				var obj=document.body.children[i];     
-				if(x>obj.offsetLeft&&x<(obj.offsetLeft+obj.clientWidth)&&y>obj.offsetTop&&y<(obj.offsetTop+obj.clientHeight))  
-				{  
-				  str+='<鼠标位于层'+obj.id+'范围之内>\n';     
-				}else{     
-				    str+='<鼠标位于层'+obj.id+'范围之外>\n';     
-				}     
-			}     
-			alert(str);     
-			*/     			
-		},
+			$(document).mousedown(function(event){
+				dx =event.clientX;
+				dy = event.clientY
+			});
+			
+			$(document).mouseup(function(event){
+				ux = event.clientX;
+				uy = event.clientY;
+								
+				$("input[type='checkbox']").each(function() {
+					var ltX = new elememtXY.x(this).x;
+					var ltY = new elememtXY.y(this).y;
+					var rdX = ltX + this.clientWidth;
+					var rdY = ltY + this.clientHeight;
+					
+					if(ltX >= dx && ltY >= dy && rdX <= ux && rdY <= uy){
+						new op.select(this);
+					}
+				});
+				
+			});			
+		},		
 		debugInfo : function(text){
 			var ul = $('#info')[0];
 			var date = new Date();
@@ -156,6 +194,32 @@ span.all{
 			$("<li/>").css("border","solid 1px #FF0000").html(info).appendTo(ul);
 		}
 	};
+	
+	var elememtXY = {
+		x : function(e){
+			return {x : getLeft(e)};
+		},
+		y : function(e){
+			return {y : getTop(e)};
+		}
+	}
+	
+	function getTop(e) {
+		var offset = e.offsetTop;
+		while((e = e.offsetParent) != null){
+			offset += e.offsetTop;
+		}
+		return offset;
+	}
+	
+	function getLeft(e) {
+		var offset = e.offsetLeft;
+		while((e = e.offsetParent) != null) {
+			offset += e.offsetLeft;
+		}
+		return offset;
+	}	
+
 </script>
 </head>
 <body>
