@@ -8,9 +8,12 @@
 </head>
 <body>
 	<a>test seesion!</a>
+	<div>
 	<br></br>
-	这个页面什么都没做，被请求后出现,通过firefox可看到:<br/>
-	Set-Cookie	JSESSIONID=625E46CDD7AC1105539C5579B1F7F304; Path=/simpel.web.test
+		这个页面什么都没做，被请求后出现,通过firefox可看到:<br/>
+		Set-Cookie	JSESSIONID=625E46CDD7AC1105539C5579B1F7F304; Path=/simpel.web.test
+	</div>
+	<dir>说明当请求jsp时，server 会给client设置cookie.</dir>
 	<a href="carts.jsp">carts.jsp这个页面有java httpSession操作.</a>
 </body>
 </html>

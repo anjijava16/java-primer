@@ -22,7 +22,7 @@
 
 	<%
 		HttpSession se = request.getSession();
-		out.println("sessionId" + se.getId());
+		out.println("<br/>sessionId:" + se.getId());
 		long lastDate = se.getLastAccessedTime();
 		int val = se.getMaxInactiveInterval();		
 		out.println(lastDate);

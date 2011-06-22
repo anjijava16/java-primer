@@ -5,6 +5,7 @@
 <title>Insert title here</title>
 </head>
 <body>
+	<div id="content"></div>
 	<script type="text/javascript">
 		/*
 		 * A function that is dynamically declared with no name
@@ -14,7 +15,15 @@
 		// Create an onload event handler that assigns the load event to a function.
 		window.onload = function() {
 		  contentDiv.innerHTML = "Our anonymous function was called because the onload event was fired!";
-		};	
+		};
+		
+		(function(){
+			alert("no parameter.");
+		})();
+		
+		(function(para){
+			alert(para)
+		})("parameter abcde")
 	</script>
 </body>
 </html>

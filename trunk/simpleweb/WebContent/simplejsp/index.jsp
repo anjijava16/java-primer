@@ -7,6 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
+	打印出所有的cookie.<br/>
 	<a href="carts.jsp">下一页面</a>
 	<%
 	
