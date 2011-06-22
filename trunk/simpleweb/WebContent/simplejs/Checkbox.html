@@ -45,6 +45,7 @@ span.all{
 		new op.addBoxListener();
 		new op.addKeyListener();
 		new op.selectAll();
+		new op.reverseSelect();
 		//new op.checkboxScopeSelect();
 	}); 
 	
@@ -204,6 +205,29 @@ span.all{
 			
 			var info = formatDate + ":" + text;
 			$("<li/>").css("border","solid 1px #FF0000").html(info).appendTo(ul);
+		},
+		reverseSelect : function(){
+			$('#reverse').click(function(event){
+				$("input[type='checkbox']").each(
+					function() {
+					switch(this.name){
+						case 'itemAll' :
+						break;
+						case 'reverse' :
+						break;
+						default :{
+							this.checked = !this.checked;
+							var parentNode = this.parentNode;
+							if(parentNode.className == 'x7'){
+								parentNode.className = 'zE';
+							}else if(parentNode.className == 'zE'){
+								parentNode.className = 'x7';
+							}
+						}
+					}
+				}
+				);	
+			});
 		}
 	};
 	
@@ -235,7 +259,10 @@ span.all{
 </script>
 </head>
 <body>
-	<span class="all"><input id="itemAll" type="checkbox" name="itemAll"/>全选</span>
+	<div>
+		<span class="all"><input id="itemAll" type="checkbox" name="itemAll"/>全选</span>
+		<span><input id="reverse" type="checkbox" name="reverse"></input>反选</span>
+	</div>
 	<ul id='ul' class="base">
 		<li><input id="1" type="checkbox" name="item"/></li>
 		<li><input id="2" type="checkbox" name="item"/></li>
