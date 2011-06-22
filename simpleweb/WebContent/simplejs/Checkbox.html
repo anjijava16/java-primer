@@ -45,7 +45,7 @@ span.all{
 		new op.addBoxListener();
 		new op.addKeyListener();
 		new op.selectAll();
-		new op.checkboxScopeSelect();
+		//new op.checkboxScopeSelect();
 	}); 
 	
 	var op = {
@@ -97,24 +97,34 @@ span.all{
 								break;
 							case 1:
 								index = nextDownId;
-								initVal = currId + 1;
+								initVal = currId;
 								for(var i = initVal; i <= index; i++){
 									var item = $('#' + i);
-									item[0].checked = true; 
+									item.attr("checked",true);
+									$(item[0].parentNode).removeClass('zE').addClass('x7');
 								}
-								
 								break;
 							case 2:
 								index = prevDownItemId;
-								initVal = currId -1;
+								initVal = currId;
 								for(var i = initVal; i >= index; i--){
 									var item = $('#' + i);
-									item[0].checked = true; 
+							    	item.attr("checked",true);
+							    	$(item[0].parentNode).removeClass('zE').addClass('x7');
 								}
+								break;
 								
 						}
 					}else{
 						new op.debugInfo('not have shift key' + "  checkbox id is " + this.id);
+						var isCheched = this.checked;
+						if(isCheched){
+							this.checked = true;
+							$(this.parentNode).removeClass('zE').addClass('x7');
+						}else{
+							this.checked = false;
+							$(this.parentNode).removeClass('x7').addClass('zE');
+						}
 					}
 				}
 			); 			
@@ -170,6 +180,8 @@ span.all{
 			$(document).mouseup(function(event){
 				ux = event.clientX;
 				uy = event.clientY;
+				
+				if(ux - dx < 20 || uy - dy < 20)return;
 								
 				$("input[type='checkbox']").each(function() {
 					var ltX = new elememtXY.x(this).x;
