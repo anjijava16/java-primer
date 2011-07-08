@@ -26,7 +26,10 @@ function placeMarker(location) {
   var clickedLocation = new google.maps.LatLng(location);
   var marker = new google.maps.Marker({
       position: location, 
-      map: map
+      map: map,
+      title:(function(loc){
+    	  return loc.toString();
+      })(location)
   });
 
   map.setCenter(location);
