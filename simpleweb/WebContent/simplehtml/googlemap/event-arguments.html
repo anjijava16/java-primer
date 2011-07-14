@@ -9,9 +9,9 @@
 <script type="text/javascript">
 var map;
 function initialize() {
-  var myLatlng = new google.maps.LatLng(-25.363882,131.044922);
+  var myLatlng = new google.maps.LatLng(22.528548,113.94469);
   var myOptions = {
-    zoom: 4,
+    zoom: 15,
     center: myLatlng,
     mapTypeId: google.maps.MapTypeId.ROADMAP
   }
@@ -32,7 +32,7 @@ function placeMarker(location) {
       })(location)
   });
 
-  map.setCenter(location);
+  //map.setCenter(location);
 }
 </script>
 </head>
