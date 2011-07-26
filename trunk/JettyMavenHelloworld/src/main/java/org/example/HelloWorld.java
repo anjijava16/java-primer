@@ -6,7 +6,11 @@ import java.io.IOException;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
- 
+
+/**
+ * @author slieer
+ * 最简单的一个web server.
+ */
 public class HelloWorld extends AbstractHandler
 {
     public void handle(String target,
