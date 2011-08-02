@@ -9,4 +9,14 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
+  <servlet>
+    <description></description>
+    <display-name>ServletAndThread</display-name>
+    <servlet-name>ServletAndThread</servlet-name>
+    <servlet-class>com.web.ServletAndThread</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ServletAndThread</servlet-name>
+    <url-pattern>/ServletAndThread</url-pattern>
+  </servlet-mapping>
 </web-app>
