@@ -1,4 +1,4 @@
-package com.security.login;
+package com.security.jaas.login;
 
 import java.io.IOException;
 
