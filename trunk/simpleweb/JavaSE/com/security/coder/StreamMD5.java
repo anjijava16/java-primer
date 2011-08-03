@@ -1,4 +1,4 @@
-package com.security;
+package com.security.coder;
 
 import java.io.FileInputStream;
 import java.security.DigestInputStream;

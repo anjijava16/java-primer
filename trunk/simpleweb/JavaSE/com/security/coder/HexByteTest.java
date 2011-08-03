@@ -1,4 +1,4 @@
-package com.security;
+package com.security.coder;
 
 public class HexByteTest {
 	public static byte[] hex2byte(String strhex) {
