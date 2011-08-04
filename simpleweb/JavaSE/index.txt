@@ -1,0 +1,3 @@
+JavaTM Platform, Standard Edition 6 Overview
+
+http://download.oracle.com/javase/6/docs/technotes/guides/index.html#base
