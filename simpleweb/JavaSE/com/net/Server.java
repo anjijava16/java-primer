@@ -12,6 +12,7 @@ import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.TrustManagerFactory;
 
 public class Server {
+	static String keystore = "JavaSE/com/security/tls_ssl/simpleDemo/key.cert";
 	public static void main(String[] args) {
 		try {
 			Server myserver = new Server();
