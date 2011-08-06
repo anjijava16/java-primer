@@ -3,21 +3,7 @@
   <groupId>simpleweb</groupId>
   <artifactId>simpleweb</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  
-  <build>
-  	<plugins>
-  		<plugin>
-  			<groupId>org.apache.maven.plugins</groupId>
-  			<artifactId>maven-compiler-plugin</artifactId>
-  			<version>2.3.2</version>
-			<configuration>  
-           		<source>1.6</source>  
-           		<target>1.6</target>  
-         	</configuration>  
-  			
-  		</plugin>
-  	</plugins>
-  </build>
+
   <dependencies>
   	<dependency>
   		<groupId>commons-logging</groupId>
@@ -61,7 +47,31 @@
 	    <artifactId>bson4jackson</artifactId>
 	    <version>1.1.2</version>
 	</dependency>
-  	
-  </dependencies> 
-  
+  </dependencies>
+
+  <build>
+  	<plugins>
+  		<plugin>
+  			<groupId>org.apache.maven.plugins</groupId>
+  			<artifactId>maven-compiler-plugin</artifactId>
+  			<version>2.3.2</version>
+			<configuration>  
+           		<source>1.6</source>  
+           		<target>1.6</target>  
+         	</configuration>	
+  		</plugin>
+	    <plugin>
+	        <groupId>com.caucho</groupId>
+	        <artifactId>resin-maven-plugin</artifactId>
+	        <version>4.0.20</version>
+	        <configuration>
+	          <server>127.0.0.1</server>
+	          <port>8086</port>
+	          <user>foo</user>
+	          <password>test</password>
+	        </configuration>
+	    </plugin>  		
+  	</plugins>
+  </build>
+
 </project>
