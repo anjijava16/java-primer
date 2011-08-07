@@ -18,12 +18,15 @@
    ?>
    
    console.log(data.c + " at work.");
-   alert(data.c + " at work.");
+   //alert(data.c + " at work.");
    
    var txt =document.createElement('TextNode');
-   txt.innerHTML = " End.";
+   txt.innerHTML = "console has start. End.";
    document.body.appendChild(txt)
  </script>
-	
+ 
+ 
+ 
+ <a href="index.php">first php</a>
 </body>
 </html>
