@@ -81,6 +81,11 @@ The README is available <a href="README">here</a>.
 </div>
 
 <hr/>
+<div style="background: none repeat scroll 0 0 #CCCCCC;border:1px solid blue;">
+	<span>USER_AGENT is:<?php echo $_SERVER["HTTP_USER_AGENT"]; ?></span>
+	<span>PHP INFO is:<?php phpinfo(); ?></span>
+	<span></span>
+</div> 
 
 <div class="footer">
 Copyright &copy; 1998-2009
@@ -91,6 +96,7 @@ Resin <sup><font size="-1">&#174;</font></sup> is a registered trademark,
 and Quercus<sup>tm</sup>, Amber<sup>tm</sup>, and Hessian<sup>tm</sup>
 are trademarks of Caucho Technology.
 </div>
+
 </body>
 
 </html>
