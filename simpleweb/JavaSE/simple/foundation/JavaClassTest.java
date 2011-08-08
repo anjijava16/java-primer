@@ -4,7 +4,7 @@ import java.math.BigInteger;
 
 import org.apache.commons.collections.map.StaticBucketMap;
 
-public class BasicJava {
+public class JavaClassTest {
 	public static void main(String... args) {
 		//int one = 1;
 		//int a = 3;
@@ -80,19 +80,21 @@ abstract class A{
 	
 	static{
 		abstract class s{
+			
 		}
 		final class sa{
+			
 		}
-		
 	}
 }
 class a11{
 	class f{
+		
 	}
+	
 	interface ss{
 		
 	}
-
 }
 
 //The member interface ff can only be defined inside a top-level class or interface
