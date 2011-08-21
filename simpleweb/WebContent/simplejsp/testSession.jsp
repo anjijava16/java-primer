@@ -15,5 +15,11 @@
 	</div>
 	<dir>说明当请求jsp时，server 会给client设置cookie.</dir>
 	<a href="carts.jsp">carts.jsp这个页面有java httpSession操作.</a>
+	<%
+		String path = request.getRealPath("");
+		String p = request.getContextPath();
+		out.print(path);
+		out.print(p);
+	%>
 </body>
 </html>
