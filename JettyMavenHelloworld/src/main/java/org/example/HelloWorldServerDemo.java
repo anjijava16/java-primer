@@ -32,15 +32,5 @@ public class HelloWorldServerDemo extends AbstractHandler
  
         server.start();
         server.join();
-    }
-    
-  	public static void main1(String[] args) throws Exception {
-  		Server server = new Server(8070);
-  		
-  		ServletHttpContext context = (ServletHttpConteserverxt) .getContext("/");
-  		context.addServlet("/", "dacurran.example.HelloWorldServlet");
-
-  		server.start();
-  	}
-    
+    }  
 }
