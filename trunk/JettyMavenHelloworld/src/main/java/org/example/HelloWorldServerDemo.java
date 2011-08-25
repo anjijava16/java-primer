@@ -11,7 +11,7 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
  * @author slieer
  * 最简单的一个web server.
  */
-public class HelloWorld extends AbstractHandler
+public class HelloWorldServerDemo extends AbstractHandler
 {
     public void handle(String target,
                        Request baseRequest,
@@ -28,9 +28,19 @@ public class HelloWorld extends AbstractHandler
     public static void main(String[] args) throws Exception
     {
         Server server = new Server(8080);
-        server.setHandler(new HelloWorld());
+        server.setHandler(new HelloWorldServerDemo());
  
         server.start();
         server.join();
     }
+    
+  	public static void main1(String[] args) throws Exception {
+  		Server server = new Server(8070);
+  		
+  		ServletHttpContext context = (ServletHttpConteserverxt) .getContext("/");
+  		context.addServlet("/", "dacurran.example.HelloWorldServlet");
+
+  		server.start();
+  	}
+    
 }
