@@ -42,7 +42,7 @@ public class ManyConnectors
         server.join();
     }
     
-    static class HelloHandler extends HelloWorld{
+    static class HelloHandler extends HelloWorldServerDemo{
     	
     }
 }
