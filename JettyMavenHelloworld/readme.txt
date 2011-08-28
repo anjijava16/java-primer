@@ -22,3 +22,7 @@ http://wiki.eclipse.org/Jetty/Howto/Configure_SSL
 
 Continuation 两种设计模式：Suspend/Resume模式，Suspend/Continue模式。
 http://kylindai.iteye.com/blog/507971
+
+运行jetty continuation example:
+mvn jetty:run
+open http://localhost:8080/chat.html
