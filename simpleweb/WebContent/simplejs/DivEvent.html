@@ -33,15 +33,21 @@
 		(function(doc){
 			var divEvent = document.getElementById('buttonEvent');
 			//alert(divEvent.nodeName)
-			divEvent.onclick = function(event){
-				var thzEvent = event;
-				if(window.event){
+			divEvent.onclick = function(e){
+				var thzEvent = e;
+				if(!e && window.event){
 					thzEvent = window.event
 				}
 				
 				//thzEvent.explicitOriginalTarget;
-				
-				var eventElementName = thzEvent.target.name;
+				var eventElementName;
+				if(thzEvent.target){
+					//ff or ie9
+					eventElementName = thzEvent.target.name;					
+				}else{
+					//ie8
+					eventElementName = thzEvent.srcElement.name;
+				}
 				switch(eventElementName){
 					case 'addUser' : 
 					alert("addUser");
