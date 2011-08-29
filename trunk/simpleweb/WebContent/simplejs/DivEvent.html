@@ -20,6 +20,7 @@
 		<div>
 			<span class='span_title'>雅虎团队经验-网站页面性能优化的34条黄金守则</span> 
 			<span class='span_sub_title'>之开发智能事件处理程序</span>
+			
 		</div>
 		 <div id='buttonEvent'>		 	
 			<input type="button" name="addUser"  value="addUser"><br>
@@ -31,7 +32,7 @@
 	</div>
 	<script>
 		(function(doc){
-			var divEvent = document.getElementById('buttonEvent');
+			var divEvent = doc.getElementById('buttonEvent');
 			//alert(divEvent.nodeName)
 			divEvent.onclick = function(e){
 				var thzEvent = e;
