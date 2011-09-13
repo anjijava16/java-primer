@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persons xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.w3school.com.cn/family family.xsd"
+	xmls="http://www.w3school.com.cn/family"
+	>
+	
+	<!--
+		http://www.w3school.com.cn/children children.xsd
+	  -->
+
+	<person>
+		<firstname>David</firstname>
+		<lastname>Smith</lastname>
+		<children xmls="http://www.w3school.com.cn/children">
+			<childname>mike</childname>
+			<a></a>
+		</children>
+	</person>
+
+	<person>
+		<firstname>Tony</firstname>
+		<lastname>Smith</lastname>
+	</person>
+
+</persons>
