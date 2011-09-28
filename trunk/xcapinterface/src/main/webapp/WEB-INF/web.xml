@@ -3,5 +3,21 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
-  <display-name>Archetype Created Web Application</display-name>
+	<servlet>
+		<servlet-name>xcap</servlet-name>
+		<servlet-class>com.xcap.web.XCAPServlet</servlet-class>
+	</servlet>
+
+	<servlet>
+		<servlet-name>xcapcaps</servlet-name>
+		<servlet-class>com.xcap.web.XcapCaps</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>xcap</servlet-name>
+		<url-pattern>/resource-lists</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>xcapcaps</servlet-name>
+		<url-pattern>/xcap-caps</url-pattern>
+	</servlet-mapping>
 </web-app>
