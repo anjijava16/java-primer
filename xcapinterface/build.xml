@@ -1,0 +1,148 @@
+<project name="User" default="compile" basedir=".">
+    <description>
+        Build file for mservices
+    </description>
+    <!-- set global properties for this build -->
+    <property name="src" location="src"/>
+    <property name="build" location="classes"/>
+    <property name="dist"  location="dist"/>
+    <property name="build.3rdlib.dir"  location="../../common/3rd_lib"/>
+    <property name="build.lib.dir"  location="../../common/lib"/>
+    
+    <target name="init">
+        <!-- Create the time stamp -->
+        <tstamp/>
+        <!-- Create the build directory structure used by compile -->
+        <mkdir dir="${build}"/>
+    </target>
+	
+    <target name="compile_ifc" depends="init"
+            description="compile the source of ifc" >
+        <!-- Compile the java code from ${src} into ${build} -->
+        <javac srcdir="${src}" debug="on" encoding="utf-8" destdir="${build}" fork="true" memoryMaximumSize="512m" includes="**/ifc/**">
+            <classpath>
+                <fileset dir="${build.3rdlib.dir}">
+                    <include name="**/*.jar"/>
+                </fileset>
+                <fileset dir="${build.lib.dir}">
+                    <include name="**/*.jar"/>
+                </fileset>
+            </classpath>
+        </javac>
+        <copy todir="${build}">
+            <fileset dir="${src}">
+                <include name="**/ifc/**/*.properties"/>
+            	<include name="**/ifc/**/*.xml"/>
+            </fileset>
+        </copy>
+    </target>
+	
+    <target name="dist_ifc" depends="compile_ifc"
+            description="generate the distribution" >
+        <!-- Create the distribution directory -->
+        <mkdir dir="${dist}"/>
+        
+        <!-- create interfaces jars -->
+        <jar destfile="${dist}/mservices_ifc.jar">
+            <fileset dir="${build}" includes = "**/ifc/**"/>
+        </jar>
+    </target>
+	
+    <target name="rel_ifc" depends="dist_ifc"
+            description="copy ifc jar to lib" >
+        <delete file="${build.lib.dir}/mservices_ifc.jar"/>
+        <copy file="${dist}/mservices_ifc.jar" todir="${build.lib.dir}"/>
+    </target>
+    
+    <target name="clean_ifc" description="clean up ifc" >
+    	<delete includeemptydirs="true">
+        	<fileset dir="${build}" includes="**/ifc/**" />
+    	</delete>
+        <delete file="${dist}/mservices_ifc.jar"/>
+    </target>
+	
+    <target name="compile" depends="init"
+            description="compile the source " >
+        <!-- Compile the java code from ${src} into ${build} -->
+        <javac srcdir="${src}" debug="on" encoding="utf-8" destdir="${build}" fork="true" memoryMaximumSize="512m">
+            <classpath>
+                <fileset dir="${build.3rdlib.dir}">
+                    <include name="**/*.jar"/>
+                </fileset>
+                <fileset dir="${build.lib.dir}">
+                    <include name="**/*.jar"/>
+                </fileset>
+            </classpath>
+        </javac>
+        <copy todir="${build}">
+            <fileset dir="${src}">
+                <include name="**/*.properties"/>
+                <exclude name="/view/**"/>
+                <exclude name="/META-INF/**"/>
+                <exclude name="/WEB-INF/**"/>
+            </fileset>
+            <fileset dir="${src}">
+                <include name="**/*.template"/>
+                <exclude name="/view/**"/>
+                <exclude name="/META-INF/**"/>
+                <exclude name="/WEB-INF/**"/>
+            </fileset>
+            <fileset dir="${src}">
+                <include name="**/*.xml"/>
+                <exclude name="/view/**"/>
+                <exclude name="/META-INF/**"/>
+                <exclude name="/WEB-INF/**"/>
+            </fileset>
+        </copy>             
+    </target>
+	
+    <target name="dist" depends="compile"
+            description="generate the distribution" >
+        <!-- Create the distribution directory -->
+        <mkdir dir="${dist}"/>
+        
+        <!-- create interfaces jars -->
+        <jar destfile="${dist}/mservices_ifc.jar">
+            <fileset dir="${build}" includes = "**/ifc/**"/>
+        </jar>
+        
+        <!-- create ejb jars -->
+        <jar destfile="${dist}/mservices_ejb.jar">
+            <fileset dir="${build}" includes = "**/dao/**,**/ejb/**,**/mozat/**,**/common/**"/>
+            <metainf dir="${src}/META-INF" includes="**"/>
+        </jar>
+        
+        <!-- create mservices web package -->
+        <war warfile="${dist}/mservices.war" webxml="${src}/WEB-INF/web.xml">
+            <classes dir="${build}" excludes = "**/dao/**,**/ejb/**,**/ifc/**,**/mozat/**, **/spaceservice/servlet/**,**/album/servlet/**,**/myfile/servlet/**"/>
+            <webinf dir="${src}/WEB-INF" includes="**"/>
+            <zipfileset dir="${src}/view" prefix="view"/>
+            <manifest>
+                <attribute name="Class-Path" value="message" />
+            </manifest>
+        </war>
+        
+        <!-- create mservices servlet web package -->
+        <war warfile="${dist}/mservicesservlet.war" webxml="${src}/WEB-INF/webservlet.xml">
+            <classes dir="${build}" includes = "**/spaceservice/servlet/**, **/widgetgallery/servlet/**, **/myfile/servlet/**, **/album/servlet/**"/>
+            <webinf dir="${src}/WEB-INF" includes="**/template/**"/>
+            <manifest>
+                <attribute name="Class-Path" value="" />
+            </manifest>
+        </war>
+        
+    </target>
+    
+    <target name="rel" depends="dist" 
+            description="copy dist jar to jboss" >
+        <delete file="${build.lib.dir}/mservices_ifc.jar"/>
+        <copy file="${dist}/mservices_ifc.jar" todir="${build.lib.dir}"/>
+    </target>
+	
+    <target name="clean"
+            description="clean up" >
+        <!-- Delete the ${build} and ${dist} directory trees -->
+        <delete dir="${build}"/>
+        <delete dir="${dist}"/>
+    </target>
+</project>
