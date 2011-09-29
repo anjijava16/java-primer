@@ -13,22 +13,19 @@ import org.xml.sax.helpers.DefaultHandler;
 
 public class SaxSimpleDemo {
 	public static void main(String[] args) {
-		new SAXHandler();
-	}
-}
-
-class SAXHandler extends DefaultHandler{
-	public SAXHandler(){
 		SAXParserFactory spf = SAXParserFactory.newInstance();
 		SAXParser saxParser = null;
 		
 		try {
 			saxParser = spf.newSAXParser();
-			saxParser.parse(new File("JavaSE\\com\\xml\\book.xml"), this);
+			saxParser.parse(new File("JavaSE\\com\\xml\\book.xml"), new DefaultHandler());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+}
+
+class SAXHandler extends DefaultHandler{
 
 	@Override
 	public void startDocument() throws SAXException {
