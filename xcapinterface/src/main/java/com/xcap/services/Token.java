@@ -22,7 +22,7 @@ import com.xcap.Constants;
 public class Token {
 	public static final Logger log = Logger.getLogger(Token.class);
 	
-	class TokenContentHandler extends DefaultHandler {
+	static class TokenContentHandler extends DefaultHandler {
 		private String status = null;
 		private String tokenExpiredTime = null;
 		private String uid = null;
@@ -61,7 +61,7 @@ public class Token {
 		}
 	}
 
-	public Map<String,String> parseTokenXML(String token){
+	public static Map<String,String> parseTokenXML(String token){
 			SAXParserFactory spf = SAXParserFactory.newInstance();
 			SAXParser saxParser = null;
 			
@@ -105,6 +105,5 @@ public class Token {
 
 			e.printStackTrace();
 		}
-
 	}
 }

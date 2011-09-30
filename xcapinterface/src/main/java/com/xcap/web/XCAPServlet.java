@@ -21,9 +21,10 @@ public class XCAPServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String[] str = Utils.urlParser(req,resp);
+		String[] str = Utils.getUrlInfo(req,resp);
 		resp.getOutputStream().print(str[0] + "<br/>");
 		resp.getOutputStream().print(str[1] + "<br/>");
+		
 		
 	}
 
