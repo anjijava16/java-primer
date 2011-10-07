@@ -13,6 +13,7 @@ public class Gc {
 		}
 		list.clear();
 		list = null;
+		
 
 		try {
 			// System.gc();
@@ -21,9 +22,23 @@ public class Gc {
 				public void run() {
 					System.out.println("thread");
 					// Runtime.getRuntime().gc();
+					System.gc();
+					System.runFinalization();
+					Runtime.getRuntime().gc();
+
 				}
 			});
 			t.start();
+			
+			try {
+				System.gc();
+				System.runFinalization();
+				Runtime.getRuntime().gc();
+				Thread.sleep(1000);
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			}			
+			
 			System.out.println("aa");
 
 			ExecutorService pool = Executors.newFixedThreadPool(3);
