@@ -20,5 +20,6 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/javaee-16.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/javamail-141.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/resin.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/weibo4j-20110401032257.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

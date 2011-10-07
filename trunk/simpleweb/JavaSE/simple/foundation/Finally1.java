@@ -4,7 +4,7 @@ public class Finally1 {
 	public static void main(String args[]) {
 		Finally1 t = new Finally1();
 		int b = t.get();
-		System.out.println(b);
+		System.out.println(b);    // 2
 	}
 
 	//finally block does not complete normally
