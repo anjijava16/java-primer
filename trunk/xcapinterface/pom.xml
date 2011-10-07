@@ -60,6 +60,34 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>isorelax</groupId>
+			<artifactId>isorelax</artifactId>
+			<version>20030108</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>dom4j</groupId>
+			<artifactId>dom4j</artifactId>
+			<version>1.6.1</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>relaxngDatatype</groupId>
+			<artifactId>relaxngDatatype</artifactId>
+			<version>20020414</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>xsdlib</groupId>
+			<artifactId>xsdlib</artifactId>
+			<version>20030225</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
