@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<contact-lists xmlns="contact-lists" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+xsi:schemaLocation="contact-lists file:///E:/BorqsWorkspace/MyGoogleCode/xcapinterface/src/doc/contact-list-1.xsd">
+	<contact msisdn="13823322278">
+		<name>Bill Doe</name>
+	</contact>
+	<contact msisdn="13823322271">
+		<name>Bill Doe</name>
+	</contact>
+	
+	<list name="friends" source="facebook">
+		<contact msisdn="13530039954">
+			<name>Joe Smith</name>
+		</contact>
+		<contact msisdn="8613530039954">
+			<name>Nancy Gross</name>
+		</contact>
+	</list>
+	<list name="close-friends"  source="facebook">
+		<contact msisdn="joe@example.com">
+			<name>Joe Smith</name>
+		</contact>
+		<contact msisdn="nancy@example.com">
+			<name>Nancy Gross</name>
+		</contact>
+		
+		<contact msisdn="nancy@example.com">
+			<name>Nancy Gross</name>
+		</contact>
+		
+	</list>
+</contact-lists>
