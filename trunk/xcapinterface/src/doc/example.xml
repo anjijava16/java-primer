@@ -1,32 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<contact-lists xmlns="contact-lists" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
-xsi:schemaLocation="contact-lists file:///E:/BorqsWorkspace/MyGoogleCode/xcapinterface/src/doc/contact-list-1.xsd">
-	<contact msisdn="13823322278">
-		<name>Bill Doe</name>
+<contact-lists xmlns="contact-lists"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="contact-lists file:///E:/BorqsWorkspace/workspace/xcapinterface/src/doc/contact-list-1.xsd">
+	<!--
+	 xsi:schemaLocation="contact-lists file:///E:/BorqsWorkspace/MyGoogleCode/xcapinterface/src/doc/contact-list-1.xsd"  
+	 -->
+	<contact contactId="13823322278">
+		<nickname>Bill Doe</nickname>
 	</contact>
-	<contact msisdn="13823322271">
-		<name>Bill Doe</name>
+	<contact contactId="13823322271">
+		<nickname>Bill Doe</nickname>
 	</contact>
-	
-	<list name="friends" source="facebook">
-		<contact msisdn="13530039954">
-			<name>Joe Smith</name>
+	<list listId="friends@facebook">
+		<contact contactId="13530039954">
+			<nickname>Joe Smith</nickname>
 		</contact>
-		<contact msisdn="8613530039954">
-			<name>Nancy Gross</name>
+		<contact contactId="8613530039954">
+			<nickname>Nancy Gross</nickname>
 		</contact>
 	</list>
-	<list name="close-friends"  source="facebook">
-		<contact msisdn="joe@example.com">
-			<name>Joe Smith</name>
+	<list listId="close-friends@facebook">
+		<contact contactId="joe">
+			<nickname>Joe Smith</nickname>
 		</contact>
-		<contact msisdn="nancy@example.com">
-			<name>Nancy Gross</name>
+		<contact contactId="cliff">
+			<nickname>cliff Gross</nickname>
 		</contact>
-		
-		<contact msisdn="nancy@example.com">
-			<name>Nancy Gross</name>
+		<contact contactId="lily">
+			<nickname>Nancy Gross</nickname>
 		</contact>
-		
 	</list>
+	<list listId="close-friends@Twitter"></list>
 </contact-lists>
