@@ -28,6 +28,8 @@ public class XCAPCapsServlet extends HttpServlet {
 				.concat("  <namespace>contact-lists</namespace>")
 				.concat(" </namespaces>")
 				.concat("</xcap-caps>");
+		
+		response.getWriter().print(str);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
