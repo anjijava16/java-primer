@@ -37,11 +37,25 @@ public class XCAPServlet extends HttpServlet {
 	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 	}
+	
+	String parseQuerystring(HttpServletRequest req, HttpServletResponse resp,String op){
+		String[] str = getUrlInfo(req,resp);
+		if(str != null ){
+			if(str.length == 1){
+				//document operate
+			}else if(str.length == 2){
+				//node operate
+			}else{
+				//error
+			}
+		}
+		return null;	
+	}
 	/**
 	 * 
 	 * @param request
 	 * @param resp
-	 * @return [userName,domInfo]
+	 * @return [userName,domInfo], null if exception
 	 */
 	public static String[] getUrlInfo(HttpServletRequest request, HttpServletResponse resp){
 		String url = request.getRequestURI();

@@ -99,7 +99,8 @@ public class Token {
 	public static void main(String[] args) {
 		try {
 			String token = "lBCzuDXqQptyckKnNdfMagmZUEjBkoAztj3VbvE90t5SwAeSqwV0bw**";
-			Map<String, String> map = new Token().parseTokenXML(token);
+			new Token();
+			Map<String, String> map = Token.parseTokenXML(token);
 			System.out.println(map);
 		} catch (Exception e) {
 

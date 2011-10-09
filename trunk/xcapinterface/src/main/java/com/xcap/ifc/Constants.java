@@ -23,4 +23,6 @@ public class Constants {
 	public final static String BASIC_AUTH_LOST_PASSWORD = "Input password please!";
 	public final static String BASIC_AUTH_PASSWORD_ERROR = "Sorry, authentication failure!";
 	//public final static String BASIC_AUTH_PASSWORD_ERROR_INFO = "用户名或者密码错误";
+	
+	public static enum http_op {get,put,delete};
 }
