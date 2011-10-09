@@ -1,4 +1,4 @@
-package com.xcap.services;
+package com.xcap.web;
 
 import java.io.InputStreamReader;
 import java.io.StringReader;
@@ -17,7 +17,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import com.xcap.Constants;
+import com.xcap.ifc.Constants;
 
 public class Token {
 	public static final Logger log = Logger.getLogger(Token.class);

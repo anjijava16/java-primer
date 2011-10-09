@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
-import com.xcap.Utils;
+import com.xcap.ifc.Constants;
 
 public class XCAPServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -21,7 +21,7 @@ public class XCAPServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String[] str = Utils.getUrlInfo(req,resp);
+		String[] str = getUrlInfo(req,resp);
 		resp.getOutputStream().print(str[0] + "<br/>");
 		resp.getOutputStream().print(str[1] + "<br/>");
 		
@@ -37,5 +37,53 @@ public class XCAPServlet extends HttpServlet {
 	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 	}
-	
+	/**
+	 * 
+	 * @param request
+	 * @param resp
+	 * @return [userName,domInfo]
+	 */
+	public static String[] getUrlInfo(HttpServletRequest request, HttpServletResponse resp){
+		String url = request.getRequestURI();
+		String query = request.getQueryString();
+
+		if(! url.endsWith(Constants.APP_USAGE)){
+			log.warn("app usage invalidate.");
+			try {
+				resp.sendError(HttpServletResponse.SC_NOT_FOUND, "app usage invalidate.");
+
+				//request.getRequestDispatcher("404.jsp").forward(request, resp);
+			} catch (Exception e) {
+				log.error(e.getMessage());
+			}		
+		}
+		
+		if(query != null){
+			String[] params = query.split(Constants.INTERVAL_SIGN);			
+			if(params != null){
+				int fromIndex = "query=/users/".length();
+				int endIndex = params[0].indexOf("/", fromIndex);
+				String userName = params[0].substring(fromIndex, endIndex); 
+				
+				String domInfo = null;
+				if(params.length == 1){
+					//document operate
+				}else if(params.length == 2){
+					//element operate
+					domInfo = params[1];
+				}else{
+					//error.
+				}
+				
+				return new String[]{userName,domInfo};
+				//return url + "<br/>" + query + "<br/>" + userName + "<br/>" + domInfo;
+			}else{
+				
+			}
+		}else {
+			//error
+		}
+		
+		return null;
+	}
 }
