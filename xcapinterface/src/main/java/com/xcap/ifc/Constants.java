@@ -1,4 +1,4 @@
-package com.xcap;
+package com.xcap.ifc;
 
 public class Constants {
 	
