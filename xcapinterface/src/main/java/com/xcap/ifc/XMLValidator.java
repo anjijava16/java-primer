@@ -57,19 +57,5 @@ public class XMLValidator {
 			System.out.println(ex.getMessage());
 			return false;
 		}
-
 	}
-	
-	static String createContactXml(Contact contact) throws ParserConfigurationException{
-		return null;
-	}
-	
-	static String createListXml(Contact contact) throws ParserConfigurationException{
-		return null;
-	}
-
-	static String createContactListXml(Contact contact) throws ParserConfigurationException{
-		return null;
-	}
-
 }

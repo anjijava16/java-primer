@@ -73,10 +73,10 @@ public class AuthFilter implements Filter {
 			String userInfo = Base64Coder.decodeString(userInfoBase64[1]);
 			String[] up = userInfo.split(":");
 
-			// String userName = up[0];
-			String password = up[1];
+			String token = up[0];
+			// String password = up[1];
 
-			Map<String, String> parseResult = Token.parseTokenXML(password);
+			Map<String, String> parseResult = Token.parseTokenXML(token);
 			String tokenStatus = parseResult.get(Constants.STATUS_TAG);
 			// String tokenMsisdn = parseResult.get(Constants.MSISDN_TAG);
 			// String tokenExpiredTime =

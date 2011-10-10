@@ -24,5 +24,8 @@ public class Constants {
 	public final static String BASIC_AUTH_PASSWORD_ERROR = "Sorry, authentication failure!";
 	//public final static String BASIC_AUTH_PASSWORD_ERROR_INFO = "用户名或者密码错误";
 	
-	public static enum http_op {get,put,delete};
+	public static enum HttpMethod {GET,POST,PUT,DELETE};
+	
+	public static String AUID_CONTACT_LISTS = "contact-lists";
+
 }
