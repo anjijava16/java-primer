@@ -22,7 +22,6 @@
 					<xs:restriction base="xs:string"></xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
-			<!-- <xs:attribute name="source" use="required" type="xs:string"></xs:attribute> -->
 		</xs:complexType>
 	</xs:element>
 

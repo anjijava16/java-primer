@@ -5,30 +5,30 @@
 	<!--
 	 xsi:schemaLocation="contact-lists file:///E:/BorqsWorkspace/MyGoogleCode/xcapinterface/src/doc/contact-list-1.xsd"  
 	 -->
-	<contact contactId="13823322278">
+	<contact id="13823322278">
 		<nickname>Bill Doe</nickname>
 	</contact>
-	<contact contactId="13823322271">
+	<contact id="13823322271">
 		<nickname>Bill Doe</nickname>
 	</contact>
-	<list listId="friends@facebook">
-		<contact contactId="13530039954">
+	<list id="friends@facebook">
+		<contact id="13530039954">
 			<nickname>Joe Smith</nickname>
 		</contact>
-		<contact contactId="8613530039954">
+		<contact id="8613530039954">
 			<nickname>Nancy Gross</nickname>
 		</contact>
 	</list>
-	<list listId="close-friends@facebook">
-		<contact contactId="joe">
+	<list id="close-friends@facebook">
+		<contact id="joe">
 			<nickname>Joe Smith</nickname>
 		</contact>
-		<contact contactId="cliff">
+		<contact id="cliff">
 			<nickname>cliff Gross</nickname>
 		</contact>
-		<contact contactId="lily">
+		<contact id="lily">
 			<nickname>Nancy Gross</nickname>
 		</contact>
 	</list>
-	<list listId="close-friends@Twitter"></list>
+	<list id="close-friends@Twitter"></list>
 </contact-lists>
