@@ -3,7 +3,7 @@ package com.xcap.ifc;
 public class Constants {
 	
 	/**url constant contract**/
-	public final static String APP_USAGE = "resource-lists";
+	public final static String APP_USAGE_CONTACT = "contact-lists";
 	public final static String USERS = "users";
 	public final static String INTERVAL_SIGN = "~~"; 
 	

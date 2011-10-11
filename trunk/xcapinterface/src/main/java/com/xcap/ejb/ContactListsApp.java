@@ -1,26 +1,27 @@
 package com.xcap.ejb;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import org.apache.log4j.Logger;
 
-import com.borqs.contact.ifc.Contact;
 import com.xcap.ifc.XCAPDatebaseIfc;
 
 //@stateless
 //@local()
 public class ContactListsApp implements XCAPDatebaseIfc{
+	public static final Logger log = Logger.getLogger(ContactListsApp.class);
+	
+	
 	final static String CONTACT_LISTS_NODE = "contact-lists";
 	final static String CONTACT_NODE = "contact";
 	final static String LIST_NODE = "list";
 	final static String NIKENAME_NODE = "nikename";
 
-	public boolean validateDocument(String xml) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 	public String get(String userId, String documentSelector,
 			String nodeSelector) {
+		if(nodeSelector == null){
+			
+		}
+		
 		return null;
 	}
 
