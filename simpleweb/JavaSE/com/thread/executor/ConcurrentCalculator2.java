@@ -50,10 +50,9 @@ public class ConcurrentCalculator2 {
 	  
 	    /**  
 	     * 迭代每个只任务，获得部分和，相加返回  
-	     *   
 	     * @return  
 	     */  
-	    public Long getResult() {   
+	    private Long getResult() {   
 	        Long result = 0l;   
 	        for (int i = 0; i < cpuCoreNumber; i++) {               
 	            try {   
