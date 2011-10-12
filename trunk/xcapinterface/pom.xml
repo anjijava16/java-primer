@@ -19,11 +19,6 @@
 			<artifactId>httpclient</artifactId>
 			<version>4.1.2</version>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.openjpa</groupId>
-			<artifactId>openjpa</artifactId>
-			<version>2.1.0</version>
-		</dependency>
 
 		<dependency>
 			<groupId>org.tuckey</groupId>
@@ -85,6 +80,13 @@
 			<groupId>xsdlib</groupId>
 			<artifactId>xsdlib</artifactId>
 			<version>20030225</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>1.8.3</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
