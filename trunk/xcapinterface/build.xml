@@ -6,7 +6,7 @@
     <property name="src" location="src"/>
     <property name="build" location="classes"/>
     <property name="dist"  location="dist"/>
-	<property name="build.lib.dir"  location="../libs"/>
+	<property name="build.lib.dir"  location="E:/BorqsWorkspace/172.16.1.203_thunk/singtel/server/libs"/>
 	    
     <target name="init">
         <!-- Create the time stamp -->
@@ -45,7 +45,7 @@
         </jar>
         
         <war warfile="${dist}/xcap-root.war" webxml="${src}/WEB-INF/web.xml">
-            <classes dir="${build}" excludes = "**/dao/**,**/ejb/**,**/ifc/**"/>
+            <classes dir="${build}" includes="**/web/**"/>
             <webinf dir="${src}/WEB-INF" includes="**"/>
             <zipfileset dir="${src}/view"/>
             <manifest>
