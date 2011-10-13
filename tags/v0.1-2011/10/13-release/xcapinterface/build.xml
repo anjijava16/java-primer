@@ -1,0 +1,84 @@
+<project name="xcap-root-1.0" default="compile" basedir=".">
+	<property file="build.properties"/>
+	<!-- set global properties for this build -->
+    <property name="src" location="src"/>
+    <property name="build" location="classes"/>
+    <property name="dist"  location="dist"/>
+	
+	<property name="build.lib.dir"  value="${3rd.lib}"/>
+	<property name="jboss.lib.dir"  value="${jboss.lib}"/>
+	<property name="jboss.deploy.dir"  value="${jboss.deploy}"/>
+	
+	<property name="xcap_ifc.jar"  value="xcap_ifc.jar"/>
+	<property name="xcap-root.war"  value="xcap-root.war"/>
+	<property name="xcap_ejb.jar"  value="xcap_ejb.jar"/>
+	
+	
+    <target name="init">
+        <!-- Create the time stamp -->
+        <tstamp/>
+        <!-- Create the build directory structure used by compile -->
+        <mkdir dir="${build}"/>
+    </target>
+    
+    <target name="compile" depends="init"
+            description="compile the source " >
+        <!-- Compile the java code from ${src} into ${build} -->
+        <javac srcdir="${src}" debug="on" encoding="utf-8" destdir="${build}">
+            <compilerarg value="-Xlint:unchecked"/>
+            <classpath>
+            	<fileset dir="${build.lib.dir}">
+            	    <include name="**/*.jar"/>
+            	</fileset>
+            </classpath>
+        </javac>
+    </target>
+    
+    <target name="dist" depends="compile"
+            description="generate the distribution" >
+        <!-- Create the distribution directory -->
+        <mkdir dir="${dist}"/>
+        
+        <!-- create interfaces jars -->
+        <jar destfile="${dist}/${xcap_ifc.jar}">
+            <fileset dir="${build}" includes = "**/ifc/**"/>
+        </jar>
+        
+        <!-- create ejb jars -->
+        <jar destfile="${dist}/${xcap_ejb.jar}">
+            <fileset dir="${build}" includes = "**/dao/**,**/ejb/**"/>
+            <metainf dir="${src}/META-INF" includes="**"/>
+        </jar>
+        
+        <war warfile="${dist}/${xcap-root.war}" webxml="${src}/WEB-INF/web.xml">
+            <classes dir="${build}" includes="**/web/**"/>
+            <webinf dir="${src}/WEB-INF" includes="**"/>
+            <zipfileset dir="${src}/view"/>
+            <manifest>
+                <attribute name="Class-Path" value="message" />
+            </manifest>
+        </war> 
+    </target>
+	
+	<target name="deploy" depends="dist">
+	    <copy todir="${jboss.lib.dir}">
+	      <fileset dir="${dist}">
+	        <include name="${xcap_ifc.jar}"/>	        
+	      </fileset>
+	    </copy>
+		
+	    <copy todir="${jboss.deploy.dir}">
+	      <fileset dir="${dist}">
+	      	<include name="${xcap_ejb.jar}"/>
+	      	<include name="${xcap-root.war}"/>
+	      </fileset>
+	    </copy>			
+	</target>
+    
+    <target name="clean"
+            description="clean up" >
+        <!-- Delete the ${build} and ${dist} directory trees -->
+        <delete dir="${build}"/>
+        <delete dir="${dist}"/>
+    </target>
+</project>
