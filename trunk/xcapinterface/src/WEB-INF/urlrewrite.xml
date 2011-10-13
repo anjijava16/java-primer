@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <urlrewrite>
 	<rule>
-		<from>^/resource-lists(/*)</from>
-		<to>/resource-lists?query=$1</to>
+		<from>^/contacts(/*)|^/presence(/*)</from>
+		<to>/xcap?query=$1</to>
 	</rule>
 	
 	<rule>
-		<from>^/abc(/*)</from>
-		<to>/test.jsp</to>
+		<from>^/test(/*)</from>
+		<to>/test.jsp?token=$1</to>
 	</rule>	
 </urlrewrite>  

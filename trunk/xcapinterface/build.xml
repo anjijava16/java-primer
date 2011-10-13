@@ -1,4 +1,4 @@
-<project name="xcap-root" default="compile" basedir=".">
+<project name="xcap-root-1.0" default="compile" basedir=".">
 	<property file="build.properties"/>
 	<!-- set global properties for this build -->
     <property name="src" location="src"/>
@@ -60,7 +60,7 @@
         </war> 
     </target>
 	
-	<target name="deploy">
+	<target name="deploy" depends="dist">
 	    <copy todir="${jboss.lib.dir}">
 	      <fileset dir="${dist}">
 	        <include name="${xcap_ifc.jar}"/>	        

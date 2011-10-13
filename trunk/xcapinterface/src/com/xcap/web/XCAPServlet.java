@@ -1,6 +1,7 @@
 package com.xcap.web;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.Reader;
 
 import javax.servlet.ServletException;
@@ -39,15 +40,37 @@ public class XCAPServlet extends HttpServlet {
 	}
 		
 	private String executeRequest(HttpServletRequest req, HttpServletResponse resp) throws IOException{
-		String[] urlInfo = getUrlInfo(req,resp);
+		String queryString = req.getQueryString();  //query=index or query=index~~/contacts/list[1]
+		String url = req.getRequestURI();
+		String method = req.getMethod();
+		log.info("url, queryString-->" + url + " " + queryString);
+				
+		String userId = (String)req.getAttribute("uid");
+		String appUsage = (String)req.getAttribute("auid");
+		log.info("-------------------------uid, auid = " + userId + "," + appUsage);
 		
-		XCAPDatebaseIfc contactIfc = (XCAPDatebaseIfc) Utils.lookupEJB(XCAPDatebaseIfc.CONTACT_JNDI);
-		if(urlInfo != null && urlInfo.length > 0){
-			String userId = urlInfo[0];
-			String appUsage = urlInfo[1];
-			String nodeSelector = urlInfo[2];
-			
-			String method = req.getMethod();
+		String nodeSelector = getNodeSelector(queryString);
+			//log.warn("app usage invalidate.");				
+			//resp.sendError(HttpServletResponse.SC_NOT_FOUND, "app usage invalidate.");
+			//request.getRequestDispatcher("404.jsp").forward(request, resp);
+		String jndi = null;
+		
+		if(appUsage == null){
+			resp.sendError(HttpServletResponse.SC_NOT_FOUND, "auid is null");
+			throw new IllegalStateException("auid is null");
+		}
+		if(appUsage.equals(Constants.APP_USAGE_CONTACT)){
+			jndi = XCAPDatebaseIfc.CONTACT_JNDI;			
+		}else{
+			throw new IllegalStateException("other auid not implement...");
+			//other app usage.
+		}
+		
+		XCAPDatebaseIfc xcapIfc = (XCAPDatebaseIfc) Utils.lookupEJB("ContactListsApp");
+		log.info("----------------------------ejb:" + xcapIfc);
+		//XCAPDatebaseIfc xcapIfc = (XCAPDatebaseIfc) Utils.lookupEJB(jndi);
+
+		if(xcapIfc != null){
 			log.info("request method is " + method);
 			HttpMethod httpMethod = HttpMethod.valueOf(method);
 			
@@ -56,7 +79,11 @@ public class XCAPServlet extends HttpServlet {
 			case POST:								
 				//call ifc
 				if(appUsage.equals(Constants.APP_USAGE_CONTACT)){
-					contactIfc.get(userId, nodeSelector);
+					String result = xcapIfc.get(userId, nodeSelector);
+					PrintWriter writer = resp.getWriter();
+					writer.print(result);
+					//writer.close();
+					
 				}else{
 					//404
 					
@@ -83,20 +110,20 @@ public class XCAPServlet extends HttpServlet {
 
 				break;
 			case DELETE:
-				if(urlInfo.length == 1){
+				if(nodeSelector == null){
 					//document operate
 					//调用ifc
-				}else if(urlInfo.length == 2){
+				}else {
 					//node operate
 					//调用ifc
-				}else{
-					//error
 				}				
 				break;
 				
 			default:
 				break;
 			}			
+		}else{
+			throw new IllegalStateException("get jndi is null");
 		}
 		return null;	
 	}
@@ -108,22 +135,10 @@ public class XCAPServlet extends HttpServlet {
 	 * @return [userName,appUsage,nodeSelector], null if exception
 	 * @throws IOException 
 	 */
-	private static String[] getUrlInfo(HttpServletRequest request, HttpServletResponse resp) throws IOException{
-		String url = request.getRequestURI();
-		String query = request.getQueryString();
-		String appUsage = null;
-		
-		if(url.endsWith(Constants.APP_USAGE_CONTACT)){
-			appUsage = Constants.APP_USAGE_CONTACT;
-		}else {
-			//other app usage.
-			log.warn("app usage invalidate.");				
-			resp.sendError(HttpServletResponse.SC_NOT_FOUND, "app usage invalidate.");
-			//request.getRequestDispatcher("404.jsp").forward(request, resp);
-		}
-		
-		if(query != null){
-			String[] params = query.split(Constants.INTERVAL_SIGN);			
+	private static String getNodeSelector(String queryString) throws IOException{
+		queryString = null;
+		if(queryString != null){
+			String[] params = queryString.split(Constants.INTERVAL_SIGN);			
 			if(params != null){
 				int fromIndex = "query=/users/".length();
 				int endIndex = params[0].indexOf("/", fromIndex);
@@ -133,11 +148,9 @@ public class XCAPServlet extends HttpServlet {
 				if(params.length == 2){
 					domInfo = params[1];  //node selector.
 				}
-				return new String[]{userName,appUsage,domInfo};
+				return domInfo;
 			}
 		}
-		resp.sendError(HttpServletResponse.SC_NOT_FOUND, "app usage invalidate.");
-		
 		return null;
 	}
 }

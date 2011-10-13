@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -32,11 +33,13 @@ public class ContactListsAppEjb implements XCAPDatebaseIfc {
 	final static String DATE_FORMAT = "yyyy-MM-dd hh:mm:ss";
 	final static DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
 	
-	@PersistenceContext
+	@PersistenceContext(unitName="xcap")
 	EntityManager em;
 	ContactsDao contactsDao;
 
-	public ContactListsAppEjb() {
+	@PostConstruct
+	public void postConstruct() {
+		log.info("-------------------------ejb---------entity manager:" + em);
 		contactsDao = new ContactsDao(em);
 	}
 
@@ -45,8 +48,8 @@ public class ContactListsAppEjb implements XCAPDatebaseIfc {
 			List<ContactEntity> list = contactsDao.getList(userId);
 			StringBuilder xmlBuilder = new StringBuilder("<?xml version='1.0' encoding='UTF-8'?>");
 			if(list != null){
-				xmlBuilder.append("<contacts xmlns=\"contact-lists\"")
-				.append("xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"")					
+				xmlBuilder.append("<contacts xmlns=\"contact-lists\" ")
+				.append("xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ")					
 				.append("xsi:schemaLocation=\"contact-lists site/contact-list-1.xsd\">");
 					
 				for(ContactEntity en : list){
@@ -56,7 +59,7 @@ public class ContactListsAppEjb implements XCAPDatebaseIfc {
 					String userIdTemp = en.getUserId().toString();
 					String id = en.getId().toString();
 					
-					xmlBuilder.append("<contact id=".concat(id).concat(">"))
+					xmlBuilder.append("<contact id=\"".concat(id).concat("\">"))
 					.append("<method>".concat(method).concat("</method>"))
 					.append("<contactName>".concat(contactName).concat("</contactName>"))
 					.append("<userId>".concat(userIdTemp).concat("</userId>"))

@@ -38,7 +38,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>xcap</servlet-name>
-		<url-pattern>/resource-lists</url-pattern>
+		<url-pattern>/xcap/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>xcapcaps</servlet-name>
