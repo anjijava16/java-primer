@@ -3,7 +3,7 @@ package com.xcap.ifc;
 public class Constants {
 	
 	/**url constant contract**/
-	public final static String APP_USAGE_CONTACT = "contact-lists";
+	public final static String APP_USAGE_CONTACT = "contacts";
 	public final static String USERS = "users";
 	public final static String INTERVAL_SIGN = "~~"; 
 	
@@ -26,6 +26,14 @@ public class Constants {
 	
 	public static enum HttpMethod {GET,POST,PUT,DELETE};
 	
-	public static String AUID_CONTACT_LISTS = "contact-lists";
+	
+	/**
+	 * Application Usage Unique Id
+	 */
+	public static final String AUID = "auid";
+	/**
+	 * User Id
+	 */
+	public static final String UID = "uid";
 
 }

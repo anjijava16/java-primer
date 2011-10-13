@@ -95,16 +95,4 @@ public class Token {
 			
 			return null;
 	}
-	
-	public static void main(String[] args) {
-		try {
-			String token = "lBCzuDXqQptyckKnNdfMagmZUEjBkoAztj3VbvE90t5SwAeSqwV0bw**";
-			new Token();
-			Map<String, String> map = Token.parseTokenXML(token);
-			System.out.println(map);
-		} catch (Exception e) {
-
-			e.printStackTrace();
-		}
-	}
 }

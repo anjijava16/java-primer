@@ -10,8 +10,8 @@ http://www.mysql.com/downloads/api-jdbc-stable.html
     <jndi-name>MySqlDSXCAP</jndi-name>
     <connection-url>jdbc:mysql://10.24.1.244:3306/uab?useUnicode=true&amp;characterEncoding=UTF-8</connection-url>
     <driver-class>org.gjt.mm.mysql.Driver</driver-class>
-    <user-name>root</user-name>
-    <password></password>
+    <user-name>opensips</user-name>
+    <password>opensips</password>
     <exception-sorter-class-name>org.jboss.resource.adapter.jdbc.vendor.MySQLExceptionSorter</exception-sorter-class-name>
     <metadata>
        <type-mapping>mySQL</type-mapping>
