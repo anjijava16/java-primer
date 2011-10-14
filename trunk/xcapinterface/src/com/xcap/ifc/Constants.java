@@ -1,18 +1,18 @@
 package com.xcap.ifc;
 
+/**
+ * 
+ * version 1.0
+ * Create Date 2011-10-14
+ * @author slieer
+ */
 public class Constants {
-	
-	/**url constant contract**/
 	public final static String APP_USAGE_CONTACT = "contacts";
+	
+	
 	public final static String USERS = "users";
-	public final static String INTERVAL_SIGN = "~~"; 
+	public final static String INTERVAL_SIGN = "/~~/"; 
 	
-	
-	public final static String STATUS_TAG = "status";
-	public final static String TOKEN_EXPIRED_TIME_TAG = "tokenExpiredTime";
-	public final static String UID_TAG = "uid";
-	public final static String MSISDN_TAG = "msisdn";
-
 	public final static String USER_AGENT = "Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)";
 	public final static String TOKEN_URL = "http://10.24.1.244/ucenter/ifc/get-userinfo-by-token";
 
@@ -25,15 +25,4 @@ public class Constants {
 	//public final static String BASIC_AUTH_PASSWORD_ERROR_INFO = "用户名或者密码错误";
 	
 	public static enum HttpMethod {GET,POST,PUT,DELETE};
-	
-	
-	/**
-	 * Application Usage Unique Id
-	 */
-	public static final String AUID = "auid";
-	/**
-	 * User Id
-	 */
-	public static final String UID = "uid";
-
 }

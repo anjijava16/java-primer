@@ -40,62 +40,55 @@ public class XCAPServlet extends HttpServlet {
 	}
 		
 	private String executeRequest(HttpServletRequest req, HttpServletResponse resp) throws IOException{
-		String queryString = req.getQueryString();  //query=index or query=index~~/contacts/list[1]
-		String url = req.getRequestURI();
-		String method = req.getMethod();
-		log.info("url, queryString-->" + url + " " + queryString);
+		//String queryString = req.getQueryString();  
+		//String url = req.getRequestURI();
+		//log.info("url, queryString-->" + url + " " + queryString);
 				
 		String userId = (String)req.getAttribute("uid");
-		String appUsage = (String)req.getAttribute("auid");
-		log.info("-------------------------uid, auid = " + userId + "," + appUsage);
+		String auid = (String)req.getAttribute("auid");
+		String queryString = (String)req.getAttribute("queryString");
+		String method = (String)req.getAttribute("method");
 		
-		String nodeSelector = getNodeSelector(queryString);
-			//log.warn("app usage invalidate.");				
-			//resp.sendError(HttpServletResponse.SC_NOT_FOUND, "app usage invalidate.");
-			//request.getRequestDispatcher("404.jsp").forward(request, resp);
+		log.info("------(method,userId, auid,queryString) = " + method + "," + userId + "," + auid + "," + queryString);
+				
 		String jndi = null;
-		
-		if(appUsage == null){
+		if(auid == null){
 			resp.sendError(HttpServletResponse.SC_NOT_FOUND, "auid is null");
 			throw new IllegalStateException("auid is null");
 		}
-		if(appUsage.equals(Constants.APP_USAGE_CONTACT)){
-			jndi = XCAPDatebaseIfc.CONTACT_JNDI;			
+		if(auid.equals(Constants.APP_USAGE_CONTACT)){
+			jndi = XCAPDatebaseIfc.CONTACT_LOCAL_JNDI;			
 		}else{
 			throw new IllegalStateException("other auid not implement...");
 			//other app usage.
 		}
 		
-		XCAPDatebaseIfc xcapIfc = (XCAPDatebaseIfc) Utils.lookupEJB("ContactListsApp");
-		log.info("----------------------------ejb:" + xcapIfc);
-		//XCAPDatebaseIfc xcapIfc = (XCAPDatebaseIfc) Utils.lookupEJB(jndi);
-
+		XCAPDatebaseIfc xcapIfc = (XCAPDatebaseIfc) Utils.lookupEJB(jndi);
 		if(xcapIfc != null){
-			log.info("request method is " + method);
 			HttpMethod httpMethod = HttpMethod.valueOf(method);
-			
 			switch (httpMethod) {
 			case GET :				
 			case POST:								
 				//call ifc
-				if(appUsage.equals(Constants.APP_USAGE_CONTACT)){
-					String result = xcapIfc.get(userId, nodeSelector);
+				if(auid.equals(Constants.APP_USAGE_CONTACT)){
+					String result = xcapIfc.get(userId, queryString);
 					PrintWriter writer = resp.getWriter();
 					writer.print(result);
 					//writer.close();
 					
 				}else{
-					//404
-					
+					//404					
+					resp.sendError(HttpServletResponse.SC_NOT_FOUND, "auid is not implement");
 				}
 				break;
 			case PUT :
 				//validate document.
 				String appSchema = null;
-				if(appUsage.equals(Constants.APP_USAGE_CONTACT)){
+				if(auid.equals(Constants.APP_USAGE_CONTACT)){
 					appSchema = XML_SCHEMA_CONTACT;
 				}else{
 					//other app usage.
+					resp.sendError(HttpServletResponse.SC_NOT_FOUND, "auid is not implement");
 				}
 							
 				Reader reader = req.getReader();					
@@ -109,14 +102,7 @@ public class XCAPServlet extends HttpServlet {
 				
 
 				break;
-			case DELETE:
-				if(nodeSelector == null){
-					//document operate
-					//调用ifc
-				}else {
-					//node operate
-					//调用ifc
-				}				
+			case DELETE:				
 				break;
 				
 			default:
@@ -126,31 +112,5 @@ public class XCAPServlet extends HttpServlet {
 			throw new IllegalStateException("get jndi is null");
 		}
 		return null;	
-	}
-	
-	/**
-	 * 
-	 * @param request
-	 * @param resp
-	 * @return [userName,appUsage,nodeSelector], null if exception
-	 * @throws IOException 
-	 */
-	private static String getNodeSelector(String queryString) throws IOException{
-		queryString = null;
-		if(queryString != null){
-			String[] params = queryString.split(Constants.INTERVAL_SIGN);			
-			if(params != null){
-				int fromIndex = "query=/users/".length();
-				int endIndex = params[0].indexOf("/", fromIndex);
-				String userName = params[0].substring(fromIndex, endIndex); 
-				
-				String domInfo = null;
-				if(params.length == 2){
-					domInfo = params[1];  //node selector.
-				}
-				return domInfo;
-			}
-		}
-		return null;
 	}
 }

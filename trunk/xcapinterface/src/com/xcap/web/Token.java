@@ -4,7 +4,7 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -19,10 +19,25 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import com.xcap.ifc.Constants;
 
+/**
+ * 
+ * version 1.0
+ * Create Date 2011-10-14
+ * @author slieer
+ */
 public class Token {
 	public static final Logger log = Logger.getLogger(Token.class);
 	
+	public enum TokenInfo{
+		STATUS_TAG,TOKEN_EXPIRED_TIME_TAG,UID_TAG,MSISDN_TAG
+	}
+	
 	static class TokenContentHandler extends DefaultHandler {
+		public final static String STATUS_TAG = "status";
+		public final static String TOKEN_EXPIRED_TIME_TAG = "tokenExpiredTime";
+		public final static String UID_TAG = "uid";
+		public final static String MSISDN_TAG = "msisdn";		
+		
 		private String status = null;
 		private String tokenExpiredTime = null;
 		private String uid = null;
@@ -39,29 +54,30 @@ public class Token {
 			String value = String.valueOf(ch);
 			value = value.substring(start, start + length);
 			
-			if (tagName == Constants.STATUS_TAG && status == null) {
+			if (tagName == STATUS_TAG && status == null) {
 				this.status = value;
-			} else if (tagName == Constants.TOKEN_EXPIRED_TIME_TAG
+			} else if (tagName == TOKEN_EXPIRED_TIME_TAG
 					&& tokenExpiredTime == null) {
 				tokenExpiredTime = value;
-			} else if (tagName == Constants.UID_TAG && uid == null) {
+			} else if (tagName == UID_TAG && uid == null) {
 				uid = value;
-			} else if (tagName == Constants.MSISDN_TAG && msisdn == null) {
+			} else if (tagName == MSISDN_TAG && msisdn == null) {
 				msisdn = value;
 			}
 		}
 		
-		public Map<String, String> getResult(){
-			Map<String, String> result = new HashMap<String, String>(8);
-			result.put(Constants.STATUS_TAG, this.status);
-			result.put(Constants.TOKEN_EXPIRED_TIME_TAG, this.tokenExpiredTime);
-			result.put(Constants.UID_TAG, this.uid);
-			result.put(Constants.MSISDN_TAG, this.msisdn);
+		public Map<TokenInfo, String> getResult(){
+			Map<TokenInfo,String> result = new EnumMap<TokenInfo, String>(TokenInfo.class);
+
+			result.put(TokenInfo.STATUS_TAG, this.status);
+			result.put(TokenInfo.TOKEN_EXPIRED_TIME_TAG, this.tokenExpiredTime);
+			result.put(TokenInfo.UID_TAG, this.uid);
+			result.put(TokenInfo.MSISDN_TAG, this.msisdn);
 			return result;
 		}
 	}
 
-	public static Map<String,String> parseTokenXML(String token){
+	public static Map<TokenInfo,String> parseTokenXML(String token){
 			SAXParserFactory spf = SAXParserFactory.newInstance();
 			SAXParser saxParser = null;
 			

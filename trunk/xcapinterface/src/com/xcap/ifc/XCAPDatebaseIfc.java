@@ -2,7 +2,7 @@ package com.xcap.ifc;
 
 
 public interface XCAPDatebaseIfc {
-	public static String CONTACT_JNDI = "ContactListsApp/local";
+	public static String CONTACT_LOCAL_JNDI = "ContactListsApp";
 	
 	public String get(String userId, String nodeSelector);
 	
