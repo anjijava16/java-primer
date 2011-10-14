@@ -1,6 +1,7 @@
 package com.xcap.web;
 
 import java.io.IOException;
+import java.util.EnumMap;
 import java.util.Map;
 
 import javax.servlet.Filter;
@@ -14,95 +15,132 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
-import biz.source_code.base64Coder.Base64Coder;
+import sun.reflect.generics.tree.Tree;
 
 import com.xcap.ifc.Constants;
+import com.xcap.web.AuthFilter.Url.Field;
+
+/**
+ * 
+ * version 1.0
+ * Create Date 2011-10-14
+ * @author slieer
+ */
 
 public class AuthFilter implements Filter {
 	public static final Logger log = Logger.getLogger(AuthFilter.class);
-
-	public void destroy() {
-	}
 
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse resp = (HttpServletResponse) response;
 		
-		String queryString = req.getQueryString();
 		String url = req.getRequestURI();
-		//log.info("url, queryString-->" + url + " " + queryString);
 		if(url.contains("test")){
 			chain.doFilter(request, response);
 			return;
 		}
-
-		log.info("basic authentication .......");
-
+		if(! Url.validateUrl(url)){
+			resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+		}
+		
 		req.setCharacterEncoding("utf-8");
 		resp.setCharacterEncoding("utf-8");
-
-		String authString = req.getHeader("Authorization");
-		if (authString == null) {
-			resp.setStatus(401);
-			String lostPassword = new String(
-					Constants.BASIC_AUTH_LOST_PASSWORD.getBytes("utf-8"),
-					"ISO-8859-1");
-			resp.setHeader("WWW-authenticate", "Basic realm=\""
-					+ lostPassword + "\"");	
-			return;
-		}else{
-			log.info("authString:" + authString);
-			String[] userInfoBase64 = authString.split(" ");
-			String userInfo = Base64Coder.decodeString(userInfoBase64[1]);
-			String[] up = userInfo.split(":");
+		
+		Map<Field, String> urlResult = Url.parserUrl(url);
+		log.info("-----------urlResult:" + urlResult);
+		if(urlResult != null && urlResult.size() > 0){
+			String token = urlResult.get(Field.TOKEN);
+			String auid = urlResult.get(Field.AUID);
+			String msisdnParam= urlResult.get(Field.MSISDN);
+			String queryString = urlResult.get(Field.QUERYSTRING);
 			
-			String token = up[0];
-			log.info("token value is:" + token);
-			// String password = up[1];
+			Map<Token.TokenInfo, String> tokenInfo = Token.parseTokenXML(token);
+			log.info("tokenInfo:" + tokenInfo);
 			
-			Map<String, String> parseResult = Token.parseTokenXML(token);
-			log.info("parseResult:" + parseResult);
-			String tokenStatus = parseResult.get(Constants.STATUS_TAG);
-			// String tokenMsisdn = parseResult.get(Constants.MSISDN_TAG);
-			// String tokenExpiredTime =
-			// parseResult.get(Constants.TOKEN_EXPIRED_TIME_TAG);
-			String tokenUid = parseResult.get(Constants.UID_TAG);
-			
-			if (!tokenStatus.equals(Constants.TOKEN_OK)) {
-				log.info("authentication failure.........");
-				resp.setStatus(401);
-				
-				String passwordError = Constants.BASIC_AUTH_PASSWORD_ERROR;
-				resp.setHeader("WWW-authenticate", "Basic realm=\""
-						+ passwordError + "\"");
-				//resp.sendError(HttpServletResponse.SC_PARTIAL_CONTENT);	
+			String tokenStatus = tokenInfo.get(Token.TokenInfo.STATUS_TAG);
+			String msisdn = tokenInfo.get(Token.TokenInfo.MSISDN_TAG);
+			String uid = tokenInfo.get(Token.TokenInfo.UID_TAG);
+			if (tokenStatus == null || msisdnParam == null || !tokenStatus.equals(Constants.TOKEN_OK) || ! msisdnParam.equals(msisdn)) {
+				resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 				return;
-			}
+			}			
 			
-			log.info("authentication OK.........");
+			req.setAttribute("auid", auid);
+			req.setAttribute("queryString", queryString);
+			req.setAttribute("uid", uid);
+			req.setAttribute("method", req.getMethod());
 			
-			log.info("-------------------- in AuthFilter -->url, queryString-->" + url + "," + queryString);
-			String[] partUrls = url.split("/");
-			
-			String auid = null;
-			if(partUrls.length > 2){
-				auid = partUrls[2];				
-			}
-			req.setAttribute(Constants.AUID, auid);
-			req.setAttribute(Constants.UID, tokenUid);
 			chain.doFilter(request, response);
-		}
-
+		}else{
+			resp.sendError(HttpServletResponse.SC_BAD_REQUEST);	
+		}		
 	}
 	
 	public void init(FilterConfig arg0) throws ServletException {
-
 	}
 
-	public static class Utils {
-		public static final Logger log = Logger.getLogger(Utils.class);
-		public static final int successful = 0;
-		public static final int failure = 1;
+	public void destroy() {
+	}
+
+	static class Url{
+		enum Field{
+			AUID,MSISDN,TOKEN,QUERYSTRING
+		}
+		
+		public static boolean validateUrl(String url){
+			String[] temps = url.split(Constants.INTERVAL_SIGN);
+			if(url == null || temps.length > 2){  //~~ should only one
+				return false;
+			}
+			if( !temps[0].endsWith("/index")){
+				return false;
+			}
+			return true;
+		}
+
+		//url:
+		// /xcap-root/contacts/13658654865/q-5cNwHjuSmigz4upDSTAbz9TnI8YYnseENltm9MztlSwAeSqwV0bw**/index~~/contacts/list%5B@id=%22classmate@facebook%22%5D,
+		//queryString: null
+		/**
+		 * @param url
+		 * @return <li>map key: auid, uid, token, queryString;</li>
+		 *         <li> map is null, parameter url is null</li>
+		 *         <li> map size==0, url exception(~~ should only one)</li>
+		 */
+		public static Map<Field,String> parserUrl(String url){
+			if(url != null){
+				//log.info("---------url:" + url);
+				
+				String[] temps = url.split(Constants.INTERVAL_SIGN);  //split docmuent selector /node document.
+				Map<Field,String> result = new EnumMap<Field, String>(Field.class);
+				
+				String[] urlInfo = null;
+				String queryString = null;
+				if(temps.length == 1){
+					urlInfo = temps[0].split("/"); 
+				}else if(temps.length == 2){
+					urlInfo = temps[0].split("/");
+					queryString = temps[1];
+				}
+				
+				int index = 2;
+				String auid = urlInfo[index];
+				String msisdn = urlInfo[index + 1];
+				String token = urlInfo[index + 2];
+				
+				result.put(Field.AUID, auid);
+				result.put(Field.MSISDN, msisdn);
+				result.put(Field.TOKEN, token);
+				if(queryString != null){
+					result.put(Field.QUERYSTRING, queryString);
+				}
+				
+				//log.info("---------------url map:" + result);
+				return result;
+			}else{
+				return null;				
+			}
+		}
 	}
 }
