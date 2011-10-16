@@ -2,7 +2,6 @@ package com.http.auth;
 
 import java.io.IOException;
 
-import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
@@ -15,18 +14,19 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.impl.auth.BasicScheme;
-import org.apache.http.impl.auth.DigestScheme;
 import org.apache.http.impl.client.BasicAuthCache;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 
+import com.http.client.HttpclientTutorial;
+
 public class DigestTest {
 	public static void main(String[] args) {
 		try {
-			//f();
-			fff();
+			//testProtectedResource();
+			testBasicAuth();
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -36,17 +36,14 @@ public class DigestTest {
 		}
 	}
 
-	static String url = "http://localhost:8080/simpleweb/protected";
+	final static String url = "http://localhost:8080/simpleweb/protected";
 	
-	static void f() throws ClientProtocolException, IOException {
+	static void testProtectedResource() throws ClientProtocolException, IOException {
 		HttpClient httpclient = new DefaultHttpClient();
 		HttpContext localContext = new BasicHttpContext();
-		HttpGet httpget = new HttpGet(url);
-		
-		//Header.
-		//httpget.addHeader();
+		HttpGet httpget = new HttpGet(url);		
 		HttpResponse response = httpclient.execute(httpget, localContext);
-
+		
 		AuthState proxyAuthState = (AuthState) localContext.getAttribute(ClientContext.PROXY_AUTH_STATE);
 
 		System.out.println("Proxy auth scope: " + proxyAuthState.getAuthScope());
@@ -58,39 +55,15 @@ public class DigestTest {
 		System.out.println("Target auth scheme: " + targetAuthState.getAuthScheme());
 		System.out.println("Target auth credentials: " + targetAuthState.getCredentials());
 		
-		response.getEntity();
+		HttpEntity entity = response.getEntity();
+		String charset = HttpclientTutorial.getResponseCharset(response);
+		System.out.println("charset:" + charset);
+		HttpclientTutorial.output(entity, charset);
+		
+		EntityUtils.consume(entity);
 	}
 	
-	static void ff() throws ClientProtocolException, IOException{
-		HttpHost targetHost = new HttpHost("localhost", 8080, "http"); 
-
-		DefaultHttpClient httpclient = new DefaultHttpClient();
-
-		httpclient.getCredentialsProvider().setCredentials(
-		        new AuthScope(targetHost.getHostName(), targetHost.getPort()), 
-		        new UsernamePasswordCredentials("username", "password"));
-
-		// Create AuthCache instance
-		AuthCache authCache = new BasicAuthCache();
-		// Generate BASIC scheme object and add it to the local auth cache
-		BasicScheme basicAuth = new BasicScheme();
-		
-		authCache.put(targetHost, basicAuth);
-
-		// Add AuthCache to the execution context
-		BasicHttpContext localcontext = new BasicHttpContext();
-		localcontext.setAttribute(ClientContext.AUTH_CACHE, authCache);        
-
-		HttpGet httpget = new HttpGet("/");
-		for (int i = 0; i < 3; i++) {
-		    HttpResponse response = httpclient.execute(targetHost, httpget, localcontext);
-		    HttpEntity entity = response.getEntity();
-		    EntityUtils.consume(entity);
-		}
-		
-	}
-	
-	static void fff() throws ClientProtocolException, IOException{
+	static void testBasicAuth() throws ClientProtocolException, IOException{
 		HttpHost targetHost = new HttpHost("localhost", 8080, "http"); 
 
 		DefaultHttpClient httpclient = new DefaultHttpClient();
@@ -102,20 +75,28 @@ public class DigestTest {
 		// Create AuthCache instance
 		AuthCache authCache = new BasicAuthCache();
 		// Generate BASIC scheme object and add it to the local auth cache
-		DigestScheme bigestScheme = new DigestScheme();
-		
-		authCache.put(targetHost, bigestScheme);
+		BasicScheme basicAuth = new BasicScheme();
+		authCache.put(targetHost, basicAuth);
 
 		// Add AuthCache to the execution context
 		BasicHttpContext localcontext = new BasicHttpContext();
 		localcontext.setAttribute(ClientContext.AUTH_CACHE, authCache);        
 
 		HttpGet httpget = new HttpGet("/simpleweb/protected");
-		for (int i = 0; i < 3; i++) {
-		    HttpResponse response = httpclient.execute(targetHost, httpget, localcontext);
-		    HttpEntity entity = response.getEntity();
-		    EntityUtils.consume(entity);
-		}
+		System.out.println(httpget.getURI());
+		
+		HttpResponse response = httpclient.execute(targetHost, httpget, localcontext);
+		
+		HttpEntity entity = response.getEntity();
+		
+		System.out.println(response.getStatusLine().getStatusCode());
+		String charset = HttpclientTutorial.getResponseCharset(response);
+		HttpclientTutorial.output(entity, charset);
+		
+		EntityUtils.consume(entity);		
+	}
+	
+	public void testBasic(){
 		
 	}
 	
