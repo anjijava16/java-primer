@@ -1,6 +1,7 @@
 package com.xcap.dao;
 
 
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -29,6 +30,31 @@ public class ContactsDao {
 	 */
 	public List<ContactEntity> getList(String userId){
 		return get(userId,-1);	
+	}
+	
+	public long getListSize(String userId){
+		String sql = "select count(id) from t_contacts where user_id = :user_id";
+		Query query = em.createNativeQuery(sql);
+		query.setParameter("user_id", userId);
+		BigInteger re = (BigInteger)query.getSingleResult();
+		return re.longValue();
+	}
+	
+	/**
+	 * 
+	 * @param userId
+	 * @param contactId
+	 * @return null or a contact
+	 */
+	public ContactEntity getById(String userId,long contactId){
+		StringBuilder temp = new StringBuilder("select * from t_contacts where id=:id and user_id=:userId");
+		Query query = em.createNativeQuery(temp.toString(), ContactEntity.class);
+		query.setParameter("id", contactId);
+		query.setParameter("userId", userId);
+		
+		@SuppressWarnings("unchecked")
+		List<ContactEntity> list = query.getResultList();
+		return (ContactEntity)(list.size() != 0 ? list.get(0) : null);
 	}
 	
 	/**

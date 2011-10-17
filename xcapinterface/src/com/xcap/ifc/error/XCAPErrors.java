@@ -1,5 +1,27 @@
 package com.xcap.ifc.error;
 
+/**
+ * @version 1.0<br>
+ * @CreateDate 2011-10-17<br>
+ * @author slieer
+ * 
+ * http://www.ietf.org/rfc/rfc4825.txt [Page 48]<br>
+ * \servers\sip-presence\xdm\commons\src\main\java\org\openxdm\xcap\common\error
+ * <ul>
+ *  <li>1、not-well-formed {@link NotWellFormedConflictException}</li>
+ *	<li>2、no-parent {@link NoParentConflictException}</li>
+ *	<li>3、not-xml-frag {@link }</li>
+ *	<li>4、schema-validation-error {@link SchemaValidationErrorConflictException}</li>
+ *	<li>5、not-xml-att-value {@link NotXMLAttributeValueConflictException}</li>
+ *  <li>6、cannot-insert {@link CannotInsertConflictException}</li>
+ *	<li>7、cannot-delete {@link CannotDeleteConflictException}</li>
+ *	<li>8、uniqueness-failure {@link UniquenessFailureConflictException}</li>
+ *	<li>9、constraint-failure {@link ConstraintFailureConflictException}</li>
+ *	<li>10、extension {@link }</li>
+ *	<li>11、not-utf-8 {@link NotUTF8ConflictException}</li>
+ *</ul>
+ *
+ */
 public class XCAPErrors {
 	private XCAPErrors(){}
 	
@@ -116,4 +138,14 @@ public class XCAPErrors {
 			return "<not-utf-8 />";
 		}
 	}
+	
+	public static class SchemaValidationErrorConflictException extends ConflictException {
+		private static final long serialVersionUID = 1L;
+		
+		protected String getConflictError() {
+			return "<schema-validation-error />";
+		}
+	}
+
+	
 }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<contacts
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="contacts contact-list-1.xsd">
+	<contact id="13823322278">
+		<name>Bill Doe</name>
+	</contact>
+	<list id="friends">
+		<contact id="1">
+			<name>Joe Smith</name>
+		</contact>
+		<contact id="2">
+			<name>Nancy Gross</name>
+		</contact>
+	</list>
+</contacts>

@@ -22,9 +22,9 @@ import com.xcap.web.AuthFilter.Url.Field;
 
 /**
  * 
- * version 1.0
- * Create Date 2011-10-14
- * @author slieer
+ * version 1.0<br>
+ * Create Date 2011-10-14<br>
+ * @author slieer<br>
  */
 
 public class AuthFilter implements Filter {
@@ -109,38 +109,42 @@ public class AuthFilter implements Filter {
 		 *         <li> map size==0, url exception(~~ should only one)</li>
 		 */
 		public static Map<Field,String> parserUrl(String url){
+			log.info("---------url:" + url);
 			if(url != null){
-				//log.info("---------url:" + url);
 				
 				String[] temps = url.split(Constants.INTERVAL_SIGN);  //split docmuent selector /node document.
 				Map<Field,String> result = new EnumMap<Field, String>(Field.class);
 				
-				String[] urlInfo = null;
-				String queryString = null;
+				String[] documentSelectorInfo = null;
+				String nodeSelectorInfo = null;
 				if(temps.length == 1){
-					urlInfo = temps[0].split("/"); 
+					documentSelectorInfo = temps[0].split("/"); 
 				}else if(temps.length == 2){
-					urlInfo = temps[0].split("/");
-					queryString = temps[1];
+					log.info("-------------document selector:" + temps[0] + "  queryString:" + temps[1] + " temp.length:" + temps.length);
+					documentSelectorInfo = temps[0].split("/");
+					nodeSelectorInfo = temps[1];
 				}
 				
-				int index = 2;
-				String auid = urlInfo[index];
-				String msisdn = urlInfo[index + 1];
-				String token = urlInfo[index + 2];
-				
-				result.put(Field.AUID, auid);
-				result.put(Field.MSISDN, msisdn);
-				result.put(Field.TOKEN, token);
-				if(queryString != null){
-					result.put(Field.QUERYSTRING, queryString);
+				log.info("----------------------documentSelectorInfo.length:" + documentSelectorInfo.length);
+				if(documentSelectorInfo != null && documentSelectorInfo.length == 6){
+					//documentSelectorInfo =[, xcap-root, contacts, 8613480783139, DDcs3x7JwQQwqvOT751dhyp3s2od75lFbuwRL9UfCpJSwAeSqwV0bw**, index]
+					int index = 2;
+					String auid = documentSelectorInfo[index];
+					String msisdn = documentSelectorInfo[index + 1];
+					String token = documentSelectorInfo[index + 2];
+					
+					result.put(Field.AUID, auid);
+					result.put(Field.MSISDN, msisdn);
+					result.put(Field.TOKEN, token);
+					if(nodeSelectorInfo != null){
+						result.put(Field.QUERYSTRING, nodeSelectorInfo);
+					}					
+					return result;
 				}
-				
 				//log.info("---------------url map:" + result);
-				return result;
-			}else{
-				return null;				
 			}
+			
+			return null;				
 		}
 	}
 }

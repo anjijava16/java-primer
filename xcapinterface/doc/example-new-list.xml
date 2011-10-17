@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<list listId="University students@facebook">
-	<contact contactId="joehi">
+<list id="University students@facebook">
+	<contact id="joehi">
 		<nickname>Joe Smith</nickname>
 	</contact>
-	<contact contactId="cliff-a">
+	<contact id="cliff-a">
 		<nickname>cliff Gross</nickname>
 	</contact>
-	<contact contactId="lily -a">
+	<contact id="lily -a">
 		<nickname>Nancy Gross</nickname>
 	</contact>
 </list>
