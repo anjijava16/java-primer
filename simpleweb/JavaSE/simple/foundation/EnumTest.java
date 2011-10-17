@@ -1,8 +1,19 @@
 package simple.foundation;
 
 public class EnumTest {
+	enum Field{
+		AUID,MSISDN,TOKEN,QUERYSTRING
+	}
 
 	public static void main(String[] args) {
+		//testColor();
+		
+		System.out.println(Field.AUID.toString());
+		System.out.println(Field.AUID.name());
+		
+	}
+
+	private static void testColor() {
 		Color color = Color.RED;
 
 		switch (color) {
