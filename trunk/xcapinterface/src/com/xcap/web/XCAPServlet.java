@@ -15,6 +15,7 @@ import org.xml.sax.SAXException;
 import com.borqs.util.Utils;
 import com.xcap.ifc.Constants;
 import com.xcap.ifc.Constants.HttpMethod;
+import com.xcap.ifc.XCAPDatebaseIfc.ResultData;
 import com.xcap.ifc.XCAPDatebaseIfc;
 import com.xcap.ifc.XMLValidator;
 
@@ -71,7 +72,12 @@ public class XCAPServlet extends HttpServlet {
 			case POST:								
 				//call ifc
 				if(auid.equals(Constants.APP_USAGE_CONTACT)){
-					String result = xcapIfc.get(userId, queryString);
+					//log.info("---------------------queryString:" + queryString);
+					ResultData data = xcapIfc.get(userId, queryString);
+					String result = data.getXml();
+					if(data.getstatus() != HttpServletResponse.SC_OK){
+						resp.setStatus(data.getstatus());
+					}
 					PrintWriter writer = resp.getWriter();
 					writer.print(result);
 					//writer.close();
