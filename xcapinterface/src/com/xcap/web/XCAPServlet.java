@@ -44,7 +44,7 @@ public class XCAPServlet extends HttpServlet {
 		//String queryString = req.getQueryString();  
 		//String url = req.getRequestURI();
 		//log.info("url, queryString-->" + url + " " + queryString);
-				
+		
 		String userId = (String)req.getAttribute("uid");
 		String auid = (String)req.getAttribute("auid");
 		String queryString = (String)req.getAttribute("queryString");
@@ -69,19 +69,23 @@ public class XCAPServlet extends HttpServlet {
 			HttpMethod httpMethod = HttpMethod.valueOf(method);
 			switch (httpMethod) {
 			case GET :				
-			case POST:								
+			case POST:
+				resp.setContentType("text/xml");
 				//call ifc
 				if(auid.equals(Constants.APP_USAGE_CONTACT)){
 					//log.info("---------------------queryString:" + queryString);
 					ResultData data = xcapIfc.get(userId, queryString);
 					String result = data.getXml();
 					if(data.getstatus() != HttpServletResponse.SC_OK){
+						log.info("error status code is " + data.getstatus());
 						resp.setStatus(data.getstatus());
-					}
-					PrintWriter writer = resp.getWriter();
-					writer.print(result);
-					//writer.close();
-					
+						resp.sendError(data.getstatus(), data.getXml());
+					}else{
+						log.info("result xml :" + result);
+						PrintWriter writer = resp.getWriter();
+						writer.print(result);
+						//writer.close();						
+					}					
 				}else{
 					//404					
 					resp.sendError(HttpServletResponse.SC_NOT_FOUND, "auid is not implement");

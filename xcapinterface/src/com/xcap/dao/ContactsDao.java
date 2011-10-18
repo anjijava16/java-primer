@@ -64,7 +64,7 @@ public class ContactsDao {
 	 */
 	public ContactEntity getByIndex(String userId,int index){
 		List<ContactEntity> list = get(userId, index);
-		return list.size() > 0 ? list.get(0) : null;
+		return list != null && list.size() > 0 ? list.get(0) : null;
 	}
 	
 	public ContactEntity getByUniqueAttribute(String userId,int index){
@@ -84,7 +84,7 @@ public class ContactsDao {
 		if(index < 0){
 			sql = "select * from t_contacts where user_id = :user_id";
 		}else{
-			index = - 1;
+			index -= 1;
 			if(index >= 0){
 				StringBuilder temp = new StringBuilder("select * from t_contacts where user_id = :user_id limit ");
 				temp.append(index)
@@ -92,14 +92,18 @@ public class ContactsDao {
 				sql = temp.toString();
 				log.info(sql);
 			}else{
+				sql = null;
 				log.error("input index ");			
 			}
 		}
-		Query query = em.createNativeQuery(sql, ContactEntity.class);
-		query.setParameter("user_id", userId);
 		
-		List<ContactEntity> list = query.getResultList();
-		return list.size() > 0 ? list : null;
-		
+		if(sql != null){
+			Query query = em.createNativeQuery(sql, ContactEntity.class);
+			query.setParameter("user_id", userId);
+			
+			List<ContactEntity> list = query.getResultList();
+			return list.size() > 0 ? list : null;			
+		}
+		return null;
 	}
 }

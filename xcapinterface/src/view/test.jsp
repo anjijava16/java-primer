@@ -17,12 +17,12 @@
 		void tokenTest(HttpServletRequest request, JspWriter out) throws Exception  {
 		    String temp = request.getParameter("token");
 			String token = "F8sUmrH997S5Vf0dovlHs0Drw1fp72LBQ3KUEcG5iho*";
-		    if(temp != null){
+		    if(temp != null && temp.length() > 1){
 			    temp = temp.substring(1);
 			    out.print("token is:" + temp + "<br/>");
 		    	token = temp;		    	
 		    }
-			Map<String,String> result = Token.parseTokenXML(token);
+			Map<Token.TokenInfo,String> result = Token.parseTokenXML(token);
 			out.print("token:" + result);
 		}
 	
