@@ -54,14 +54,14 @@ public class Token {
 			String value = String.valueOf(ch);
 			value = value.substring(start, start + length);
 			
-			if (tagName == STATUS_TAG && status == null) {
+			if (tagName.equals(STATUS_TAG) && status == null) {
 				this.status = value;
-			} else if (tagName == TOKEN_EXPIRED_TIME_TAG
+			} else if (tagName.equals(TOKEN_EXPIRED_TIME_TAG)
 					&& tokenExpiredTime == null) {
 				tokenExpiredTime = value;
-			} else if (tagName == UID_TAG && uid == null) {
+			} else if (tagName.equals(UID_TAG) && uid == null) {
 				uid = value;
-			} else if (tagName == MSISDN_TAG && msisdn == null) {
+			} else if (tagName.equals(MSISDN_TAG) && msisdn == null) {
 				msisdn = value;
 			}
 		}
