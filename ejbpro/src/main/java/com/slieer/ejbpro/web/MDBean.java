@@ -12,15 +12,12 @@ import javax.naming.NamingException;
 
 public class MDBean {
 	public static void callMDB(InitialContext ctx) throws NamingException, JMSException {
-		QueueConnection cnn;
-		QueueSender sender;
-		QueueSession session;
 		Queue queue = (Queue) ctx.lookup("queue/HelloQueue");
 		QueueConnectionFactory factory = (QueueConnectionFactory) ctx.lookup("ConnectionFactory");
-		cnn = factory.createQueueConnection();
-		session = cnn.createQueueSession(false, QueueSession.AUTO_ACKNOWLEDGE);
+		QueueConnection cnn = factory.createQueueConnection();
+		QueueSession session = cnn.createQueueSession(false, QueueSession.AUTO_ACKNOWLEDGE);
 		TextMessage msg = session.createTextMessage("Hello World");
-		sender = session.createSender(queue);
+		QueueSender sender = session.createSender(queue);
 		sender.send(msg);
 		System.out.println("Message sent successfully to remote queue.");
 	}
