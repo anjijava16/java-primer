@@ -6,7 +6,7 @@ public interface XCAPDatebaseIfc {
 	
 	public ResultData get(String userId, String nodeSelector);
 	
-	public ResultData put(String userId, String nodeSelector);
+	public ResultData put(String userId, String nodeSelector, String xml);
 	
 	public ResultData delete(String userId, String nodeSelector);
 	
