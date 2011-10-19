@@ -20,11 +20,16 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.LocalBinding;
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.Attributes;
@@ -55,6 +60,7 @@ public class ContactListsAppEjb implements XCAPDatebaseIfc {
 	final static String USER_ID_NODE = "userId";
 	final static String CREATE_DATE_NODE = "createDate";                                    
 
+	final static String ID_ATTR = "id";
 
 	final static String DATE_FORMAT = "yyyy-MM-dd hh:mm:ss";
 	final static DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
@@ -134,7 +140,40 @@ public class ContactListsAppEjb implements XCAPDatebaseIfc {
 		return new ResultData(ResultData.STATUS_404, null);
 	}
 
-	public ResultData put(String userId, String nodeSelector) {
+	public ResultData put(String userId, String nodeSelector, String xml) {
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+	    factory.setNamespaceAware(true); // never forget this!
+	    DocumentBuilder builder;
+		try {
+			builder = factory.newDocumentBuilder();
+			Document doc = builder.parse(new InputSource(new StringReader(xml)));	
+			
+			NodeList nodes = doc.getChildNodes();
+			
+			for (int i = 0; i < nodes.getLength(); i++) {
+				Node node = nodes.item(i);
+				if(node.getNodeName().equals(CONTACT_NODE)){
+					NamedNodeMap map = node.getAttributes();
+					Node n = map.getNamedItem(ID_ATTR);
+					String id  = n.getNodeValue();
+					
+					NodeList list = node.getChildNodes();
+					for(int j = 0; j <list.getLength(); j++){
+						Node leafNode = list.item(j);
+						String name = leafNode.getNodeName();
+						String value = leafNode.getNodeValue();
+						
+						
+					}
+				}else{
+					//list node...
+				} 
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		return null;
 	}
 

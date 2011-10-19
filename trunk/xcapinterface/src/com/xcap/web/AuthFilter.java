@@ -73,7 +73,12 @@ public class AuthFilter implements Filter {
 			
 			chain.doFilter(request, response);
 		}else{
-			resp.sendError(HttpServletResponse.SC_BAD_REQUEST);	
+			try{
+				resp.sendError(HttpServletResponse.SC_BAD_REQUEST);	
+				return ;				
+			}catch (Exception e) {
+				log.error("send error Exception.");
+			}
 		}		
 	}
 	

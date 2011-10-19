@@ -1,8 +1,11 @@
 package com.xcap.web;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Reader;
+import java.util.Scanner;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,6 +16,7 @@ import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 
 import com.borqs.util.Utils;
+import com.sun.tools.ws.processor.model.Request;
 import com.xcap.ifc.Constants;
 import com.xcap.ifc.Constants.HttpMethod;
 import com.xcap.ifc.XCAPDatebaseIfc.ResultData;
@@ -23,7 +27,9 @@ public class XCAPServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	public static final Logger log = Logger.getLogger(XCAPServlet.class);
 	
-	final static String XML_SCHEMA_CONTACT = "./xmlschema/contact-list.xsd";
+	final static String SCHEMA_DIR = "/WEB-INF/classes/com/xcap/web/xmlschema";
+	final static String XML_SCHEMA_CONTACT = "contacts.xsd";
+	
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -92,25 +98,40 @@ public class XCAPServlet extends HttpServlet {
 				}
 				break;
 			case PUT :
-				//validate document.
-				String appSchema = null;
-				if(auid.equals(Constants.APP_USAGE_CONTACT)){
-					appSchema = XML_SCHEMA_CONTACT;
-				}else{
-					//other app usage.
-					resp.sendError(HttpServletResponse.SC_NOT_FOUND, "auid is not implement");
-				}
-							
-				Reader reader = req.getReader();					
-				try {
-					XMLValidator.xmlValidator(reader, appSchema);
-				} catch (SAXException e) {
-					e.printStackTrace();
-				} catch (IOException e) {			
-					e.printStackTrace();
+				BufferedReader reader = req.getReader();
+				Scanner scanner = new Scanner(reader);
+				StringBuilder xmlBuilder = new StringBuilder();
+				while(scanner.hasNextLine()){
+					xmlBuilder.append(scanner.nextLine());
 				}				
+				log.info("-----------------------put:" + xmlBuilder + " length:" + xmlBuilder.length());
 				
-
+				if( xmlBuilder.length() > 0){
+					//xml form not-well-formed
+					
+					//validate document.
+					String appSchema = null;
+					
+					if(auid.equals(Constants.APP_USAGE_CONTACT)){
+						appSchema = XML_SCHEMA_CONTACT;
+					}else{
+						//other app usage.
+						resp.sendError(HttpServletResponse.SC_NOT_FOUND, "auid is not implement");
+					}
+					
+					try {
+						String filePath = this.getServletContext().getRealPath(SCHEMA_DIR.concat("/").concat(appSchema));
+						log.info("file path:" + filePath + " " + new File(filePath));
+						XMLValidator.xmlValidator(xmlBuilder.toString(), filePath, false);
+					} catch (SAXException e) {
+						e.printStackTrace();
+					} catch (IOException e) {			
+						e.printStackTrace();
+					}
+					
+					
+				}
+				
 				break;
 			case DELETE:				
 				break;

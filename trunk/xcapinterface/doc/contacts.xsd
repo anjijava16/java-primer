@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="contacts" xmlns="contacts"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<xs:element name="contacts">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="contact" maxOccurs="unbounded" minOccurs="1"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="contact">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="method" type="xs:string" maxOccurs="1" minOccurs="1"/>
+				<xs:element name="contactName" type="xs:string" maxOccurs="1" minOccurs="1"/>
+				<xs:element name="userId" type="xs:string" maxOccurs="1" minOccurs="1"/>
+				<xs:element name="createDate" type="xs:string" maxOccurs="1" minOccurs="1"/>
+			</xs:sequence>
+			<xs:attribute name="id" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string"></xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
