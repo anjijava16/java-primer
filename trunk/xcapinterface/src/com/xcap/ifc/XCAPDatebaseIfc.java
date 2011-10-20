@@ -1,8 +1,14 @@
 package com.xcap.ifc;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 
 public interface XCAPDatebaseIfc {
 	public static String CONTACT_LOCAL_JNDI = "ContactListsApp";
+
+	final static String DATE_FORMAT = "yyyy-MM-dd hh:mm:ss";
+	final static DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
 	
 	public ResultData get(String userId, String nodeSelector);
 	

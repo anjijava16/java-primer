@@ -16,13 +16,15 @@ import com.xcap.dao.entity.ContactEntity;
  * @author slieer
  * version 1.0
  */
-public class ContactsDao {
-	public static final Logger log = Logger.getLogger(ContactsDao.class);	
+public class ContactsOnlyReadDao {
+	public static final Logger log = Logger.getLogger(ContactsOnlyReadDao.class);	
 	
 	private EntityManager em;
-	public ContactsDao(EntityManager em){
+	public ContactsOnlyReadDao(EntityManager em){
 		this.em = em;
 	}
+	
+	
 	
 	/**
 	 * @param userId
