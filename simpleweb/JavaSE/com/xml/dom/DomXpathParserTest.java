@@ -20,7 +20,7 @@ import org.xml.sax.SAXException;
 /**
  *http://www.ibm.com/developerworks/cn/xml/x-javaxpathapi.html 
  */
-public class DomTest {
+public class DomXpathParserTest {
 	public static String file = "JavaSE/com/xml/dom/book.xml";
 	public static void main(String[] args) {
 		try {

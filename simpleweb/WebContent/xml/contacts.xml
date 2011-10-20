@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<contacts xmlns="contacts"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="contacts file:///E:/BorqsWorkspace/workspace/xcapinterface/doc/contact-list-1.xsd">
+<contacts xmlns="contacts" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="contacts file:///E:/BorqsWorkspace/workspace/simpleweb/WebContent/xml/contacts.xsd">
 	<contact id="21016">
 		<method>8405566</method>
 		<contactname>ALAN</contactname>
@@ -10,9 +9,9 @@
 	</contact>
 	<contact id="21015">
 		<method>13798584767</method>
-		<contactname></contactname>
+		<contactname>ALAN</contactname>
 		<userid>6</userid>
-		<createdate></createdate>
+		<createdate>2011-09-28 07:10:20</createdate>
 	</contact>
 	<contact id="21053">
 		<method>12593008613823514039</method>
@@ -21,7 +20,7 @@
 		<createdate>2011-09-29 05:52:25</createdate>
 	</contact>
 	<contact id="21046">
-		<method></method>
+		<method>84236457</method>
 		<contactname>翟小斌</contactname>
 		<userid>6</userid>
 		<createdate>2011-09-28 07:10:20</createdate>

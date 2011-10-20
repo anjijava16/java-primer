@@ -16,7 +16,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 
-public class XmlStringParser {
+public class XmlStringSaxParser {
 	static String xml = "<contact id=\"890\"><method>13823514039</method><contactName>杨威</contactName><userId>13</userId><createDate>2011-09-27 05:26:52</createDate></contact>";
 
 	public static void main(String[] args) {
