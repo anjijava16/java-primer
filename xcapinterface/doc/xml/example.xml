@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <contacts xmlns="contact-lists"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="contacts file:///E:/BorqsWorkspace/workspace/xcapinterface/doc/contact-list-1.xsd">
-	<!-- xsi:schemaLocation="contacts file:///E:/BorqsWorkspace/MyGoogleCode/xcapinterface/src/doc/contact-list-1.xsd" -->
+	xsi:schemaLocation="contacts contacts.xsd">
+	
 	<contact id="890">
 		<method>13823514039</method>
 		<contactName>杨威</contactName>

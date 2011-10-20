@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <contacts xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="contacts contact-list-1.xsd">
+	xsi:schemaLocation="contacts contacts.xsd">
 	<contact id="11024">
 		<method>13510776271</method>
 		<contactname>Gykoooooo</contactname>

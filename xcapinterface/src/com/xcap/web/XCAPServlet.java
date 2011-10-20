@@ -11,9 +11,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.validation.ValidatorHandler;
 
 import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
 
 import com.borqs.util.Utils;
 import com.sun.tools.ws.processor.model.Request;
@@ -104,10 +107,18 @@ public class XCAPServlet extends HttpServlet {
 				while(scanner.hasNextLine()){
 					xmlBuilder.append(scanner.nextLine());
 				}				
-				log.info("-----------------------put:" + xmlBuilder + " length:" + xmlBuilder.length());
+				//log.info("-----------------------put:" + xmlBuilder + " length:" + xmlBuilder.length());
 				
 				if( xmlBuilder.length() > 0){
 					//xml form not-well-formed
+					
+					SAXParserFactory spf = SAXParserFactory.newInstance();
+					spf.setNamespaceAware(true);
+					//XMLReader reader1 = spf.newSAXParser().getXMLReader(); 
+					//reader.parse(xml);
+
+
+					//http://www.bitscn.com/plus/view.php?aid=22784					
 					
 					//validate document.
 					String appSchema = null;
@@ -121,7 +132,7 @@ public class XCAPServlet extends HttpServlet {
 					
 					try {
 						String filePath = this.getServletContext().getRealPath(SCHEMA_DIR.concat("/").concat(appSchema));
-						log.info("file path:" + filePath + " " + new File(filePath));
+						//log.info("file path:" + filePath + " " + new File(filePath));
 						XMLValidator.xmlValidator(xmlBuilder.toString(), filePath, false);
 					} catch (SAXException e) {
 						e.printStackTrace();
@@ -129,7 +140,7 @@ public class XCAPServlet extends HttpServlet {
 						e.printStackTrace();
 					}
 					
-					
+					xcapIfc.put(userId, queryString, xmlBuilder.toString());
 				}
 				
 				break;

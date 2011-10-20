@@ -26,6 +26,7 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.LocalBinding;
 import org.w3c.dom.Document;
@@ -39,7 +40,8 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import sun.util.BuddhistCalendar;
 
-import com.xcap.dao.ContactsDao;
+import com.xcap.dao.ContactDao;
+import com.xcap.dao.ContactsOnlyReadDao;
 import com.xcap.dao.entity.ContactEntity;
 import com.xcap.ifc.Constants;
 import com.xcap.ifc.Contact;
@@ -52,26 +54,26 @@ import com.xcap.ifc.error.XCAPErrors;
 public class ContactListsAppEjb implements XCAPDatebaseIfc {
 	public static final Logger log = Logger.getLogger(ContactListsAppEjb.class);
 
-	final static String CONTACT_NODE = "contact";
-	final static String LIST_NODE = "list";
+	final static String NODE_CONTACTS = "contacts";
+	final static String NODE_CONTACT = "contact";
+	final static String NODE_LIST = "list";
 	
-	final static String METHOD_NODE = "method"; 
-	final static String CONTACT_NAME_NODE = "contactName";
-	final static String USER_ID_NODE = "userId";
-	final static String CREATE_DATE_NODE = "createDate";                                    
+	final static String NODE_LEAF_METHOD = "method"; 
+	final static String NODE_LEAF_CONTACT_NAME = "contactName";
+	final static String NODE_LEAF_USER_ID = "userId";
+	final static String NODE_LEAF_CREATE_DATE = "createDate";                                    
 
-	final static String ID_ATTR = "id";
-
-	final static String DATE_FORMAT = "yyyy-MM-dd hh:mm:ss";
-	final static DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+	final static String ATTR_ID = "id";
 	
 	@PersistenceContext(unitName="xcap")
 	EntityManager em;
-	ContactsDao contactsDao;
-
+	ContactsOnlyReadDao onlyReadContactsDao;
+	ContactDao contactsDao;
+	
 	@PostConstruct
 	public void postConstruct() {
-		contactsDao = new ContactsDao(em);
+		onlyReadContactsDao = new ContactsOnlyReadDao(em);
+		contactsDao = new ContactDao(em);
 	}
 
 	public ResultData get(String userId, String nodeSelector) {
@@ -82,7 +84,7 @@ public class ContactListsAppEjb implements XCAPDatebaseIfc {
 			xmlBuilder.append("<contacts xmlns=\"contact-lists\" ")
 			.append("xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ")					
 			.append("xsi:schemaLocation=\"contact-lists site/contact-list-1.xsd\">");
-			List<ContactEntity> list = contactsDao.getList(userId);
+			List<ContactEntity> list = onlyReadContactsDao.getList(userId);
 			constructContactNode(xmlBuilder, list);
 			
 			xmlBuilder.append("</contacts>");
@@ -148,27 +150,26 @@ public class ContactListsAppEjb implements XCAPDatebaseIfc {
 			builder = factory.newDocumentBuilder();
 			Document doc = builder.parse(new InputSource(new StringReader(xml)));	
 			
-			NodeList nodes = doc.getChildNodes();
-			
-			for (int i = 0; i < nodes.getLength(); i++) {
-				Node node = nodes.item(i);
-				if(node.getNodeName().equals(CONTACT_NODE)){
-					NamedNodeMap map = node.getAttributes();
-					Node n = map.getNamedItem(ID_ATTR);
-					String id  = n.getNodeValue();
+			//String topNodeName = doc.getNodeName();  #document
+			String topTagName = doc.getDocumentElement().getTagName();
+			log.info("----------------top node name: " + topTagName);
+			if(NODE_CONTACTS.equals(topTagName)){
+				if(nodeSelector == null ||(nodeSelector != null && nodeSelector.equals(Constants.APP_USAGE_CONTACT))){
+					//put document.replace user all contacts.
 					
-					NodeList list = node.getChildNodes();
-					for(int j = 0; j <list.getLength(); j++){
-						Node leafNode = list.item(j);
-						String name = leafNode.getNodeName();
-						String value = leafNode.getNodeValue();
-						
-						
-					}
-				}else{
-					//list node...
-				} 
+				}
+			}else if(NODE_CONTACT.equals(topTagName)){
+				//判断选择器是否准确
+				//add or replace one contact.
+			}else if(isLeafNodeName(topTagName) != null){
+				//判断选择器是否准确
+				//replace a contact attribute.
+				
+			}else if(NODE_LIST.equals(topTagName)){
+				//implement later
+				
 			}
+			 contactNode(doc,topTagName);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -178,9 +179,88 @@ public class ContactListsAppEjb implements XCAPDatebaseIfc {
 	}
 
 	public ResultData delete(String userId, String nodeSelector) {
+		//delete all
+		//delete a contact
+		
 		return null;
 	}
 	
+	private void contactNode(Document doc,String tagName){
+		NodeList nodes = null;
+		if(isLeafNodeName(tagName) != null ){
+			if(tagName.equals(NODE_CONTACT) || tagName.equals(NODE_LIST)){
+				nodes = doc.getElementsByTagName(NODE_CONTACT);
+			}else{
+				nodes = doc.getChildNodes();
+			}
+			//tagName.equals(NODE_CONTACTS) || tagName.equals(NODE_CONTACT)
+			for (int i = 0; i < nodes.getLength(); i++) {
+				Node node = nodes.item(i);
+				String nodeName = node.getNodeName();
+				//log.info("-------------nodeName:" + nodeName);
+				if(nodeName.equals(NODE_CONTACT)){
+					NamedNodeMap map = node.getAttributes();
+					Node n = map.getNamedItem(ATTR_ID);
+					String id  = n.getNodeValue();
+					log.info("-------------id:" + id);
+					
+					NodeList list = node.getChildNodes();
+					
+					ContactEntity contact = new ContactEntity();
+					for(int j = 0; j <list.getLength(); j++){
+						Node leafNode = list.item(j);
+						String name = leafNode.getNodeName();
+						if(!name.equals("#text")){
+							NodeList textNodes = leafNode.getChildNodes();
+							String value = null;							
+							int len = textNodes.getLength();
+							
+							if(len == 1){
+								value = textNodes.item(0).getNodeValue();
+							}else{
+								//value is null
+								value = null;
+							}
+							log.info(name + ":" + value);
+							if(name.equals(NODE_LEAF_CONTACT_NAME)){
+								contact.setContactName(value);
+							}else if(name.equals(NODE_LEAF_CREATE_DATE)){
+								//contact.setCreateDate(value);
+							}else if(name.equals(NODE_LEAF_METHOD)){
+								contact.setContactMethod(value);
+							}else if(name.equals(NODE_LEAF_USER_ID)){
+								long userId = Long.valueOf(value);
+								contact.setUserId(userId);
+							}
+						}
+						
+						contactsDao.saveOrUpdate(contact);
+					}
+				}else{
+					//list node...
+				} 
+				System.out.println();
+			}			
+		}else {
+			
+			//leaf node
+		}
+		
+	}
+	
+	
+	/**
+	 * @param nodeName
+	 * @return nodeName is validate leaf node name return nodeName ,or null
+	 */
+	public String isLeafNodeName(String nodeName){
+		if(NODE_LEAF_CONTACT_NAME.equals(nodeName) || NODE_LEAF_USER_ID.equals(nodeName)
+				|| NODE_LEAF_METHOD.equals(nodeName) || NODE_LEAF_CREATE_DATE.equals(nodeName)){
+			return nodeName;
+		}else{
+			return null;
+		}
+	}
 	
 	private static String getXmlByTagName(String xmlText,String tagName) throws Exception {
 		class Handler extends DefaultHandler {
@@ -236,8 +316,8 @@ public class ContactListsAppEjb implements XCAPDatebaseIfc {
 	 * @return
 	 */
 	private String secondLevelUrlValidate(String condition2){
-		if (condition2.equals(CONTACT_NAME_NODE) || condition2.equals(METHOD_NODE)
-			|| condition2.equals(USER_ID_NODE) || condition2.equals(CREATE_DATE_NODE) ){
+		if (condition2.equals(NODE_LEAF_CONTACT_NAME) || condition2.equals(NODE_LEAF_METHOD)
+			|| condition2.equals(NODE_LEAF_USER_ID) || condition2.equals(NODE_LEAF_CREATE_DATE) ){
 			return condition2;
 		}else if(condition2.matches("^method\\[1\\]$") || condition2.matches("^contactName\\[1\\]$")
 				|| condition2.matches("^userId\\[1\\]$") || condition2.matches("^createDate\\[1\\]$") ){
@@ -279,9 +359,9 @@ public class ContactListsAppEjb implements XCAPDatebaseIfc {
 	 */
 	private ResultData getSecondLevelXml(String userId, String condition1) {
 		log.info("--------------condition1:" + condition1);
-		if(condition1.startsWith(ContactListsAppEjb.CONTACT_NODE)){
-			if(condition1.equals(ContactListsAppEjb.CONTACT_NODE)){
-				long size = contactsDao.getListSize(userId);
+		if(condition1.startsWith(ContactListsAppEjb.NODE_CONTACT)){
+			if(condition1.equals(ContactListsAppEjb.NODE_CONTACT)){
+				long size = onlyReadContactsDao.getListSize(userId);
 				if(size == 0){
 					log.info("was not found in the document.");
 					return new ResultData(ResultData.STATUS_404,"");
@@ -289,7 +369,7 @@ public class ContactListsAppEjb implements XCAPDatebaseIfc {
 					StringBuilder contactXml = new StringBuilder();
 					
 					constructContactNode(contactXml,
-							contactsDao.getList(userId));
+							onlyReadContactsDao.getList(userId));
 					return new ResultData(ResultData.STATUS_200, contactXml.toString());
 				}else{
 					new ResultData(ResultData.STATUS_409, new XCAPErrors.NoParentConflictException("Contacts").getResponseContent());
@@ -301,7 +381,7 @@ public class ContactListsAppEjb implements XCAPDatebaseIfc {
 				if(match.find()){
 					int indexTemp = Integer.valueOf(match.group(0));
 					log.info("-----------------index:" + indexTemp);
-					ContactEntity entity = contactsDao.getByIndex(userId, indexTemp);
+					ContactEntity entity = onlyReadContactsDao.getByIndex(userId, indexTemp);
 					
 					return getStatusAndXml(entity);
 				}							
@@ -313,13 +393,13 @@ public class ContactListsAppEjb implements XCAPDatebaseIfc {
 				Matcher match = p.matcher(condition1);
 				if(match.find()){
 					int id = Integer.valueOf(match.group(0));
-					ContactEntity entity = contactsDao.getById(userId, id);
+					ContactEntity entity = onlyReadContactsDao.getById(userId, id);
 					return getStatusAndXml(entity);								
 				}
 			}else{
 				return new ResultData(ResultData.STATUS_404, "");
 			}
-		}else if(condition1.startsWith(ContactListsAppEjb.LIST_NODE)){
+		}else if(condition1.startsWith(ContactListsAppEjb.NODE_LIST)){
 			 
 		}
 		

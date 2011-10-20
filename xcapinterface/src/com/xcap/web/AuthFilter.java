@@ -58,6 +58,10 @@ public class AuthFilter implements Filter {
 			Map<Token.TokenInfo, String> tokenInfo = Token.parseTokenXML(token);
 			log.info("tokenInfo:" + tokenInfo);
 			
+			if(tokenInfo == null){
+				resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				return;				
+			}
 			String tokenStatus = tokenInfo.get(Token.TokenInfo.STATUS_TAG);
 			String msisdn = tokenInfo.get(Token.TokenInfo.MSISDN_TAG);
 			String uid = tokenInfo.get(Token.TokenInfo.UID_TAG);
