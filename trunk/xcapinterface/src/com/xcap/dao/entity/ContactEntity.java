@@ -85,5 +85,12 @@ public class ContactEntity implements Serializable  {
 	public void setBlocking(Integer blocking) {
 		this.blocking = blocking;
 	}
-	
+	@Override
+	public String toString() {
+		return "ContactEntity [id=" + id + ", userId=" + userId
+				+ ", contactMethod=" + contactMethod + ", contactName="
+				+ contactName + ", description=" + description
+				+ ", createDate=" + createDate + ", contactType=" + contactType
+				+ ", blocking=" + blocking + "]";
+	}
 }

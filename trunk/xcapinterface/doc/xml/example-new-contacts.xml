@@ -3,30 +3,26 @@
 	xsi:schemaLocation="contacts contacts.xsd">
 	<contact id="11024">
 		<method>13510776271</method>
-		<contactname>Gykoooooo</contactname>
-		<userid>6</userid>
-		<createdate>2011-09-28 07:10:20</createdate>
+		<contactName>Gykoooooo</contactName>		
+		<createDate>2011-09-28 07:10:20</createDate>
 	</contact>
 
 	<contact id="1046">
 		<method>84236457</method>
-		<contactname>翟小斌</contactname>
-		<userid>6</userid>
-		<createdate>2011-09-28 07:10:20</createdate>
+		<contactName>翟小斌</contactName>		
+		<createDate>2011-09-28 07:10:20</createDate>
 	</contact>
 
 	<list id="friends@facebook">
 		<contact id="11034">
 			<method>46546464646</method>
-			<contactname>yuankang</contactname>
-			<userid>6</userid>
-			<createdate>2011-09-28 07:10:20</createdate>
+			<contactName>yuankang</contactName>			
+			<createDate>2011-09-28 07:10:20</createDate>
 		</contact>
 		<contact id="11032">
 			<method>156445564641</method>
-			<contactname>yuankang</contactname>
-			<userid>6</userid>
-			<createdate>2011-09-28 07:10:20</createdate>
+			<contactName>yuankang</contactName>			
+			<createDate>2011-09-28 07:10:20</createDate>
 		</contact>
 	</list>
 </contacts>
