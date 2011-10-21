@@ -3,9 +3,6 @@ package com.xcap.ejb;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,16 +14,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.LocalBinding;
 import org.w3c.dom.Document;
@@ -37,8 +28,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-
-import sun.util.BuddhistCalendar;
 
 import com.xcap.dao.ContactDao;
 import com.xcap.dao.ContactsOnlyReadDao;
@@ -60,7 +49,8 @@ public class ContactListsAppEjb implements XCAPDatebaseIfc {
 	
 	final static String NODE_LEAF_METHOD = "method"; 
 	final static String NODE_LEAF_CONTACT_NAME = "contactName";
-	final static String NODE_LEAF_USER_ID = "userId";
+	//final static String NODE_LEAF_USER_ID = "userId";
+	final static String NODE_LEAF_DESC = "description";
 	final static String NODE_LEAF_CREATE_DATE = "createDate";                                    
 
 	final static String ATTR_ID = "id";
@@ -169,8 +159,8 @@ public class ContactListsAppEjb implements XCAPDatebaseIfc {
 				//implement later
 				
 			}
-			 contactNode(doc,topTagName);
 			
+			contactNode(doc,topTagName, Long.valueOf(userId));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -185,24 +175,27 @@ public class ContactListsAppEjb implements XCAPDatebaseIfc {
 		return null;
 	}
 	
-	private void contactNode(Document doc,String tagName){
+	private void contactNode(Document doc,String tagName, long userId){
 		NodeList nodes = null;
-		if(isLeafNodeName(tagName) != null ){
+		
+		if(isLeafNodeName(tagName) == null ){
 			if(tagName.equals(NODE_CONTACT) || tagName.equals(NODE_LIST)){
+				log.info("-------------------saveOrOutdate contact node");
 				nodes = doc.getElementsByTagName(NODE_CONTACT);
 			}else{
-				nodes = doc.getChildNodes();
+				log.info("-------------------saveOrOutdate other node");
+				nodes = doc.getChildNodes().item(0).getChildNodes();
 			}
 			//tagName.equals(NODE_CONTACTS) || tagName.equals(NODE_CONTACT)
 			for (int i = 0; i < nodes.getLength(); i++) {
 				Node node = nodes.item(i);
 				String nodeName = node.getNodeName();
-				//log.info("-------------nodeName:" + nodeName);
+				log.info("-------------nodeName:" + nodeName);
 				if(nodeName.equals(NODE_CONTACT)){
 					NamedNodeMap map = node.getAttributes();
 					Node n = map.getNamedItem(ATTR_ID);
 					String id  = n.getNodeValue();
-					log.info("-------------id:" + id);
+					//log.info("-------------id:" + id);
 					
 					NodeList list = node.getChildNodes();
 					
@@ -214,28 +207,30 @@ public class ContactListsAppEjb implements XCAPDatebaseIfc {
 							NodeList textNodes = leafNode.getChildNodes();
 							String value = null;							
 							int len = textNodes.getLength();
-							
+							//log.info("---------len:" + len);
 							if(len == 1){
 								value = textNodes.item(0).getNodeValue();
 							}else{
 								//value is null
 								value = null;
 							}
-							log.info(name + ":" + value);
+							//log.info(name + ":" + value);
 							if(name.equals(NODE_LEAF_CONTACT_NAME)){
 								contact.setContactName(value);
 							}else if(name.equals(NODE_LEAF_CREATE_DATE)){
 								//contact.setCreateDate(value);
 							}else if(name.equals(NODE_LEAF_METHOD)){
 								contact.setContactMethod(value);
-							}else if(name.equals(NODE_LEAF_USER_ID)){
-								long userId = Long.valueOf(value);
-								contact.setUserId(userId);
 							}
 						}
 						
-						contactsDao.saveOrUpdate(contact);
 					}
+					log.info("------------saveOrUpdate--->" + contact.toString());
+					if(id != null){
+						contact.setId(Long.valueOf(id));
+					}
+					contact.setUserId(userId);
+					contactsDao.saveOrUpdate(contact);
 				}else{
 					//list node...
 				} 
@@ -247,21 +242,7 @@ public class ContactListsAppEjb implements XCAPDatebaseIfc {
 		}
 		
 	}
-	
-	
-	/**
-	 * @param nodeName
-	 * @return nodeName is validate leaf node name return nodeName ,or null
-	 */
-	public String isLeafNodeName(String nodeName){
-		if(NODE_LEAF_CONTACT_NAME.equals(nodeName) || NODE_LEAF_USER_ID.equals(nodeName)
-				|| NODE_LEAF_METHOD.equals(nodeName) || NODE_LEAF_CREATE_DATE.equals(nodeName)){
-			return nodeName;
-		}else{
-			return null;
-		}
-	}
-	
+		
 	private static String getXmlByTagName(String xmlText,String tagName) throws Exception {
 		class Handler extends DefaultHandler {
 			private String tagName;
@@ -305,6 +286,19 @@ public class ContactListsAppEjb implements XCAPDatebaseIfc {
 		stringReader.close();
 		return h.getValue();
 	}	
+
+	/**
+	 * @param nodeName
+	 * @return nodeName is validate leaf node name return nodeName ,or null
+	 */
+	public String isLeafNodeName(String nodeName){
+		if(NODE_LEAF_CONTACT_NAME.equals(nodeName)
+				|| NODE_LEAF_METHOD.equals(nodeName) || NODE_LEAF_CREATE_DATE.equals(nodeName)){
+			return nodeName;
+		}else{
+			return null;
+		}
+	}
 	
 	/**
 	 *   method or method[1] 
@@ -317,11 +311,11 @@ public class ContactListsAppEjb implements XCAPDatebaseIfc {
 	 */
 	private String secondLevelUrlValidate(String condition2){
 		if (condition2.equals(NODE_LEAF_CONTACT_NAME) || condition2.equals(NODE_LEAF_METHOD)
-			|| condition2.equals(NODE_LEAF_USER_ID) || condition2.equals(NODE_LEAF_CREATE_DATE) ){
+			|| condition2.equals(NODE_LEAF_CREATE_DATE) ){
 			return condition2;
 		}else if(condition2.matches("^method\\[1\\]$") || condition2.matches("^contactName\\[1\\]$")
-				|| condition2.matches("^userId\\[1\\]$") || condition2.matches("^createDate\\[1\\]$") ){
-			Pattern pattern = Pattern.compile("method|contactName|userId|createDate");
+				|| condition2.matches("^createDate\\[1\\]$") ){
+			Pattern pattern = Pattern.compile("method|contactName|createDate");
 			Matcher match = pattern.matcher(condition2);
 			if(match.find()){
 				return match.group(0);
@@ -434,14 +428,12 @@ public class ContactListsAppEjb implements XCAPDatebaseIfc {
 			String method = en.getContactMethod();
 			String contactName = en.getContactName();
 			String createDate = dateFormat.format(en.getCreateDate());
-			String userIdTemp = en.getUserId().toString();
 			String id = en.getId().toString();
 
 			xmlBuilder
 					.append("<contact id=\"".concat(id).concat("\">"))
 					.append("<method>".concat(method != null ? method : "").concat("</method>"))
 					.append("<contactName>".concat(contactName != null ? contactName : "").concat("</contactName>"))
-					.append("<userId>".concat(userIdTemp).concat("</userId>"))
 					.append("<createDate>".concat(createDate).concat("</createDate>")).append("</contact>");
 		}
 	}

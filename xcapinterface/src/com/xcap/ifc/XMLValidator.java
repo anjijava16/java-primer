@@ -4,57 +4,69 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 
+import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
+import org.apache.log4j.Logger;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
 
 public class XMLValidator {
-
+	private final static Logger log = Logger.getLogger(XMLValidator.class);
+	
+	public static final int RESULT_OK = 0;
+	public static final int RESULT_STRUCTURE_ERROR = 1;
+	public static final int RESULT_SCHEMA_VALIDATE_ERROR = 2;
+	
 	/**
 	 * 
 	 * @param xmlFilePath
 	 * @param schemaFilePath
 	 * @param xmlFileOrXmlText
 	 *            true xml file; false xml text.
-	 * @return
+	 * @return 0 Ok, 1 XML document structures, 2 schema validate error.
 	 * @throws SAXException
 	 * @throws IOException
 	 */
-	public static boolean xmlValidator(String xml, String schemaFilePath,
-			boolean xmlFileOrXmlText) throws SAXException, IOException {
-		// 1. Lookup a factory for the W3C XML Schema language
-		SchemaFactory factory = SchemaFactory
-				.newInstance("http://www.w3.org/2001/XMLSchema");
+	public static int xmlValidator(String xml, String schemaFilePath,
+			boolean xmlFileOrXmlText) throws IOException {
+		StringReader xmlStringReader = new StringReader(xml);
 
-		// 2. Compile the schema.
-		// Here the schema is loaded from a java.io.File, but you could use
-		// a java.net.URL or a javax.xml.transform.Source instead.
-		File schemaLocation = new File(schemaFilePath);
-		Schema schema = factory.newSchema(schemaLocation);
+		SAXParserFactory spf = SAXParserFactory.newInstance();
+		spf.setNamespaceAware(true);
+		XMLReader xmlReader;
+		try {
+			xmlReader = spf.newSAXParser().getXMLReader();
+			xmlReader.parse(new InputSource(xmlStringReader));
+		} catch (Exception e1) {
+			log.error(e1.getMessage());
+			return RESULT_STRUCTURE_ERROR;
+		}
+		
+		SchemaFactory factory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
 
-		// 3. Get a validator from the schema.
-		Validator validator = schema.newValidator();
-
-		// 4. Parse the document you want to check./
 		Source source = null;
 		if (!xmlFileOrXmlText) {
 			source = new StreamSource(new StringReader(xml));
 		} else {
 			source = new StreamSource(xml);
 		}
-
-		// 5. Check the document
+		
 		try {
+			File schemaLocation = new File(schemaFilePath);
+			Schema schema = factory.newSchema(schemaLocation);
+			Validator validator = schema.newValidator();
 			validator.validate(source);
-			return true;
+			return RESULT_OK;
 		} catch (SAXException ex) {
 
 			System.out.println(ex.getMessage());
-			return false;
+			return RESULT_SCHEMA_VALIDATE_ERROR;
 		}
 	}
 	
@@ -63,10 +75,8 @@ public class XMLValidator {
 		String xsd = "src/doc/contact-list-1.xsd";
 
 		try {
-			boolean re = xmlValidator(xml, xsd, true);
-			System.out.println(re);
-		} catch (SAXException e) {
-			e.printStackTrace();
+			int result = xmlValidator(xml, xsd, true);
+			System.out.println(result);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
