@@ -14,6 +14,8 @@ import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.HttpConnectionParams;
 
+import sun.util.logging.resources.logging;
+
 
 public class Fundamentals {
 	public static void main(String[] args) {
@@ -23,8 +25,8 @@ public class Fundamentals {
 		String url = constructUrl(phoneNo, token);
 		try {
 			File file = new File("JavaSE/com/http/example.xml");
-			put(url,file);
-			//get(url);
+			//put(url,file);
+			get(url);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -87,6 +89,7 @@ public class Fundamentals {
             HttpResponse response = httpclient.execute(httppost);
             HttpEntity resEntity = response.getEntity();
             
+            System.out.println("StatusCode:" + response.getStatusLine().getStatusCode());
             Scanner s = new Scanner(resEntity.getContent());
             while(s.hasNextLine()){
             	System.out.println(s.nextLine());

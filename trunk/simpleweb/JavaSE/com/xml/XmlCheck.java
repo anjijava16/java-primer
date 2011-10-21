@@ -4,9 +4,13 @@ import java.io.StringReader;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParserFactory;
 
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
 
 /**
  * 判断xml 中是否有书写错误
@@ -32,24 +36,36 @@ public class XmlCheck {
 	
 
 	public static void main(String[] args) {
-		dom();
-
+		InputSource input = new InputSource(new StringReader(goodXmlString));
+		InputSource badInput = new InputSource(new StringReader(badXmlString));
+		//dom(input);
+		sax(badInput);
 	}
 
-	private static void sax() {
-		
+	public static void sax(InputSource input) {
+		SAXParserFactory spf = SAXParserFactory.newInstance();
+		spf.setNamespaceAware(true);
+		XMLReader reader;
+		try {
+			reader = spf.newSAXParser().getXMLReader();
+			reader.parse(input);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
 	}
 	
-	private static void jdom(){
-		
+	public static void jdom(){
 	}
 	
-	private static void dom() {
+	public static void dom4j(){
+	}
+	
+	public static void dom(InputSource input) {
 		DocumentBuilder parser;
 		try {
 			parser = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			// Document document = parser.parse(new File(xmlFile));
-			Document document = parser.parse(new InputSource(new StringReader(goodXmlString)));
+			Document document = parser.parse(input);
 			
 			System.out.println("------------------");
 			Document document1 = parser.parse(new InputSource(new StringReader(badXmlString)));
