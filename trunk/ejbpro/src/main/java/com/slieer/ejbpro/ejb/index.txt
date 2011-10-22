@@ -11,3 +11,8 @@ mbean code="org.jboss.mq.server.jmx.Queue"
       	jboss.mq:service=DestinationManager
       </depends> 
 </mbean> 
+
+
+查看已发布的web service:
+
+http://127.0.0.1:8080/jbossws/
