@@ -12,21 +12,16 @@ import com.slieer.ejbpro.ifc.HelloWebserviceIfc;
 public class WebServiceClient {
 	static Logger log = Logger.getLogger(WebServiceClient.class);
 
-    static String host = "localhost";
-    static String portType = "HelloBean";
-    static String serviceName = "Greeter";
-    static String serviceEndpointAddress = "http://" + host + ":8080/" + serviceName;
-    static String nameSpace = "http://ws.examples/";
+    static String serviceName = "HelloWebServiceService";
+    static String nameSpace = "http://ejb.ejbpro.slieer.com/";
 
     public static void main(String[] args) throws Exception
     {
-        URL wsdlLocation = new URL(serviceEndpointAddress + "/" + portType + "?WSDL");
+        URL wsdlLocation = new URL("http://127.0.0.1:8080/ejbpro_ejb/HelloWebService?wsdl");
         QName serviceNameQ = new QName(nameSpace, serviceName);
         
         Service service = Service.create(wsdlLocation, serviceNameQ);
-        
-        HelloWebserviceIfc client = (HelloWebserviceIfc)service.getPort(HelloWebserviceIfc.class);
-
-        log.info(client.hello());
+        log.info("service:" + service);
+        System.out.println(service);
     }
 }

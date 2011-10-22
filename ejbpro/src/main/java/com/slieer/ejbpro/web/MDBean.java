@@ -10,6 +10,7 @@ import javax.jms.TextMessage;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+//jsp call.
 public class MDBean {
 	public static void callMDB(InitialContext ctx) throws NamingException, JMSException {
 		Queue queue = (Queue) ctx.lookup("queue/HelloQueue");
