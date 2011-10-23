@@ -16,3 +16,6 @@ mbean code="org.jboss.mq.server.jmx.Queue"
 查看已发布的web service:
 
 http://127.0.0.1:8080/jbossws/
+
+jboss Quartz计划任务
+http://blog.csdn.net/spamatrix/article/details/4984495
