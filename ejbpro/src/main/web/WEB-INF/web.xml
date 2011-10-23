@@ -3,4 +3,13 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
+	<servlet>
+		<servlet-name>MDBeanServlet</servlet-name>
+		<servlet-class>com.slieer.ejbpro.web.MDBeanServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>MDBeanServlet</servlet-name>
+		<url-pattern>MDB-servlet</url-pattern>
+	</servlet-mapping>
 </web-app>

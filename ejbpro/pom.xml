@@ -33,6 +33,35 @@
     	<type>jar</type>
     	<scope>compile</scope>
     </dependency>
+    <dependency>
+    	<groupId>org.apache.derby</groupId>
+    	<artifactId>derby</artifactId>
+    	<version>10.8.1.2</version>
+    	<type>jar</type>
+    	<scope>provided</scope>
+    </dependency>
+    <dependency>
+    	<groupId>org.apache.derby</groupId>
+    	<artifactId>derbyLocale_zh_CN</artifactId>
+    	<version>10.8.1.2</version>
+    	<type>jar</type>
+    	<scope>provided</scope>
+    </dependency>
+    <dependency>
+    	<groupId>org.apache.derby</groupId>
+    	<artifactId>derbyclient</artifactId>
+    	<version>10.8.1.2</version>
+    	<type>jar</type>
+    	<scope>provided</scope>
+    </dependency>
+    <dependency>
+    	<groupId>org.apache.derby</groupId>
+    	<artifactId>derbytools</artifactId>
+    	<version>10.8.1.2</version>
+    	<type>jar</type>
+    	<scope>provided</scope>
+    	<optional>true</optional>
+    </dependency>
   </dependencies>
 
 
