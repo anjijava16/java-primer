@@ -1,8 +1,10 @@
 package com.xcap.ifc;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Scanner;
 
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.Source;
@@ -25,16 +27,13 @@ public class XMLValidator {
 	
 	/**
 	 * 
-	 * @param xmlFilePath
+	 * @param xmlFilePath  xml text String.
 	 * @param schemaFilePath
-	 * @param xmlFileOrXmlText
-	 *            true xml file; false xml text.
 	 * @return 0 Ok, 1 XML document structures, 2 schema validate error.
 	 * @throws SAXException
 	 * @throws IOException
 	 */
-	public static int xmlValidator(String xml, String schemaFilePath,
-			boolean xmlFileOrXmlText) throws IOException {
+	public static int xmlValidator(String xml, String schemaFilePath) throws IOException {
 		StringReader xmlStringReader = new StringReader(xml);
 
 		SAXParserFactory spf = SAXParserFactory.newInstance();
@@ -44,19 +43,15 @@ public class XMLValidator {
 			xmlReader = spf.newSAXParser().getXMLReader();
 			xmlReader.parse(new InputSource(xmlStringReader));
 		} catch (Exception e1) {
+			e1.printStackTrace();
 			log.error(e1.getMessage());
 			return RESULT_STRUCTURE_ERROR;
 		}
 		
 		SchemaFactory factory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
 
-		Source source = null;
-		if (!xmlFileOrXmlText) {
-			source = new StreamSource(new StringReader(xml));
-		} else {
-			source = new StreamSource(xml);
-		}
-		
+		Source source = new StreamSource(new StringReader(xml));
+		 
 		try {
 			File schemaLocation = new File(schemaFilePath);
 			Schema schema = factory.newSchema(schemaLocation);
@@ -70,15 +65,14 @@ public class XMLValidator {
 		}
 	}
 	
-	public static void main(String[] args) {
-		String xml = "E:/jboss-5.1.0.GA-jdk6/jboss-5.1.0.GA/server/default/tmp/4sg02c-mqxk54-gtxn6gvd-1-gty56r37-a5/xcap-root.war/WEB-INF/classes/com/xcap/web/xmlschema/contacts.xsd";
-		String xsd = "src/doc/contact-list-1.xsd";
-
-		try {
-			int result = xmlValidator(xml, xsd, true);
-			System.out.println(result);
-		} catch (IOException e) {
-			e.printStackTrace();
+	public static int xmlFileValidator(String xmlFilePath, String schemaFilePath) throws Exception{
+		File file = new File(xmlFilePath);
+		Scanner scanner = new Scanner(new FileReader(file));
+		StringBuilder builder = new StringBuilder();
+		while(scanner.hasNextLine()){
+			builder.append(scanner.nextLine());
 		}
-	}	
+		
+		return xmlValidator(builder.toString(), schemaFilePath);
+	}
 }

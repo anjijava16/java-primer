@@ -4,8 +4,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 
-public interface XCAPDatebaseIfc {
-	public static String CONTACT_LOCAL_JNDI = "ContactListsApp";
+public interface XCAPDatebaseLocalIfc {
+	public static String CONTACT_LOCAL_JNDI = "ContactListsApp/local";
 
 	final static String DATE_FORMAT = "yyyy-MM-dd hh:mm:ss";
 	final static DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);

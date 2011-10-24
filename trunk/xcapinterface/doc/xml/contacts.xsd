@@ -22,18 +22,16 @@
 					<xs:restriction base="xs:string"></xs:restriction>
 				</xs:simpleType>
 			</xs:attribute>
-			<!-- <xs:attribute name="source" use="required" type="xs:string"></xs:attribute> -->
 		</xs:complexType>
 	</xs:element>
 
 	<xs:element name="contact">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element name="method" type="xs:string" maxOccurs="1" minOccurs="1"/>
 				<xs:element name="contactName" type="xs:string" maxOccurs="1" minOccurs="1"/>
 				<xs:element name="createDate" type="xs:string" maxOccurs="1" minOccurs="1"/>
 			</xs:sequence>
-			<xs:attribute name="id" use="required">
+			<xs:attribute name="method" use="required">
 				<xs:simpleType>
 					<xs:restriction base="xs:string"></xs:restriction>
 				</xs:simpleType>

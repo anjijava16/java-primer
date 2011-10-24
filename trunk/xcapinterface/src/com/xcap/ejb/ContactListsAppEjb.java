@@ -34,26 +34,25 @@ import com.xcap.dao.ContactsOnlyReadDao;
 import com.xcap.dao.entity.ContactEntity;
 import com.xcap.ifc.Constants;
 import com.xcap.ifc.Contact;
-import com.xcap.ifc.XCAPDatebaseIfc;
+import com.xcap.ifc.XCAPDatebaseLocalIfc;
 import com.xcap.ifc.error.XCAPErrors;
 
 @Stateless
-@Local(value = XCAPDatebaseIfc.class)
-@LocalBinding(jndiBinding = "ContactListsApp")
-public class ContactListsAppEjb implements XCAPDatebaseIfc {
+@Local(value = XCAPDatebaseLocalIfc.class)
+@LocalBinding(jndiBinding = "ContactListsApp/local")
+public class ContactListsAppEjb implements XCAPDatebaseLocalIfc {
 	public static final Logger log = Logger.getLogger(ContactListsAppEjb.class);
 
 	final static String NODE_CONTACTS = "contacts";
 	final static String NODE_CONTACT = "contact";
 	final static String NODE_LIST = "list";
 	
-	final static String NODE_LEAF_METHOD = "method"; 
 	final static String NODE_LEAF_CONTACT_NAME = "contactName";
-	//final static String NODE_LEAF_USER_ID = "userId";
 	final static String NODE_LEAF_DESC = "description";
-	final static String NODE_LEAF_CREATE_DATE = "createDate";                                    
+	final static String NODE_LEAF_CREATE_DATE = "createDate";    
+	
+	final static String NODE_ATTR_METHOD = "method"; 
 
-	final static String ATTR_ID = "id";
 	
 	@PersistenceContext(unitName="xcap")
 	EntityManager em;
@@ -193,9 +192,9 @@ public class ContactListsAppEjb implements XCAPDatebaseIfc {
 				log.info("-------------nodeName:" + nodeName);
 				if(nodeName.equals(NODE_CONTACT)){
 					NamedNodeMap map = node.getAttributes();
-					Node n = map.getNamedItem(ATTR_ID);
-					String id  = n.getNodeValue();
-					//log.info("-------------id:" + id);
+					Node n = map.getNamedItem(NODE_ATTR_METHOD);
+					String method  = n.getNodeValue();
+					//log.info("-------------method:" + method);
 					
 					NodeList list = node.getChildNodes();
 					
@@ -219,16 +218,11 @@ public class ContactListsAppEjb implements XCAPDatebaseIfc {
 								contact.setContactName(value);
 							}else if(name.equals(NODE_LEAF_CREATE_DATE)){
 								//contact.setCreateDate(value);
-							}else if(name.equals(NODE_LEAF_METHOD)){
-								contact.setContactMethod(value);
 							}
 						}
-						
 					}
 					log.info("------------saveOrUpdate--->" + contact.toString());
-					if(id != null){
-						contact.setId(Long.valueOf(id));
-					}
+					contact.setContactMethod(method);
 					contact.setUserId(userId);
 					contactsDao.saveOrUpdate(contact);
 				}else{
@@ -292,8 +286,7 @@ public class ContactListsAppEjb implements XCAPDatebaseIfc {
 	 * @return nodeName is validate leaf node name return nodeName ,or null
 	 */
 	public String isLeafNodeName(String nodeName){
-		if(NODE_LEAF_CONTACT_NAME.equals(nodeName)
-				|| NODE_LEAF_METHOD.equals(nodeName) || NODE_LEAF_CREATE_DATE.equals(nodeName)){
+		if(NODE_LEAF_CONTACT_NAME.equals(nodeName) || NODE_LEAF_CREATE_DATE.equals(nodeName)){
 			return nodeName;
 		}else{
 			return null;
@@ -310,11 +303,10 @@ public class ContactListsAppEjb implements XCAPDatebaseIfc {
 	 * @return
 	 */
 	private String secondLevelUrlValidate(String condition2){
-		if (condition2.equals(NODE_LEAF_CONTACT_NAME) || condition2.equals(NODE_LEAF_METHOD)
+		if (condition2.equals(NODE_LEAF_CONTACT_NAME)
 			|| condition2.equals(NODE_LEAF_CREATE_DATE) ){
 			return condition2;
-		}else if(condition2.matches("^method\\[1\\]$") || condition2.matches("^contactName\\[1\\]$")
-				|| condition2.matches("^createDate\\[1\\]$") ){
+		}else if(condition2.matches("^contactName\\[1\\]$") || condition2.matches("^createDate\\[1\\]$") ){
 			Pattern pattern = Pattern.compile("method|contactName|createDate");
 			Matcher match = pattern.matcher(condition2);
 			if(match.find()){
@@ -331,7 +323,7 @@ public class ContactListsAppEjb implements XCAPDatebaseIfc {
 
 	0		contacts/contact
 			contacts/contact[1]
-			contacts/contact[@id="1"]
+			contacts/contact[@method="1"]
 				
 	1、		contacts/list
 			contacts/list[1]
@@ -344,8 +336,8 @@ public class ContactListsAppEjb implements XCAPDatebaseIfc {
 	        ...... 1,2 组合,其余六种情况
 	
 	4、	    method/contactName/userId/createDate 例如
-	        contacts/list[@id="close-friends"]/contact[@id="1"]/method
-	        contacts/list[@id="close-friends"]/contact[@id="1"]/method[1]
+	        contacts/list[@id="close-friends"]/contact[@method="1"]/contactName
+	        contacts/list[@id="close-friends"]/contact[@method="1"]/contactName[1]
 		
 	 * @param userId
 	 * @param condition
@@ -380,15 +372,16 @@ public class ContactListsAppEjb implements XCAPDatebaseIfc {
 					return getStatusAndXml(entity);
 				}							
 				
-			}else if(condition1.matches("^contact\\[@id=\"\\d+\"\\]$")){
+			}else if(condition1.matches("^contact\\[@".concat(NODE_ATTR_METHOD).concat("=\"\\S+\"\\]$"))){
 				log.info("----------get contact node by database id.");
-
-				Pattern p = Pattern.compile("\\d+");
-				Matcher match = p.matcher(condition1);
-				if(match.find()){
-					int id = Integer.valueOf(match.group(0));
-					ContactEntity entity = onlyReadContactsDao.getById(userId, id);
-					return getStatusAndXml(entity);								
+				
+				int beginIndex = condition1.indexOf("=\"");
+				int endIndex = condition1.indexOf("\"]");
+				
+				if(beginIndex != -1 && endIndex != -1 && beginIndex < endIndex){
+					String method = condition1.substring(beginIndex + 2, endIndex);
+					ContactEntity entity = onlyReadContactsDao.getByContactMethod(userId, method);
+					return getStatusAndXml(entity);					
 				}
 			}else{
 				return new ResultData(ResultData.STATUS_404, "");
@@ -424,15 +417,14 @@ public class ContactListsAppEjb implements XCAPDatebaseIfc {
 
 	private static void constructContactNode(StringBuilder xmlBuilder,
 			ContactEntity en) {
-		if (en != null) {
-			String method = en.getContactMethod();
+		String method = en.getContactMethod();
+		if (en != null && method != null) {
 			String contactName = en.getContactName();
 			String createDate = dateFormat.format(en.getCreateDate());
-			String id = en.getId().toString();
+			//String id = en.getId().toString();
 
 			xmlBuilder
-					.append("<contact id=\"".concat(id).concat("\">"))
-					.append("<method>".concat(method != null ? method : "").concat("</method>"))
+					.append("<contact method=\"".concat(method).concat("\">"))
 					.append("<contactName>".concat(contactName != null ? contactName : "").concat("</contactName>"))
 					.append("<createDate>".concat(createDate).concat("</createDate>")).append("</contact>");
 		}
