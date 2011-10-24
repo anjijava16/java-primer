@@ -53,6 +53,11 @@ public class ContactListsAppEjb implements XCAPDatebaseLocalIfc {
 	
 	final static String NODE_ATTR_METHOD = "method"; 
 
+	final static String PATTERN_CONTACT_INDEX = "^contact\\[\\d+\\]$";
+	final static String PATTERN_CONTACT_UNIQUE_ATTR  = "^contact\\[@".concat(NODE_ATTR_METHOD).concat("=\"\\S+\"\\]$");
+	final static String PATTERN_CONTACTNAME_INDEX = "^contactName\\[1\\]$";
+	final static String PATTERN_CREATEDATE_INDEX = "^createDate\\[1\\]$";
+	
 	
 	@PersistenceContext(unitName="xcap")
 	EntityManager em;
@@ -144,12 +149,72 @@ public class ContactListsAppEjb implements XCAPDatebaseLocalIfc {
 			log.info("----------------top node name: " + topTagName);
 			if(NODE_CONTACTS.equals(topTagName)){
 				if(nodeSelector == null ||(nodeSelector != null && nodeSelector.equals(Constants.APP_USAGE_CONTACT))){
-					//put document.replace user all contacts.
-					
+					//put document, replace user all contacts.
+					contactNode(doc,topTagName, Long.valueOf(userId));
 				}
 			}else if(NODE_CONTACT.equals(topTagName)){
 				//判断选择器是否准确
 				//add or replace one contact.
+			    log.info("------------document top tag name is:" + topTagName + ". node selector:" + nodeSelector);
+				
+				if(nodeSelector.equals(NODE_CONTACT)){  //
+					int size = (int)onlyReadContactsDao.getListSize(userId);
+					switch (size) {
+					case 0:   //add
+						contactNode(doc,NODE_CONTACT, Long.valueOf(userId));
+						break;
+					case 1:   //merge
+						//first delete existed node, then add.
+						contactNode(doc,NODE_CONTACT, Long.valueOf(userId));
+						break;
+					default:
+						//error
+						log.info("------------");
+						String errorInfo = new XCAPErrors.CannotInsertConflictException().getResponseContent();
+						return new ResultData(ResultData.STATUS_409, errorInfo);
+					}
+				}else if(nodeSelector.matches(PATTERN_CONTACT_INDEX)){
+					//
+					Pattern p = Pattern.compile("\\d+");
+					Matcher match = p.matcher(nodeSelector);
+					if(match.find()){
+						int index = Integer.valueOf(match.group(0));
+						int size = (int)onlyReadContactsDao.getListSize(userId);
+						if(index > 0){
+							
+							if(index <= size){
+								//检查查 url contact method 和docmuent(contact node)的contact method 是否一致。一致才能merge.    
+							}else if(index == size +1){
+								//add
+							}else if(index > size + 1){
+								//404 error
+							}
+						}
+					}
+					
+				}else if(nodeSelector.matches(PATTERN_CONTACT_UNIQUE_ATTR)){
+					
+					int beginIndex = nodeSelector.indexOf("=\"");
+					int endIndex = nodeSelector.indexOf("\"]");
+					
+					if(beginIndex != -1 && endIndex != -1 && beginIndex < endIndex){
+						String method = nodeSelector.substring(beginIndex + 2, endIndex);
+						
+						ContactEntity en = onlyReadContactsDao.getByContactMethod(userId, method);
+						//contactsDao.saveOrUpdate(contact);
+						
+						//检查查 url contact method 和docmuent(contact node)的contact method 是否一致。一致才能merge.
+						if(en == null){
+							ContactEntity newEntity = new ContactEntity();
+							//add.
+						}else{
+							//merge.
+							//en.setContactName(contactName);
+						}			
+					}
+					
+				}
+				
 			}else if(isLeafNodeName(topTagName) != null){
 				//判断选择器是否准确
 				//replace a contact attribute.
@@ -159,7 +224,6 @@ public class ContactListsAppEjb implements XCAPDatebaseLocalIfc {
 				
 			}
 			
-			contactNode(doc,topTagName, Long.valueOf(userId));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -306,8 +370,8 @@ public class ContactListsAppEjb implements XCAPDatebaseLocalIfc {
 		if (condition2.equals(NODE_LEAF_CONTACT_NAME)
 			|| condition2.equals(NODE_LEAF_CREATE_DATE) ){
 			return condition2;
-		}else if(condition2.matches("^contactName\\[1\\]$") || condition2.matches("^createDate\\[1\\]$") ){
-			Pattern pattern = Pattern.compile("method|contactName|createDate");
+		}else if(condition2.matches(PATTERN_CONTACTNAME_INDEX) || condition2.matches(PATTERN_CREATEDATE_INDEX) ){
+			Pattern pattern = Pattern.compile("contactName|createDate");
 			Matcher match = pattern.matcher(condition2);
 			if(match.find()){
 				return match.group(0);
@@ -360,7 +424,7 @@ public class ContactListsAppEjb implements XCAPDatebaseLocalIfc {
 				}else{
 					new ResultData(ResultData.STATUS_409, new XCAPErrors.NoParentConflictException("Contacts").getResponseContent());
 				}
-			}else if(condition1.matches("^contact\\[\\d+\\]$")){
+			}else if(condition1.matches(PATTERN_CONTACT_INDEX)){
 				log.info("----------get contact node by index");
 				Pattern p = Pattern.compile("\\d+");
 				Matcher match = p.matcher(condition1);
@@ -372,7 +436,7 @@ public class ContactListsAppEjb implements XCAPDatebaseLocalIfc {
 					return getStatusAndXml(entity);
 				}							
 				
-			}else if(condition1.matches("^contact\\[@".concat(NODE_ATTR_METHOD).concat("=\"\\S+\"\\]$"))){
+			}else if(condition1.matches(PATTERN_CONTACT_UNIQUE_ATTR)){
 				log.info("----------get contact node by database id.");
 				
 				int beginIndex = condition1.indexOf("=\"");
