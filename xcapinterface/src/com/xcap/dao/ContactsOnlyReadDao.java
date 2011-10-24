@@ -69,6 +69,19 @@ public class ContactsOnlyReadDao {
 		return list != null && list.size() > 0 ? list.get(0) : null;
 	}
 	
+	public ContactEntity getByContactMethod(String userId,String method){
+		StringBuilder temp = new StringBuilder("select * from t_contacts where contact_method=:method and user_id=:userId");
+		Query query = em.createNativeQuery(temp.toString(), ContactEntity.class);
+		query.setParameter("method", method);
+		query.setParameter("userId", userId);
+		
+		@SuppressWarnings("unchecked")
+		List<ContactEntity> list = query.getResultList();
+		return (ContactEntity)(list.size() != 0 ? list.get(0) : null);
+		
+	}
+	
+	
 	public ContactEntity getByUniqueAttribute(String userId,int index){
 		return null;
 	}

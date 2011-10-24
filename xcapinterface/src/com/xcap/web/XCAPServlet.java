@@ -24,8 +24,8 @@ import com.borqs.util.Utils;
 import com.sun.tools.ws.processor.model.Request;
 import com.xcap.ifc.Constants;
 import com.xcap.ifc.Constants.HttpMethod;
-import com.xcap.ifc.XCAPDatebaseIfc.ResultData;
-import com.xcap.ifc.XCAPDatebaseIfc;
+import com.xcap.ifc.XCAPDatebaseLocalIfc.ResultData;
+import com.xcap.ifc.XCAPDatebaseLocalIfc;
 import com.xcap.ifc.XMLValidator;
 import com.xcap.ifc.error.XCAPErrors;
 
@@ -74,13 +74,13 @@ public class XCAPServlet extends HttpServlet {
 			throw new IllegalStateException("auid is null");
 		}
 		if (auid.equals(Constants.APP_USAGE_CONTACT)) {
-			jndi = XCAPDatebaseIfc.CONTACT_LOCAL_JNDI;
+			jndi = XCAPDatebaseLocalIfc.CONTACT_LOCAL_JNDI;
 		} else {
 			throw new IllegalStateException("other auid not implement...");
 			// other app usage.
 		}
 
-		XCAPDatebaseIfc xcapIfc = (XCAPDatebaseIfc) Utils.lookupEJB(jndi);
+		XCAPDatebaseLocalIfc xcapIfc = (XCAPDatebaseLocalIfc) Utils.lookupEJB(jndi);
 		if (xcapIfc != null) {
 			HttpMethod httpMethod = HttpMethod.valueOf(method);
 			switch (httpMethod) {
@@ -136,7 +136,7 @@ public class XCAPServlet extends HttpServlet {
 						// xml form not-well-formed
 						// validate document.
 						result = XMLValidator.xmlValidator(
-								xmlBuilder.toString(), filePath, false);
+								xmlBuilder.toString(), filePath);
 
 					} catch (IOException e) {
 						e.printStackTrace();
@@ -157,7 +157,7 @@ public class XCAPServlet extends HttpServlet {
 							xmlError = new XCAPErrors.SchemaValidationErrorConflictException()
 									.getResponseContent();
 						}
-						resp.setStatus(XCAPDatebaseIfc.ResultData.STATUS_409);
+						resp.setStatus(XCAPDatebaseLocalIfc.ResultData.STATUS_409);
 						resp.setContentType("text/xml");
 						resp.getWriter().append(xmlError);
 					}

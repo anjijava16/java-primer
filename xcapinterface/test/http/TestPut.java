@@ -11,21 +11,23 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.HttpConnectionParams;
+import org.junit.Test;
 
 
-public class TestPut extends Test{
-	public static void main(String[] args) {
-		String phoneNo = "8613714532530"; 
-		String token = "YPRG0MWas7e6lM6sQ9CL4mxbtGk49jB-SNgtULIamd1SwAeSqwV0bw**";
-		
+public class TestPut extends TestBase{
+	String phoneNo = "8613714532530"; 
+	String token = "YPRG0MWas7e6lM6sQ9CL4mxbtGk49jB-SNgtULIamd1SwAeSqwV0bw**";
+
+	@Test
+	public void putDocument(){
 		String url = constructUrl(phoneNo, token);
 		try {
-			File file = getXmlFilePath("example.xml");
+			File file = getXmlFilePath("xml/example-new-contacts.xml");
 			putDocument(url,file);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		}		
 	}
 	
 	public static void putDocument(String url, File file) throws Exception {

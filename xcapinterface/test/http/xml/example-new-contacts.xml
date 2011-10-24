@@ -1,26 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <contacts xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="contacts contacts.xsd">
-	<contact id="11024">
-		<method>13510776271</method>
-		<contactname>Gykoooooo</contactname>
-		<createdate>2011-09-28 07:10:20</createdate>
+	<contact method="13510776271">
+		<contactName>Gykoooooo</contactName>
+		<createDate>2011-09-28 07:10:20</createDate>
 	</contact>
 
-	<contact id="11046">
-		<method>84236457</method>
-		<contactname>翟小斌</contactname>		
-		<createdate>2011-09-28 07:10:20</createdate>
+	<contact method="84236457">
+		<contactName>翟小斌</contactName>
+		<createDate>2011-09-28 07:10:20</createDate>
 	</contact>
-
-	<contact id="11034">
-		<method>46546464646</method>
-		<contactname>yuankang</contactname>		
-		<createdate>2011-09-28 07:10:20</createdate>
+	<contact method="46546464646">
+		<contactName>yuankang</contactName>
+		<createDate>2011-09-28 07:10:20</createDate>
 	</contact>
-	<contact id="11032">
-		<method>156445564641</method>
-		<contactname>yuankang</contactname>		
-		<createdate>2011-09-28 07:10:20</createdate>
+	<contact method="156445564641">
+		<contactName>yuankang</contactName>
+		<createDate>2011-09-28 07:10:20</createDate>
 	</contact>
 </contacts>
