@@ -112,7 +112,8 @@ public class XCAPErrors {
 			return "<cannot-delete />";
 		}
 	}
-		
+	
+	
 	public static class UniquenessFailureConflictException extends ConflictException {
 		private static final long serialVersionUID = 1L;
 		
