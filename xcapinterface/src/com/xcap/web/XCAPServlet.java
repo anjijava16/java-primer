@@ -62,11 +62,11 @@ public class XCAPServlet extends HttpServlet {
 
 		String userId = (String) req.getAttribute("uid");
 		String auid = (String) req.getAttribute("auid");
-		String queryString = (String) req.getAttribute("queryString");
+		String nodeSelector = (String) req.getAttribute("queryString");
 		String method = (String) req.getAttribute("method");
 
-		log.info("------(method,userId, auid,queryString) = " + method + ","
-				+ userId + "," + auid + "," + queryString);
+		log.info("------(method,userId, auid,nodeSelector) = " + method + ","
+				+ userId + "," + auid + "," + nodeSelector);
 
 		String jndi = null;
 		if (auid == null) {
@@ -91,7 +91,7 @@ public class XCAPServlet extends HttpServlet {
 				if (auid.equals(Constants.APP_USAGE_CONTACT)) {
 					// log.info("---------------------queryString:" +
 					// queryString);
-					ResultData data = xcapIfc.get(userId, queryString);
+					ResultData data = xcapIfc.get(userId, nodeSelector);
 					String result = data.getXml();
 					if (data.getstatus() != HttpServletResponse.SC_OK) {
 						log.info("error status code is " + data.getstatus());
@@ -144,7 +144,7 @@ public class XCAPServlet extends HttpServlet {
 					}
 
 					if (result == XMLValidator.RESULT_OK) {
-						xcapIfc.put(userId, queryString, xmlBuilder.toString());
+						xcapIfc.put(userId, nodeSelector, xmlBuilder.toString());
 					} else {
 						String xmlError = "";
 						if (result == XMLValidator.RESULT_STRUCTURE_ERROR) {

@@ -2,6 +2,7 @@ package http;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.text.MessageFormat;
 import java.util.Scanner;
 
 import org.apache.http.HttpEntity;
@@ -23,6 +24,25 @@ public class TestPut extends TestBase{
 		String url = constructUrl(phoneNo, token);
 		try {
 			File file = getXmlFilePath("xml/example-new-contacts.xml");
+			putDocument(url,file);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+	}
+	
+	@Test
+	public void putNodeByIndex(){
+		String url = constructUrl(phoneNo, token);
+		
+		String nodeSelector = "/~~/contacts/contact{0}1{1}";
+		MessageFormat form = new MessageFormat(nodeSelector);
+		Object[] args = {LEFT_SQUARE_BRACKET, RIGHT_SQUARE_BRACKET};
+		nodeSelector = form.format(args);
+
+		url = url.concat(nodeSelector);
+		try {
+			File file = getXmlFilePath("xml/example-new-contact.xml");
 			putDocument(url,file);
 			
 		} catch (Exception e) {
