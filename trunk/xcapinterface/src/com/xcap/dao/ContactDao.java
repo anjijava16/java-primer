@@ -59,141 +59,47 @@ public class ContactDao {
 			c.setContactType(contact.getContactType());
 		}
 		
-
 		return c;
 	}
-
-	public void updateContact(ContactEntity contact) {
-
+	
+	public int deleteContacts(long userId){
+		String sql = "delete from t_contacts where user_id = :userId";
+		Query query = em.createNativeQuery(sql);
+		return query.executeUpdate();
 	}
-
-	public void deleteContactById(Long id) {
-		ContactEntity entity = em.find(ContactEntity.class, id);
-		if (entity != null) {
-			em.remove(entity);
-		}
-
+	
+	public int deleteContactByTagNameSelector(long userId){
+		String sql = "delete from t_contacts where user_id= :userId  limit 1";
+		Query query = em.createNativeQuery(sql);
+		query.setParameter("userId", userId);
+		return query.executeUpdate();
 	}
-
-	public void deleteContact(Contact contact) {
-		ContactEntity entity = em.find(ContactEntity.class, contact.getId());
-		if (entity != null) {
-			if (contact.getContactName() == null
-					|| entity.getContactName() == null) {
-				em.remove(entity);
-			} else {
-				if (contact.getContactName().equals(entity.getContactName())) {
-					em.remove(entity);
-				}
-			}
-
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<ContactEntity> queryUserContacts(Long userId) {
-		String ql = "select c from ContactEntity c where c.userId=?1";
-		Query query = em.createQuery(ql);
-		query.setParameter(1, userId);
-
-		return query.getResultList();
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<ContactEntity> queryUserRosters(Long userId) {
-		log.info("**********" + userId + "************");
-		String ql = "select c from ContactEntity c where c.userId=?1 and exists (select ur from UserRefEntity ur where (ur.mobile like concat('%',c.contactMethod) or c.contactMethod like concat('%',ur.mobile)) and ur.rel=?2) order by c.id asc";
-		Query query = em.createQuery(ql);
-		query.setParameter(1, userId);
-		query.setParameter(2, "IM");
-		return query.getResultList();
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<ContactEntity> queryRecommendFriends(Long userId, String mobile) {
-		String ql = "from ContactEntity c where c.contactMethod=?1 and c.contactMethod not in (select cc.contactMethod from ContactEntity cc where cc.userId=?2)";
-		Query query = em.createQuery(ql);
-		query.setParameter(1, mobile);
-		query.setParameter(2, userId);
-		List<ContactEntity> list = query.getResultList();
-		return list;
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<ContactEntity> queryToUserList(String mobile) {
-		String ql = "from ContactEntity c where c.contactMethod like concat('%',?1) or ?1 like concat('%',c.contactMethod)";
-		Query query = em.createQuery(ql);
-		query.setParameter(1, mobile);
-		return query.getResultList();
-	}
-
-/*	public boolean isIMUser(String mobile) {
-		UserRefEntity entity = queryUserRef(mobile,"IM");
-		if (entity!=null) {
-			return true;
-		}
-		return false;
-	}*/
-
-	public void userPhoneNoReceivedNotify(Long userId, String phoneNo) {
-		/*
-		 * String ql = "from ContactEntity c where c.contactMethod=?1"; Query
-		 * query = em.createQuery(ql); query.setParameter(1, phoneNo);
-		 * List<ContactEntity> entities = query.getResultList();
-		 * for(ContactEntity entity : entities){
-		 * entity.setContactUserId(userId); em.merge(entity); }
-		 */
-	}
-
-	public void updateUserRef() {
-
-	}
-
-	public ContactEntity getContactById(Long id) {
-		ContactEntity entity = em.find(ContactEntity.class, id);
-		return entity;
-	}
-
-	@SuppressWarnings("unchecked")
-	public void updateUserBlockingStatus(Long userId, String MSISDN,
-			Integer blocking) {
-		String ql = "from ContactEntity c where c.userId=?1 and c.contactMethod=?2";
-		Query query = em.createQuery(ql);
-		query.setParameter(1, userId);
-		query.setParameter(2, MSISDN);
-		List<ContactEntity> entities = query.getResultList();
-		if (entities.size() > 0) {
-			ContactEntity entity = entities.get(0);
-			entity.setBlocking(blocking);
-			em.merge(entity);
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public void updatePhoneUserId(String phoneNumber, Long newUserId) {
-		/*
-		 * String ql = "from ContactEntity c where c.contactMethod=?1"; Query
-		 * query = em.createQuery(ql); query.setParameter(1, phoneNumber);
-		 * List<ContactEntity> entities = query.getResultList();
-		 * for(ContactEntity entity : entities){
-		 * entity.setContactUserId(newUserId); em.merge(entity); }
-		 */
-	}
-
-	/*
-	 * delete if there exists self contact
+	
+	/**
+	 * @param userId
+	 * @param index
+	 * @return -1 index invalid ,or delete row mount.
 	 */
-	@SuppressWarnings("unchecked")
-	public void deleteSelfContact(String phoneNumber, Long newUserId) {
-		String ql = "from ContactEntity c where c.userId=?1 and c.contactMethod=?2";
-		Query query = em.createQuery(ql);
-		query.setParameter(1, newUserId);
-		query.setParameter(2, phoneNumber);
-
-		List<ContactEntity> entities = query.getResultList();
-		if (entities.size() > 0) {
-			em.remove(entities.get(0));
+	public int deleteContactByIndexSelector(long userId, int index){
+		
+		if(index >= 1){
+			StringBuilder temp = new StringBuilder("select * from t_contacts where user_id = :userId limit :index,1");
+			String sql = temp.toString();
+			log.info(sql);
+			Query query = em.createNativeQuery(sql);
+			query.setParameter("userId", userId);
+			query.setParameter("index", index -1);
+			
+			return query.executeUpdate();
 		}
+		return -1;
 	}
-
+	
+	public int deleteContactByUniqueAttr(long userId, String method){
+		String sql = "delete from t_contacts where user_id = :userId and contact_method = :method";
+		Query query = em.createNativeQuery(sql);
+		query.setParameter("userId", userId);
+		query.setParameter("method", method);
+		return query.executeUpdate();
+	}
 }

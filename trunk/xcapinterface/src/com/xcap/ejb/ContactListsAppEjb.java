@@ -21,6 +21,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.LocalBinding;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -83,19 +84,11 @@ public class ContactListsAppEjb implements XCAPDatebaseLocalIfc {
 			
 			xmlBuilder.append("</contacts>");
 			return new ResultData(ResultData.STATUS_200,xmlBuilder.toString());
-		}else{
-			String sel = null;
-			try {
-				sel = URLDecoder.decode(nodeSelector,"utf-8");
-			} catch (UnsupportedEncodingException e) {
-				log.error("url UnsupportedEncodingException");
-				return  new ResultData(ResultData.STATUS_409, new XCAPErrors.NotUTF8ConflictException().getResponseContent());
-			}
-			
-			log.info("decode node selector:" + sel + " userId:" + userId);
-			if(sel.startsWith(Constants.APP_USAGE_CONTACT)){
+		}else{			
+			log.info("decode node selector:" + nodeSelector + " userId:" + userId);
+			if(nodeSelector.startsWith(Constants.APP_USAGE_CONTACT)){
 				//sel.indexOf(Constants.APP_USAGE_CONTACT.concat("/"));
-				String condition[] = sel.split("/");
+				String condition[] = nodeSelector.split("/");
 				
 				if(condition.length == 2){   
 					return getSecondLevelXml(userId, condition[1]);
@@ -144,20 +137,28 @@ public class ContactListsAppEjb implements XCAPDatebaseLocalIfc {
 			builder = factory.newDocumentBuilder();
 			Document doc = builder.parse(new InputSource(new StringReader(xml)));	
 			
-			//String topNodeName = doc.getNodeName();  #document
-			String topTagName = doc.getDocumentElement().getTagName();
+			Element element = doc.getDocumentElement();
+			String topTagName = element.getTagName();
 			log.info("----------------top node name: " + topTagName);
+			
+			String secondLevelSelector = null; 
+			if(nodeSelector != null){
+				String selectorArr[] = nodeSelector.split("/");
+				if(selectorArr.length >= 2){
+					secondLevelSelector = selectorArr[1];
+				}
+			}
+		    log.info("------------document top tag name is:" + topTagName + ". node selector:" + secondLevelSelector);
+			
 			if(NODE_CONTACTS.equals(topTagName)){
 				if(nodeSelector == null ||(nodeSelector != null && nodeSelector.equals(Constants.APP_USAGE_CONTACT))){
 					//put document, replace user all contacts.
 					contactNode(doc,topTagName, Long.valueOf(userId));
 				}
-			}else if(NODE_CONTACT.equals(topTagName)){
-				//判断选择器是否准确
-				//add or replace one contact.
-			    log.info("------------document top tag name is:" + topTagName + ". node selector:" + nodeSelector);
-				
-				if(nodeSelector.equals(NODE_CONTACT)){  //
+			}else if(NODE_CONTACT.equals(topTagName)){//document top node is contact.	
+				//add or replace one contact.				
+				if(secondLevelSelector.equals(NODE_CONTACT)){  //
+					log.info("put operate, node selector is contact.");
 					int size = (int)onlyReadContactsDao.getListSize(userId);
 					switch (size) {
 					case 0:   //add
@@ -169,55 +170,131 @@ public class ContactListsAppEjb implements XCAPDatebaseLocalIfc {
 						break;
 					default:
 						//error
-						log.info("------------");
 						String errorInfo = new XCAPErrors.CannotInsertConflictException().getResponseContent();
 						return new ResultData(ResultData.STATUS_409, errorInfo);
 					}
-				}else if(nodeSelector.matches(PATTERN_CONTACT_INDEX)){
-					//
+				}else if(secondLevelSelector.matches(PATTERN_CONTACT_INDEX)){
+					log.info("put operate by node index, node selector is " + nodeSelector);
+					
 					Pattern p = Pattern.compile("\\d+");
 					Matcher match = p.matcher(nodeSelector);
 					if(match.find()){
 						int index = Integer.valueOf(match.group(0));
 						int size = (int)onlyReadContactsDao.getListSize(userId);
-						if(index > 0){
+						if(index > 0){  //index valid
+							String method = element.getAttribute(NODE_ATTR_METHOD);
+							NodeList nodeList = element.getChildNodes();
 							
-							if(index <= size){
-								//检查查 url contact method 和docmuent(contact node)的contact method 是否一致。一致才能merge.    
+							String newContactName = null;
+							for (int i = 0; i < nodeList.getLength(); i++) {
+								Node node = nodeList.item(i);
+								if(! node.getNodeName().equals("#text")){
+									NodeList nodeList2 = node.getChildNodes();
+									if(NODE_LEAF_CONTACT_NAME.equals(node.getNodeName())){
+										newContactName = nodeList2.getLength() > 0 ? nodeList2.item(0).getNodeValue() : null;											
+									}
+								}				
+							}
+							if(index <= size){																
+								if(newContactName != null){
+									ContactEntity contact = onlyReadContactsDao.getByContactMethod(userId, method);
+									contact.setContactName(newContactName);
+									contactsDao.saveOrUpdate(contact);
+								}
 							}else if(index == size +1){
 								//add
+								ContactEntity contact = new ContactEntity();
+								contact.setContactName(newContactName);
+								contact.setContactMethod(method);
+								contactsDao.saveOrUpdate(contact);
 							}else if(index > size + 1){
 								//404 error
+								return new ResultData(ResultData.STATUS_404, "");
 							}
 						}
+						return new ResultData(ResultData.STATUS_200, "");
 					}
 					
-				}else if(nodeSelector.matches(PATTERN_CONTACT_UNIQUE_ATTR)){
-					
+				}else if(secondLevelSelector.matches(PATTERN_CONTACT_UNIQUE_ATTR)){
+					log.info("put operate by unique attribute, node selector is " + nodeSelector);
 					int beginIndex = nodeSelector.indexOf("=\"");
 					int endIndex = nodeSelector.indexOf("\"]");
 					
 					if(beginIndex != -1 && endIndex != -1 && beginIndex < endIndex){
 						String method = nodeSelector.substring(beginIndex + 2, endIndex);
 						
-						ContactEntity en = onlyReadContactsDao.getByContactMethod(userId, method);
-						//contactsDao.saveOrUpdate(contact);
+						String docAttrMethod = element.getAttribute(NODE_ATTR_METHOD);
+						NodeList nodeList = element.getChildNodes();
 						
-						//检查查 url contact method 和docmuent(contact node)的contact method 是否一致。一致才能merge.
-						if(en == null){
-							ContactEntity newEntity = new ContactEntity();
-							//add.
+						String newContactName = null;
+						for (int i = 0; i < nodeList.getLength(); i++) {
+							Node node = nodeList.item(i);
+							if(! node.getNodeName().equals("#text")){
+								NodeList nodeList2 = node.getChildNodes();
+								if(NODE_LEAF_CONTACT_NAME.equals(node.getNodeName())){
+									newContactName = nodeList2.getLength() > 0 ? nodeList2.item(0).getNodeValue() : null;											
+								}
+							}				
+						}
+						
+						if(method.equals(docAttrMethod)){
+							ContactEntity en = onlyReadContactsDao.getByContactMethod(userId, method);
+							if(en != null){
+								//merge.
+								en.setContactName(newContactName);
+								contactsDao.saveOrUpdate(en);
+							}else {
+								//add.
+								ContactEntity newEntity = new ContactEntity();
+								newEntity.setContactName(newContactName);
+								newEntity.setContactMethod(method);
+								contactsDao.saveOrUpdate(en);
+							}
 						}else{
-							//merge.
-							//en.setContactName(contactName);
+							//404 error
+							return new ResultData(ResultData.STATUS_404, "");
 						}			
 					}
 					
 				}
 				
 			}else if(isLeafNodeName(topTagName) != null){
-				//判断选择器是否准确
+				log.info("put operate, leaf node, node selector is " + nodeSelector);
+				//second level is by tag name.
+				ContactEntity entity = null;
+				if(secondLevelSelector.equals(NODE_CONTACT)){
+					int size = (int)onlyReadContactsDao.getListSize(userId);
+					if(size == 1){
+						List<ContactEntity> tempList = onlyReadContactsDao.getList(userId);
+						if(tempList != null && tempList.size() > 0){
+							entity = tempList.get(0);
+						}
+					}
+				}else if(secondLevelSelector.matches(PATTERN_CONTACT_INDEX)){
+					Pattern p = Pattern.compile("\\d+");
+					Matcher match = p.matcher(nodeSelector);
+					if(match.find()){
+						int index = Integer.valueOf(match.group(0));
+						entity = onlyReadContactsDao.getByIndex(userId, index);
+					}
+				}else if(secondLevelSelector.matches(PATTERN_CONTACT_UNIQUE_ATTR)){
+					int beginIndex = nodeSelector.indexOf("=\"");
+					int endIndex = nodeSelector.indexOf("\"]");
+					
+					if(beginIndex != -1 && endIndex != -1 && beginIndex < endIndex){
+						String method = nodeSelector.substring(beginIndex + 2, endIndex);
+						entity = onlyReadContactsDao.getByContactMethod(userId, method);
+					}
+				}
 				//replace a contact attribute.
+				NodeList tempNodeList = element.getElementsByTagName(NODE_LEAF_CONTACT_NAME);
+				Node leafNode = tempNodeList.item(0);
+				if(entity != null && leafNode != null && leafNode.getFirstChild() != null){
+					String contactName = leafNode.getNodeValue();
+					entity.setContactName(contactName);
+					contactsDao.saveOrUpdate(entity);
+					return new ResultData(ResultData.STATUS_200, "");
+				}
 				
 			}else if(NODE_LIST.equals(topTagName)){
 				//implement later
@@ -228,14 +305,49 @@ public class ContactListsAppEjb implements XCAPDatebaseLocalIfc {
 			e.printStackTrace();
 		}
 		
-		return null;
+		return new ResultData(ResultData.STATUS_404, "");
 	}
 
 	public ResultData delete(String userId, String nodeSelector) {
 		//delete all
 		//delete a contact
+		if(nodeSelector == null || nodeSelector.equals(NODE_CONTACTS)){
+			contactsDao.deleteContacts(Long.valueOf(userId));
+		}else{
+			if(nodeSelector.equals(NODE_CONTACT)){
+				long size = onlyReadContactsDao.getListSize(userId);
+				if(size == 1){
+					int affectRows = contactsDao.deleteContacts(Long.valueOf(userId));
+					return new ResultData(ResultData.STATUS_200,"");
+				}else{
+					return new ResultData(ResultData.STATUS_409, new XCAPErrors.CannotDeleteConflictException().getResponseContent());
+				}
+			}else if(nodeSelector.matches(PATTERN_CONTACT_INDEX)){
+				Pattern p = Pattern.compile("\\d+");
+				Matcher match = p.matcher(nodeSelector);
+				if(match.find()){
+					int index = Integer.valueOf(match.group(0));
+					int affectRows = contactsDao.deleteContactByIndexSelector(Long.valueOf(userId), index);
+					return new ResultData(ResultData.STATUS_200,"");
+				}else {
+					return new ResultData(ResultData.STATUS_409, new XCAPErrors.CannotDeleteConflictException().getResponseContent());
+				}
+				
+			}else if(nodeSelector.matches(PATTERN_CONTACT_UNIQUE_ATTR)){
+				int beginIndex = nodeSelector.indexOf("=\"");
+				int endIndex = nodeSelector.indexOf("\"]");
+				
+				if(beginIndex != -1 && endIndex != -1 && beginIndex < endIndex){
+					String method = nodeSelector.substring(beginIndex + 2, endIndex);
+					int affectRows = contactsDao.deleteContactByUniqueAttr(Long.valueOf(userId), method);
+					return new ResultData(ResultData.STATUS_200,"");
+				}else{
+					return new ResultData(ResultData.STATUS_409, new XCAPErrors.CannotDeleteConflictException().getResponseContent());
+				}
+			}
+		}
 		
-		return null;
+		return new ResultData(ResultData.STATUS_404, "");
 	}
 	
 	private void contactNode(Document doc,String tagName, long userId){
@@ -285,9 +397,9 @@ public class ContactListsAppEjb implements XCAPDatebaseLocalIfc {
 							}
 						}
 					}
-					log.info("------------saveOrUpdate--->" + contact.toString());
 					contact.setContactMethod(method);
 					contact.setUserId(userId);
+					log.info("------------saveOrUpdate--->" + contact.toString());
 					contactsDao.saveOrUpdate(contact);
 				}else{
 					//list node...

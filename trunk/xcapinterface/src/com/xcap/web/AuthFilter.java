@@ -1,6 +1,8 @@
 package com.xcap.web;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -18,6 +20,8 @@ import org.apache.log4j.Logger;
 import sun.reflect.generics.tree.Tree;
 
 import com.xcap.ifc.Constants;
+import com.xcap.ifc.XCAPDatebaseLocalIfc.ResultData;
+import com.xcap.ifc.error.XCAPErrors;
 import com.xcap.web.AuthFilter.Url.Field;
 
 /**
@@ -69,6 +73,14 @@ public class AuthFilter implements Filter {
 				resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 				return;
 			}			
+			
+			try {
+				queryString = URLDecoder.decode(queryString,"utf-8");
+			} catch (UnsupportedEncodingException e) {
+				log.error("url UnsupportedEncodingException");
+				resp.sendError(ResultData.STATUS_409,new XCAPErrors.NotUTF8ConflictException().getResponseContent());
+				return;
+			}
 			
 			req.setAttribute("auid", auid);
 			req.setAttribute("queryString", queryString);

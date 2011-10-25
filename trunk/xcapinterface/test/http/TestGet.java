@@ -6,6 +6,7 @@ import java.text.MessageFormat;
 
 import org.apache.log4j.Logger;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestGet extends TestBase{
@@ -17,7 +18,7 @@ public class TestGet extends TestBase{
 	public void runBeforeTest(){
 	} 
 	
-	//@Test
+	@Test
 	public void getDocument(){
 		String url = constructUrl(phoneNo, token);
 		//url = url.concat("/~~/contacts");
@@ -26,7 +27,7 @@ public class TestGet extends TestBase{
 
 	
 	
-	//@Test
+	@Test
 	public void getNodeByIndex(){
 		String url = constructUrl(phoneNo, token);
 		String nodeSelector = "/~~/contacts/contact{0}1{1}";
@@ -42,7 +43,7 @@ public class TestGet extends TestBase{
 		
 	}
 	
-	//@Test
+	@Test
 	public void getNodeByUniqueAttr(){
 		String url = constructUrl(phoneNo, token);
 		String nodeSelector = "/~~/contacts/contact{0}{1}method={2}8405566{2}{3}";
@@ -74,8 +75,8 @@ public class TestGet extends TestBase{
 		
 	}
 	
-	
-	//@Test
+	@Ignore("tested")
+	@Test
 	public void uriWord(){
 		String s = "[";
 		String s1 = "]";
@@ -92,7 +93,8 @@ public class TestGet extends TestBase{
 		}
 	}
 	
-	//@Test
+	@Ignore("tested")
+	@Test
 	public void stringSplitTest(){
 		String condition1 = "~~/contacts/contact[@contactId=\"1982332x1\"]";
 		int beginIndex = condition1.indexOf("=\"");
