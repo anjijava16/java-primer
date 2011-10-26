@@ -1,4 +1,5 @@
-package http;
+package http.contacts;
+
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -10,9 +11,10 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestGet extends TestBase{
-	Logger log = Logger.getLogger(getClass());
-	static String phoneNo = "8613714532530"; 
-	static String token = "YPRG0MWas7e6lM6sQ9CL4mxbtGk49jB-SNgtULIamd1SwAeSqwV0bw**";
+	public static Logger log = Logger.getLogger(TestGet.class);	
+	
+	final static String phoneNo = "8613714532530"; 
+	final static String token = "YPRG0MWas7e6lM6sQ9CL4mxbtGk49jB-SNgtULIamd1SwAeSqwV0bw**";
 	
 	@Before 
 	public void runBeforeTest(){
@@ -21,59 +23,76 @@ public class TestGet extends TestBase{
 	@Test
 	public void getDocument(){
 		String url = constructUrl(phoneNo, token);
-		//url = url.concat("/~~/contacts");
-        client(url);
+		getReqClient(url);
 	}
 
-	
-	
 	@Test
 	public void getNodeByIndex(){
 		String url = constructUrl(phoneNo, token);
-		String nodeSelector = "/~~/contacts/contact{0}1{1}";
-		
-		MessageFormat form = new MessageFormat(nodeSelector);
-		Object[] args = {LEFT_SQUARE_BRACKET, RIGHT_SQUARE_BRACKET};
-		nodeSelector = form.format(args);
-		
+		int index = 2;
+		String nodeSelector = constructSelectorByIndex(index);
 		url = url.concat(nodeSelector);
-		
 		System.out.println("url:" + url);
-		client(url);
+		getReqClient(url);
 		
 	}
 	
 	@Test
 	public void getNodeByUniqueAttr(){
 		String url = constructUrl(phoneNo, token);
-		String nodeSelector = "/~~/contacts/contact{0}{1}method={2}8405566{2}{3}";
-		
+/*		String nodeSelector = "/~~/contacts/contact{0}{1}method={2}8405566{2}{3}";
 		MessageFormat form = new MessageFormat(nodeSelector);
 		Object[] args = {LEFT_SQUARE_BRACKET, AT,DOUBLE_QUOTATION_MARKS, RIGHT_SQUARE_BRACKET};
 		nodeSelector = form.format(args);
-		
+*/		
+		String method = "46546464646";
+		String nodeSelector = constructSelectorByUniqueAttr(method);
 		url = url.concat(nodeSelector);
 		
 		System.out.println("url:" + url);
-		client(url);		
+		getReqClient(url);		
 	}
 	
 	@Test
 	public void getNodeByTagName(){
 		String url = constructUrl(phoneNo, token);
-		String nodeSelector = "/~~/contacts/contact";		
-		client(url.concat(nodeSelector));
+		String nodeSelector = constructSelectorByTagName();		
+		getReqClient(url.concat(nodeSelector));
 	}	
 	
 	@Test
 	public void getLeafNodeByTagName(){
+		int i = 0;
+		switch (i) {
+		case 0:
+			
+			break;
+		case 1:
+			
+			break;
+		case 2:
+			
+			break;
+		}
 		
 	}
 
 	@Test
 	public void getLeafNodeByIndex(){
-		
+		int i = 0;
+		switch (i) {
+		case 0:
+			
+			break;
+		case 1:
+			
+			break;
+		case 2:
+			
+			break;
+		}		
 	}
+	
 	
 	@Ignore("tested")
 	@Test
@@ -104,5 +123,9 @@ public class TestGet extends TestBase{
 			String method = condition1.substring(beginIndex + 2, endIndex);
 			System.out.println(method);
 		}		
+	}
+	
+	public static void main(String[] args) {
+		log.info("--------------");
 	}
 }

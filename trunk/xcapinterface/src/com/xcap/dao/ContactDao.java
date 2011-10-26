@@ -65,6 +65,7 @@ public class ContactDao {
 	public int deleteContacts(long userId){
 		String sql = "delete from t_contacts where user_id = :userId";
 		Query query = em.createNativeQuery(sql);
+		query.setParameter("userId", userId);
 		return query.executeUpdate();
 	}
 	
@@ -83,7 +84,7 @@ public class ContactDao {
 	public int deleteContactByIndexSelector(long userId, int index){
 		
 		if(index >= 1){
-			StringBuilder temp = new StringBuilder("select * from t_contacts where user_id = :userId limit :index,1");
+			StringBuilder temp = new StringBuilder("delete from t_contacts where user_id = :userId limit :index,1");
 			String sql = temp.toString();
 			log.info(sql);
 			Query query = em.createNativeQuery(sql);

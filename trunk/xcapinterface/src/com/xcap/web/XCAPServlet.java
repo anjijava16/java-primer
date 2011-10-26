@@ -54,7 +54,7 @@ public class XCAPServlet extends HttpServlet {
 		executeRequest(req, resp);
 	}
 
-	private String executeRequest(HttpServletRequest req,
+	private void executeRequest(HttpServletRequest req,
 			HttpServletResponse resp) throws IOException {
 		// String queryString = req.getQueryString();
 		// String url = req.getRequestURI();
@@ -152,12 +152,10 @@ public class XCAPServlet extends HttpServlet {
 									.getResponseContent();
 
 						} else {
-							// result ==
-							// XMLValidator.RESULT_SCHEMA_VALIDATE_ERROR
 							xmlError = new XCAPErrors.SchemaValidationErrorConflictException()
 									.getResponseContent();
 						}
-						resp.setStatus(XCAPDatebaseLocalIfc.ResultData.STATUS_409);
+						resp.setStatus(ResultData.STATUS_409);
 						resp.setContentType("text/xml");
 						resp.getWriter().append(xmlError);
 					}
@@ -165,14 +163,22 @@ public class XCAPServlet extends HttpServlet {
 
 				break;
 			case DELETE:
-				break;
-
-			default:
+				ResultData re = xcapIfc.delete(userId, nodeSelector);
+				if(ResultData.STATUS_200 == re.getstatus()){
+					resp.setStatus(ResultData.STATUS_200);
+				}else if(ResultData.STATUS_409 == re.getstatus()){
+					resp.setStatus(ResultData.STATUS_409);
+					resp.setContentType("text/xml");
+					resp.getWriter().append(re.getXml());					
+				}else if(ResultData.STATUS_404 == re.getstatus()){
+					resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+				}
+				
 				break;
 			}
 		} else {
+			resp.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 			throw new IllegalStateException("get jndi is null");
 		}
-		return null;
 	}
 }
