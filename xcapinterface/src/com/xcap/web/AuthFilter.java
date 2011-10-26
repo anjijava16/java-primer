@@ -75,7 +75,9 @@ public class AuthFilter implements Filter {
 			}			
 			
 			try {
-				queryString = URLDecoder.decode(queryString,"utf-8");
+				if(queryString != null){
+					queryString = URLDecoder.decode(queryString,"utf-8");					
+				}
 			} catch (UnsupportedEncodingException e) {
 				log.error("url UnsupportedEncodingException");
 				resp.sendError(ResultData.STATUS_409,new XCAPErrors.NotUTF8ConflictException().getResponseContent());

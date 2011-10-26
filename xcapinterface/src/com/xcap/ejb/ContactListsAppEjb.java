@@ -96,7 +96,7 @@ public class ContactListsAppEjb implements XCAPDatebaseLocalIfc {
 					log.info("--------------condition.length == 3");
 					ResultData data = getSecondLevelXml(userId, condition[1]);
 					String tagName = null;   //node selector second level.
-					if((tagName = secondLevelUrlValidate(condition[2])) != null){
+					if((tagName = thirdLevelUrlValidate(condition[2])) != null){
 						log.info("--------------proccess Contact's leaf node.");
 						if(data.getstatus() == ResultData.STATUS_200){
 							String xml = data.getXml();
@@ -142,10 +142,13 @@ public class ContactListsAppEjb implements XCAPDatebaseLocalIfc {
 			log.info("----------------top node name: " + topTagName);
 			
 			String secondLevelSelector = null; 
+			String thirdLevelSeletor = null;
 			if(nodeSelector != null){
 				String selectorArr[] = nodeSelector.split("/");
-				if(selectorArr.length >= 2){
+				if(selectorArr.length == 2){
 					secondLevelSelector = selectorArr[1];
+				}else if(selectorArr.length == 3){
+					thirdLevelSeletor = selectorArr[2];
 				}
 			}
 		    log.info("------------document top tag name is:" + topTagName + ". node selector:" + secondLevelSelector);
@@ -153,7 +156,7 @@ public class ContactListsAppEjb implements XCAPDatebaseLocalIfc {
 			if(NODE_CONTACTS.equals(topTagName)){
 				if(nodeSelector == null ||(nodeSelector != null && nodeSelector.equals(Constants.APP_USAGE_CONTACT))){
 					//put document, replace user all contacts.
-					contactNode(doc,topTagName, Long.valueOf(userId));
+					return contactNode(doc,topTagName, Long.valueOf(userId));
 				}
 			}else if(NODE_CONTACT.equals(topTagName)){//document top node is contact.	
 				//add or replace one contact.				
@@ -197,9 +200,13 @@ public class ContactListsAppEjb implements XCAPDatebaseLocalIfc {
 							}
 							if(index <= size){																
 								if(newContactName != null){
-									ContactEntity contact = onlyReadContactsDao.getByContactMethod(userId, method);
-									contact.setContactName(newContactName);
-									contactsDao.saveOrUpdate(contact);
+									ContactEntity contact = onlyReadContactsDao.getByIndex(userId, index);
+									if(contact.getContactMethod().equals(method)){
+										contact.setContactName(newContactName);
+										contactsDao.saveOrUpdate(contact);										
+									}else{
+										
+									}
 								}
 							}else if(index == size +1){
 								//add
@@ -258,44 +265,49 @@ public class ContactListsAppEjb implements XCAPDatebaseLocalIfc {
 					
 				}
 				
-			}else if(isLeafNodeName(topTagName) != null){
+			}else if(thirdLevelUrlValidate(topTagName) != null){  //According to document text judge
 				log.info("put operate, leaf node, node selector is " + nodeSelector);
 				//second level is by tag name.
-				ContactEntity entity = null;
-				if(secondLevelSelector.equals(NODE_CONTACT)){
-					int size = (int)onlyReadContactsDao.getListSize(userId);
-					if(size == 1){
-						List<ContactEntity> tempList = onlyReadContactsDao.getList(userId);
-						if(tempList != null && tempList.size() > 0){
-							entity = tempList.get(0);
+				if(thirdLevelSeletor != null){
+					String thirdLevelTagName = thirdLevelUrlValidate(thirdLevelSeletor);
+					if(topTagName.equals(thirdLevelTagName)){
+						ContactEntity entity = null;
+						if(secondLevelSelector.equals(NODE_CONTACT)){
+							int size = (int)onlyReadContactsDao.getListSize(userId);
+							if(size == 1){
+								List<ContactEntity> tempList = onlyReadContactsDao.getList(userId);
+								if(tempList != null && tempList.size() > 0){
+									entity = tempList.get(0);
+								}
+							}
+						}else if(secondLevelSelector.matches(PATTERN_CONTACT_INDEX)){
+							Pattern p = Pattern.compile("\\d+");
+							Matcher match = p.matcher(nodeSelector);
+							if(match.find()){
+								int index = Integer.valueOf(match.group(0));
+								entity = onlyReadContactsDao.getByIndex(userId, index);
+							}
+						}else if(secondLevelSelector.matches(PATTERN_CONTACT_UNIQUE_ATTR)){
+							int beginIndex = nodeSelector.indexOf("=\"");
+							int endIndex = nodeSelector.indexOf("\"]");
+							
+							if(beginIndex != -1 && endIndex != -1 && beginIndex < endIndex){
+								String method = nodeSelector.substring(beginIndex + 2, endIndex);
+								entity = onlyReadContactsDao.getByContactMethod(userId, method);
+							}
 						}
-					}
-				}else if(secondLevelSelector.matches(PATTERN_CONTACT_INDEX)){
-					Pattern p = Pattern.compile("\\d+");
-					Matcher match = p.matcher(nodeSelector);
-					if(match.find()){
-						int index = Integer.valueOf(match.group(0));
-						entity = onlyReadContactsDao.getByIndex(userId, index);
-					}
-				}else if(secondLevelSelector.matches(PATTERN_CONTACT_UNIQUE_ATTR)){
-					int beginIndex = nodeSelector.indexOf("=\"");
-					int endIndex = nodeSelector.indexOf("\"]");
-					
-					if(beginIndex != -1 && endIndex != -1 && beginIndex < endIndex){
-						String method = nodeSelector.substring(beginIndex + 2, endIndex);
-						entity = onlyReadContactsDao.getByContactMethod(userId, method);
+						//replace a contact attribute.
+						NodeList tempNodeList = element.getElementsByTagName(NODE_LEAF_CONTACT_NAME);
+						Node leafNode = tempNodeList.item(0);
+						if(entity != null && leafNode != null && leafNode.getFirstChild() != null){
+							String contactName = leafNode.getNodeValue();
+							entity.setContactName(contactName);
+							contactsDao.saveOrUpdate(entity);
+							return new ResultData(ResultData.STATUS_200, "");
+						}						
 					}
 				}
-				//replace a contact attribute.
-				NodeList tempNodeList = element.getElementsByTagName(NODE_LEAF_CONTACT_NAME);
-				Node leafNode = tempNodeList.item(0);
-				if(entity != null && leafNode != null && leafNode.getFirstChild() != null){
-					String contactName = leafNode.getNodeValue();
-					entity.setContactName(contactName);
-					contactsDao.saveOrUpdate(entity);
-					return new ResultData(ResultData.STATUS_200, "");
-				}
-				
+							
 			}else if(NODE_LIST.equals(topTagName)){
 				//implement later
 				
@@ -350,10 +362,13 @@ public class ContactListsAppEjb implements XCAPDatebaseLocalIfc {
 		return new ResultData(ResultData.STATUS_404, "");
 	}
 	
-	private void contactNode(Document doc,String tagName, long userId){
+	/**
+	 * put contact nodes.
+	 */
+	private ResultData contactNode(Document doc,String tagName, long userId){
 		NodeList nodes = null;
 		
-		if(isLeafNodeName(tagName) == null ){
+		if(thirdLevelUrlValidate(tagName) == null ){
 			if(tagName.equals(NODE_CONTACT) || tagName.equals(NODE_LIST)){
 				log.info("-------------------saveOrOutdate contact node");
 				nodes = doc.getElementsByTagName(NODE_CONTACT);
@@ -404,13 +419,11 @@ public class ContactListsAppEjb implements XCAPDatebaseLocalIfc {
 				}else{
 					//list node...
 				} 
-				System.out.println();
+				log.info("put contact ...");
+				return new ResultData(ResultData.STATUS_200, "");
 			}			
-		}else {
-			
-			//leaf node
 		}
-		
+		return null;
 	}
 		
 	private static String getXmlByTagName(String xmlText,String tagName) throws Exception {
@@ -456,18 +469,6 @@ public class ContactListsAppEjb implements XCAPDatebaseLocalIfc {
 		stringReader.close();
 		return h.getValue();
 	}	
-
-	/**
-	 * @param nodeName
-	 * @return nodeName is validate leaf node name return nodeName ,or null
-	 */
-	public String isLeafNodeName(String nodeName){
-		if(NODE_LEAF_CONTACT_NAME.equals(nodeName) || NODE_LEAF_CREATE_DATE.equals(nodeName)){
-			return nodeName;
-		}else{
-			return null;
-		}
-	}
 	
 	/**
 	 *   method or method[1] 
@@ -478,7 +479,7 @@ public class ContactListsAppEjb implements XCAPDatebaseLocalIfc {
 	 * @param condition2
 	 * @return
 	 */
-	private String secondLevelUrlValidate(String condition2){
+	private String thirdLevelUrlValidate(String condition2){
 		if (condition2.equals(NODE_LEAF_CONTACT_NAME)
 			|| condition2.equals(NODE_LEAF_CREATE_DATE) ){
 			return condition2;
@@ -493,27 +494,27 @@ public class ContactListsAppEjb implements XCAPDatebaseLocalIfc {
 	}
 	
 	/**
-	 * 		//by tagName ,                        
-			//by unique unique attr,   
-			//by index
+	 * 		//by tagName ,<br/>
+			//by unique unique attr,<br/>   
+			//by index,<br/>
 
-	0		contacts/contact
-			contacts/contact[1]
-			contacts/contact[@method="1"]
+	0		contacts/contact<br/>
+			contacts/contact[1]<br/>
+			contacts/contact[@method="1"]<br/>
 				
-	1、		contacts/list
-			contacts/list[1]
-			contacts/list[@id="close-friends"]			
-				
-	2、		contacts/list[@id="close-friends"]/contact
-			contacts/list[@id="close-friends"]/contact[1]
-			contacts/list[@id="close-friends"]/contact[@id="1"]
+	1、		contacts/list<br/>
+			contacts/list[1]<br/>
+			contacts/list[@id="close-friends"]<br/>			
+----------------------------------only proccess 0,1------------------------------------------<br>				
+	2、		contacts/list[@id="close-friends"]/contact<br/>
+			contacts/list[@id="close-friends"]/contact[1]<br/>
+			contacts/list[@id="close-friends"]/contact[@id="1"]<br/>
 		
-	        ...... 1,2 组合,其余六种情况
+	        ...... 1,2 组合,其余六种情况<br/>
 	
-	4、	    method/contactName/userId/createDate 例如
-	        contacts/list[@id="close-friends"]/contact[@method="1"]/contactName
-	        contacts/list[@id="close-friends"]/contact[@method="1"]/contactName[1]
+	4、	    method/contactName/userId/createDate 例如<br/>
+	        contacts/list[@id="close-friends"]/contact[@method="1"]/contactName<br/>
+	        contacts/list[@id="close-friends"]/contact[@method="1"]/contactName[1]<br/>
 		
 	 * @param userId
 	 * @param condition
