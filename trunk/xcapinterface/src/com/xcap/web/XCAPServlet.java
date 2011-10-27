@@ -144,7 +144,14 @@ public class XCAPServlet extends HttpServlet {
 					}
 
 					if (result == XMLValidator.RESULT_OK) {
-						xcapIfc.put(userId, nodeSelector, xmlBuilder.toString());
+						ResultData resultData = xcapIfc.put(userId, nodeSelector, xmlBuilder.toString());
+						if(resultData.getstatus() == ResultData.STATUS_404){
+							resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+						}else if(resultData.getstatus() == ResultData.STATUS_409){
+							resp.setStatus(ResultData.STATUS_409);
+							resp.setContentType("text/xml");
+							resp.getWriter().append(resultData.getXml());
+						}
 					} else {
 						String xmlError = "";
 						if (result == XMLValidator.RESULT_STRUCTURE_ERROR) {

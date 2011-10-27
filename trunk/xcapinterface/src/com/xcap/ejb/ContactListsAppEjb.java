@@ -3,7 +3,9 @@ package com.xcap.ejb;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -139,7 +141,7 @@ public class ContactListsAppEjb implements XCAPDatebaseLocalIfc {
 			
 			Element element = doc.getDocumentElement();
 			String topTagName = element.getTagName();
-			log.info("----------------top node name: " + topTagName);
+			//log.info("----------------top node name: " + topTagName);
 			
 			String secondLevelSelector = null; 
 			String thirdLevelSeletor = null;
@@ -148,29 +150,34 @@ public class ContactListsAppEjb implements XCAPDatebaseLocalIfc {
 				if(selectorArr.length == 2){
 					secondLevelSelector = selectorArr[1];
 				}else if(selectorArr.length == 3){
+					secondLevelSelector = selectorArr[1];
 					thirdLevelSeletor = selectorArr[2];
 				}
 			}
 		    log.info("------------document top tag name is:" + topTagName + ". node selector:" + secondLevelSelector);
 			
+		    long userIdTemp = Long.valueOf(userId);
 			if(NODE_CONTACTS.equals(topTagName)){
 				if(nodeSelector == null ||(nodeSelector != null && nodeSelector.equals(Constants.APP_USAGE_CONTACT))){
 					//put document, replace user all contacts.
-					return contactNode(doc,topTagName, Long.valueOf(userId));
+					log.info("delete contacts by userId, put document.");
+					contactsDao.deleteContacts(Long.valueOf(userId));
+					return contactNode(doc,NODE_CONTACTS, userIdTemp);
 				}
 			}else if(NODE_CONTACT.equals(topTagName)){//document top node is contact.	
 				//add or replace one contact.				
 				if(secondLevelSelector.equals(NODE_CONTACT)){  //
-					log.info("put operate, node selector is contact.");
+					log.info("put operate by node tag name, node selector is contact.");
 					int size = (int)onlyReadContactsDao.getListSize(userId);
 					switch (size) {
 					case 0:   //add
-						contactNode(doc,NODE_CONTACT, Long.valueOf(userId));
-						break;
+						contactNode(doc,NODE_CONTACT, userIdTemp);
+						return new ResultData(ResultData.STATUS_200, "");
+						
 					case 1:   //merge
 						//first delete existed node, then add.
-						contactNode(doc,NODE_CONTACT, Long.valueOf(userId));
-						break;
+						contactNode(doc,NODE_CONTACT, userIdTemp);
+						return new ResultData(ResultData.STATUS_200, "");
 					default:
 						//error
 						String errorInfo = new XCAPErrors.CannotInsertConflictException().getResponseContent();
@@ -184,42 +191,40 @@ public class ContactListsAppEjb implements XCAPDatebaseLocalIfc {
 					if(match.find()){
 						int index = Integer.valueOf(match.group(0));
 						int size = (int)onlyReadContactsDao.getListSize(userId);
-						if(index > 0){  //index valid
-							String method = element.getAttribute(NODE_ATTR_METHOD);
-							NodeList nodeList = element.getChildNodes();
+						if(index > 0 && index <= size + 1){  //index valid
+							log.info("index valid, value is " + index);
+
+							Map<String, String> re = getContactXmlValue(element);
+							String newContactName = re.get(NODE_LEAF_CONTACT_NAME);
+							String method = re.get(NODE_ATTR_METHOD);
 							
-							String newContactName = null;
-							for (int i = 0; i < nodeList.getLength(); i++) {
-								Node node = nodeList.item(i);
-								if(! node.getNodeName().equals("#text")){
-									NodeList nodeList2 = node.getChildNodes();
-									if(NODE_LEAF_CONTACT_NAME.equals(node.getNodeName())){
-										newContactName = nodeList2.getLength() > 0 ? nodeList2.item(0).getNodeValue() : null;											
-									}
-								}				
-							}
-							if(index <= size){																
-								if(newContactName != null){
-									ContactEntity contact = onlyReadContactsDao.getByIndex(userId, index);
-									if(contact.getContactMethod().equals(method)){
-										contact.setContactName(newContactName);
-										contactsDao.saveOrUpdate(contact);										
-									}else{
-										
-									}
+							if(index <= size){
+								log.info("merge contact by index");
+								ContactEntity contact = onlyReadContactsDao.getByIndex(userId, index);
+								if(contact != null ){
+									contact.setContactName(newContactName);
+									contact.setContactMethod(method);
+									contactsDao.saveOrUpdate(contact);										
+									log.info("merge contact by index." + contact);
+									return new ResultData(ResultData.STATUS_200, "");
+								}else{
+									log.info("merge contact by index. 404");
 								}
 							}else if(index == size +1){
 								//add
 								ContactEntity contact = new ContactEntity();
+								contact.setUserId(userIdTemp);
 								contact.setContactName(newContactName);
 								contact.setContactMethod(method);
 								contactsDao.saveOrUpdate(contact);
-							}else if(index > size + 1){
-								//404 error
-								return new ResultData(ResultData.STATUS_404, "");
+								return new ResultData(ResultData.STATUS_200, "");
 							}
+						}else{
+							//404 error
+							log.info("index overflow");
 						}
-						return new ResultData(ResultData.STATUS_200, "");
+					}else{
+						log.info("index pattern not find.");
 					}
 					
 				}else if(secondLevelSelector.matches(PATTERN_CONTACT_UNIQUE_ATTR)){
@@ -229,40 +234,33 @@ public class ContactListsAppEjb implements XCAPDatebaseLocalIfc {
 					
 					if(beginIndex != -1 && endIndex != -1 && beginIndex < endIndex){
 						String method = nodeSelector.substring(beginIndex + 2, endIndex);
-						
-						String docAttrMethod = element.getAttribute(NODE_ATTR_METHOD);
-						NodeList nodeList = element.getChildNodes();
-						
-						String newContactName = null;
-						for (int i = 0; i < nodeList.getLength(); i++) {
-							Node node = nodeList.item(i);
-							if(! node.getNodeName().equals("#text")){
-								NodeList nodeList2 = node.getChildNodes();
-								if(NODE_LEAF_CONTACT_NAME.equals(node.getNodeName())){
-									newContactName = nodeList2.getLength() > 0 ? nodeList2.item(0).getNodeValue() : null;											
-								}
-							}				
-						}
+												
+						Map<String, String> re = getContactXmlValue(element);
+						String newContactName = re.get(NODE_LEAF_CONTACT_NAME);
+						String docAttrMethod = re.get(NODE_ATTR_METHOD);
 						
 						if(method.equals(docAttrMethod)){
 							ContactEntity en = onlyReadContactsDao.getByContactMethod(userId, method);
 							if(en != null){
 								//merge.
+								log.info("merge contact by unique attr.");
 								en.setContactName(newContactName);
 								contactsDao.saveOrUpdate(en);
+								return new ResultData(ResultData.STATUS_200, "");
 							}else {
 								//add.
+								log.info("add contact by unique attr. userId " + userIdTemp);
 								ContactEntity newEntity = new ContactEntity();
+								newEntity.setUserId(userIdTemp);
 								newEntity.setContactName(newContactName);
 								newEntity.setContactMethod(method);
-								contactsDao.saveOrUpdate(en);
+								contactsDao.saveOrUpdate(newEntity);
+								return new ResultData(ResultData.STATUS_200, "");
 							}
 						}else{
 							//404 error
-							return new ResultData(ResultData.STATUS_404, "");
 						}			
 					}
-					
 				}
 				
 			}else if(thirdLevelUrlValidate(topTagName) != null){  //According to document text judge
@@ -296,23 +294,23 @@ public class ContactListsAppEjb implements XCAPDatebaseLocalIfc {
 								entity = onlyReadContactsDao.getByContactMethod(userId, method);
 							}
 						}
+						
+						log.info("modify contact attribue,contact is:" + entity);
 						//replace a contact attribute.
-						NodeList tempNodeList = element.getElementsByTagName(NODE_LEAF_CONTACT_NAME);
+						NodeList tempNodeList = doc.getElementsByTagName(NODE_LEAF_CONTACT_NAME);
 						Node leafNode = tempNodeList.item(0);
 						if(entity != null && leafNode != null && leafNode.getFirstChild() != null){
-							String contactName = leafNode.getNodeValue();
+							log.info("----####");
+							String contactName = leafNode.getFirstChild().getNodeValue();
 							entity.setContactName(contactName);
 							contactsDao.saveOrUpdate(entity);
 							return new ResultData(ResultData.STATUS_200, "");
 						}						
 					}
-				}
-							
+				}				
 			}else if(NODE_LIST.equals(topTagName)){
-				//implement later
-				
-			}
-			
+				//implement later	
+			}			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -321,45 +319,76 @@ public class ContactListsAppEjb implements XCAPDatebaseLocalIfc {
 	}
 
 	public ResultData delete(String userId, String nodeSelector) {
+		log.info("delete operator, nodeSelector :" + nodeSelector);
 		//delete all
 		//delete a contact
+		long userIdTemp = Long.valueOf(userId);
 		if(nodeSelector == null || nodeSelector.equals(NODE_CONTACTS)){
+			log.info("delete all by userId " + userId);
 			contactsDao.deleteContacts(Long.valueOf(userId));
 		}else{
-			if(nodeSelector.equals(NODE_CONTACT)){
-				long size = onlyReadContactsDao.getListSize(userId);
-				if(size == 1){
-					int affectRows = contactsDao.deleteContacts(Long.valueOf(userId));
-					return new ResultData(ResultData.STATUS_200,"");
-				}else{
-					return new ResultData(ResultData.STATUS_409, new XCAPErrors.CannotDeleteConflictException().getResponseContent());
-				}
-			}else if(nodeSelector.matches(PATTERN_CONTACT_INDEX)){
-				Pattern p = Pattern.compile("\\d+");
-				Matcher match = p.matcher(nodeSelector);
-				if(match.find()){
-					int index = Integer.valueOf(match.group(0));
-					int affectRows = contactsDao.deleteContactByIndexSelector(Long.valueOf(userId), index);
-					return new ResultData(ResultData.STATUS_200,"");
-				}else {
-					return new ResultData(ResultData.STATUS_409, new XCAPErrors.CannotDeleteConflictException().getResponseContent());
-				}
-				
-			}else if(nodeSelector.matches(PATTERN_CONTACT_UNIQUE_ATTR)){
-				int beginIndex = nodeSelector.indexOf("=\"");
-				int endIndex = nodeSelector.indexOf("\"]");
-				
-				if(beginIndex != -1 && endIndex != -1 && beginIndex < endIndex){
-					String method = nodeSelector.substring(beginIndex + 2, endIndex);
-					int affectRows = contactsDao.deleteContactByUniqueAttr(Long.valueOf(userId), method);
-					return new ResultData(ResultData.STATUS_200,"");
-				}else{
-					return new ResultData(ResultData.STATUS_409, new XCAPErrors.CannotDeleteConflictException().getResponseContent());
-				}
+			String[] selectors = nodeSelector.split("/");
+			if(selectors.length == 2){
+				String secondLevelSelector = selectors[1];
+				if(secondLevelSelector.equals(NODE_CONTACT)){  //by tagName selector.
+					long size = onlyReadContactsDao.getListSize(userId);
+					if(size == 1){
+						int affectRows = contactsDao.deleteContacts(userIdTemp);
+						return new ResultData(ResultData.STATUS_200,"");
+					}else{
+						return new ResultData(ResultData.STATUS_409, new XCAPErrors.CannotDeleteConflictException().getResponseContent());
+					}
+				}else if(secondLevelSelector.matches(PATTERN_CONTACT_INDEX)){
+					log.info("delete contact by index ");
+					Pattern p = Pattern.compile("\\d+");
+					Matcher match = p.matcher(nodeSelector);
+					if(match.find()){
+						int index = Integer.valueOf(match.group(0));
+						int affectRows = contactsDao.deleteContactByIndexSelector(userIdTemp, index);
+						if(affectRows != -1){
+							return new ResultData(ResultData.STATUS_200,"");						
+						}
+					}else {
+						return new ResultData(ResultData.STATUS_409, new XCAPErrors.CannotDeleteConflictException().getResponseContent());
+					}
+					
+				}else if(secondLevelSelector.matches(PATTERN_CONTACT_UNIQUE_ATTR)){
+					log.info("delete contact by unique attr.");
+					int beginIndex = nodeSelector.indexOf("=\"");
+					int endIndex = nodeSelector.indexOf("\"]");
+					
+					if(beginIndex != -1 && endIndex != -1 && beginIndex < endIndex){
+						String method = nodeSelector.substring(beginIndex + 2, endIndex);
+						int affectRows = contactsDao.deleteContactByUniqueAttr(userIdTemp, method);
+						return new ResultData(ResultData.STATUS_200,"");
+					}else{
+						return new ResultData(ResultData.STATUS_409, new XCAPErrors.CannotDeleteConflictException().getResponseContent());
+					}
+				}				
 			}
 		}
 		
 		return new ResultData(ResultData.STATUS_404, "");
+	}
+	
+	private static Map<String,String> getContactXmlValue(Element element){
+		String method = element.getAttribute(NODE_ATTR_METHOD);
+		NodeList nodeList = element.getChildNodes();
+		
+		String newContactName = null;
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			Node node = nodeList.item(i);
+			if(! node.getNodeName().equals("#text")){
+				NodeList nodeList2 = node.getChildNodes();
+				if(NODE_LEAF_CONTACT_NAME.equals(node.getNodeName())){
+					newContactName = nodeList2.getLength() > 0 ? nodeList2.item(0).getNodeValue() : null;											
+				}
+			}				
+		}
+		Map<String,String> re = new HashMap<String, String>();
+		re.put(NODE_ATTR_METHOD, method);
+		re.put(NODE_LEAF_CONTACT_NAME, newContactName);
+		return re;
 	}
 	
 	/**
@@ -370,13 +399,13 @@ public class ContactListsAppEjb implements XCAPDatebaseLocalIfc {
 		
 		if(thirdLevelUrlValidate(tagName) == null ){
 			if(tagName.equals(NODE_CONTACT) || tagName.equals(NODE_LIST)){
-				log.info("-------------------saveOrOutdate contact node");
+				log.info("-------------------saveOrOutdate contact or list node");
 				nodes = doc.getElementsByTagName(NODE_CONTACT);
 			}else{
-				log.info("-------------------saveOrOutdate other node");
-				nodes = doc.getChildNodes().item(0).getChildNodes();
+				log.info("-------------------saveOrOutdate contacts node");
+				nodes = doc.getDocumentElement().getChildNodes();
 			}
-			//tagName.equals(NODE_CONTACTS) || tagName.equals(NODE_CONTACT)
+			
 			for (int i = 0; i < nodes.getLength(); i++) {
 				Node node = nodes.item(i);
 				String nodeName = node.getNodeName();
@@ -420,10 +449,10 @@ public class ContactListsAppEjb implements XCAPDatebaseLocalIfc {
 					//list node...
 				} 
 				log.info("put contact ...");
-				return new ResultData(ResultData.STATUS_200, "");
 			}			
+			return new ResultData(ResultData.STATUS_200, "");
 		}
-		return null;
+		return new ResultData(ResultData.STATUS_404, "");
 	}
 		
 	private static String getXmlByTagName(String xmlText,String tagName) throws Exception {

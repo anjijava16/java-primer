@@ -1,5 +1,6 @@
 package com.xcap.dao;
 
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 
@@ -78,20 +79,27 @@ public class ContactDao {
 	
 	/**
 	 * @param userId
-	 * @param index
+	 * @param index >= 1
 	 * @return -1 index invalid ,or delete row mount.
 	 */
 	public int deleteContactByIndexSelector(long userId, int index){
 		
 		if(index >= 1){
-			StringBuilder temp = new StringBuilder("delete from t_contacts where user_id = :userId limit :index,1");
-			String sql = temp.toString();
-			log.info(sql);
-			Query query = em.createNativeQuery(sql);
-			query.setParameter("userId", userId);
-			query.setParameter("index", index -1);
+			String queryString = "select id from t_contacts where user_id = :userId limit :index,1";
+			Query queryId = em.createNativeQuery(queryString);
+			queryId.setParameter("userId", userId);
+			queryId.setParameter("index", index -1);  //xcap selector index start with 1, but mysql limit index start with 0.
 			
-			return query.executeUpdate();
+			@SuppressWarnings("rawtypes")
+			List list = queryId.getResultList();
+			if(list.size() > 0){
+				BigInteger idTemp = (BigInteger)list.get(0);
+				
+				StringBuilder temp = new StringBuilder("delete from t_contacts where id = :id");
+				Query delQuery = em.createNativeQuery(temp.toString());
+				delQuery.setParameter("id", idTemp.longValue());
+				return delQuery.executeUpdate();
+			}
 		}
 		return -1;
 	}
