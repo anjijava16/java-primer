@@ -3,7 +3,6 @@ package http.contacts;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.text.MessageFormat;
 
 import org.apache.log4j.Logger;
 import org.junit.Before;
@@ -62,16 +61,22 @@ public class TestGet extends TestBase{
 	
 	@Test
 	public void getLeafNodeByTagName(){
-		int i = 0;
+		int i = 2;
 		switch (i) {
 		case 0:
-			
+			//tag name
 			break;
 		case 1:
-			
+			//index
 			break;
 		case 2:
-			
+			//attr
+			String url = constructUrl(phoneNo, token);
+			String uniqueAttr = "9999939999"; // method.
+			String nodeSelector = construct_A_T_Leaf(uniqueAttr, TageName.contactName);
+			url = url.concat(nodeSelector);
+			log.info(url);
+			getReqClient(url);
 			break;
 		}
 		

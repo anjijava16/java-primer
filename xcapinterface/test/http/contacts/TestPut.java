@@ -25,7 +25,7 @@ public class TestPut extends TestBase{
 	@Test
 	public void putContactNodeByIndex(){
 		String url = constructUrl(phoneNo, token);
-		int index = 3; // example
+		int index = 1; // example
 		String nodeSelector = constructSelectorByIndex(index);
 		url = url.concat(nodeSelector);
 		try {
@@ -54,7 +54,7 @@ public class TestPut extends TestBase{
 	@Test
 	public void putContactNodeByUniqueAttr(){
 		String url = constructUrl(phoneNo, token);
-		String method = "";
+		String method = "9999939999";
 		String nodeSelector = constructSelectorByUniqueAttr(method);
 		url = url.concat(nodeSelector);
 		try {
@@ -67,7 +67,18 @@ public class TestPut extends TestBase{
 	}
 	
 	@Test
-	public void putAttr(){
+	public void putAttr(){		
 		//six case.
+		String url = constructUrl(phoneNo, token);
+		String method = "9999939999";
+		String nodeSelector = construct_A_T_Leaf(method, TageName.contactName);
+		url = url.concat(nodeSelector);
+		try {
+			File file = getXmlFilePath("xml/example-update-contactName.xml");
+			putReqClient(url,file);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
 	}
 }

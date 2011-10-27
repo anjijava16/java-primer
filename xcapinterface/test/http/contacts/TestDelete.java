@@ -26,6 +26,8 @@ public class TestDelete extends TestBase {
 	@Test
 	public void deleteContactByIndex() {
 		String url = constructUrl(phoneNo, token);
+		String nodeSelector = constructSelectorByIndex(2);
+		url = url.concat(nodeSelector);
 		try {
 			deleteReqClient(url);
 		} catch (Exception e) {
@@ -36,6 +38,8 @@ public class TestDelete extends TestBase {
 	@Test
 	public void deleteContactByUniqueAttr() {
 		String url = constructUrl(phoneNo, token);
+		String method = "156445564641";
+		url = url.concat(constructSelectorByUniqueAttr(method));
 		try {
 			deleteReqClient(url);
 		} catch (Exception e) {
@@ -46,6 +50,7 @@ public class TestDelete extends TestBase {
 	@Test
 	public void deleteContactByTagName() {
 		String url = constructUrl(phoneNo, token);
+		url = url.concat(constructSelectorByTagName());
 		try {
 			deleteReqClient(url);
 		} catch (Exception e) {
