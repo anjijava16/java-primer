@@ -28,6 +28,9 @@ public class HelloStatelessEjb implements HelloStatelessLocalIfc, HelloStateless
 	
 	@Resource
 	private SessionContext ctx;
+	
+	@Resource
+	private TimerService timer;
 
 	@Override
 	public String hello() {
@@ -37,9 +40,10 @@ public class HelloStatelessEjb implements HelloStatelessLocalIfc, HelloStateless
 	@Override
 	public void scheduleTimer(long milliseconds) {
 		count = 1;
-		TimerService t = ctx.getTimerService();
+		//TimerService timer = ctx.getTimerService();
+		
 		Date newDatePoint = new Date(new Date().getTime() + milliseconds);
-		t.createTimer(newDatePoint, milliseconds, "大家好，这是我的第一个定时器");
+		timer.createTimer(newDatePoint, milliseconds, "大家好，这是我的第一个定时器");
 	}
 
 	private int count = 1; // 不太好啊

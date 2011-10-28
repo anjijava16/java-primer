@@ -85,9 +85,7 @@
 	    <copy todir="${jboss.deploy.dir}">
 	      <fileset dir="${dist}">
 	      	<include name="${ejbpro_ejb.jar}"/>
-	      <!-- 
-		       <include name="${ejbpro_web.war}"/>
-	       -->	
+		    <include name="${ejbpro_web.war}"/>
 	      </fileset>
 	    </copy>			
 	</target>
