@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server>
+	<mbean code="org.jmx.slieer.JNDIMap" name="org.jmx.slieer:service=JNDIMap">
+		<attribute name="JndiName">inmemory/map/MapTest</attribute>
+		<depends>jboss:service=Naming</depends>
+	</mbean>
+</server>

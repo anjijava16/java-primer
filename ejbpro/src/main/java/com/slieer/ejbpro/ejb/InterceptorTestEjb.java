@@ -16,7 +16,9 @@ import com.slieer.ejbpro.ifc.InterceptorTestRemoteIfc;
 
 public class InterceptorTestEjb implements InterceptorTestRemoteIfc {
 
-	public void doSomething(String param) {
-		 //
+	@Override
+	public String doSomething(String param) {
+		 return "Hi,".concat(param); 
+		
 	}
 }
