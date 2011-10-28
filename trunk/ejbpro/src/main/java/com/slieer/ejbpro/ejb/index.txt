@@ -1,21 +1,2 @@
-
-<!--  write to messaging\destinations-service.xml
-	or create file what name is xx-service.xml, e.g. src\doc\HelloMDB-service.xml,and copy JBOSS_HOME/server/default/deploy.
--->
-mbean code="org.jboss.mq.server.jmx.Queue" 
-      name="jboss.mq.destination:service=Queue,
-      name=HelloQueue"> 
-      
-      <attribute name="JNDIName">queue/HelloQueue</attribute> 
-      <depends optional-attribute-name="DestinationManager">
-      	jboss.mq:service=DestinationManager
-      </depends> 
-</mbean> 
-
-
-查看已发布的web service:
-
-http://127.0.0.1:8080/jbossws/
-
 jboss Quartz计划任务
 http://blog.csdn.net/spamatrix/article/details/4984495
