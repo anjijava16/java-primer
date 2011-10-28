@@ -10,8 +10,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestDelete extends TestBase {
-	final static String phoneNo = "8613714532530"; 
-	final static String token = "YPRG0MWas7e6lM6sQ9CL4mxbtGk49jB-SNgtULIamd1SwAeSqwV0bw**";	
+	final static String phoneNo = "8613480783139"; 
+	final static String token = "DDcs3x7JwQQwqvOT751dhxPUTartlMV70DRk28fiJjRSwAeSqwV0bw**";
 	
 	@Test
 	public void deleteContacts() {

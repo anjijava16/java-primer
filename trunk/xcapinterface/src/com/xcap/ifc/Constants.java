@@ -8,7 +8,10 @@ package com.xcap.ifc;
  */
 public class Constants {
 	public final static String APP_USAGE_CONTACT = "contacts";
+	public final static String APP_USAGE_SINGSPACE_CONTACT = "SingSpaceContacts";
 	
+	public final static String SCHEMA_DIR = "/WEB-INF/classes/com/xcap/web/xmlschema";
+	public final static String XML_SCHEMA_CONTACT = "contacts.xsd";	
 	
 	public final static String USERS = "users";
 	public final static String INTERVAL_SIGN = "/~~/"; 

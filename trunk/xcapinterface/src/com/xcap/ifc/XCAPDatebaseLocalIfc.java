@@ -3,9 +3,14 @@ package com.xcap.ifc;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-
+/**
+ * @author slieer
+ * Create Date 2011-10-28
+ * version 1.0
+ */
 public interface XCAPDatebaseLocalIfc {
-	public static String CONTACT_LOCAL_JNDI = "ContactListsApp/local";
+	public static String UAB_CONTACTS_LOCAL_JNDI = "UABContactsApp/local";
+	public static String SING_SPACE_CONTACTS_LOCAL_JNDI = "SingSpaceContactsApp/local";
 
 	final static String DATE_FORMAT = "yyyy-MM-dd hh:mm:ss";
 	final static DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
