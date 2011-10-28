@@ -33,8 +33,6 @@ public class XCAPServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	public static final Logger log = Logger.getLogger(XCAPServlet.class);
 
-	final static String SCHEMA_DIR = "/WEB-INF/classes/com/xcap/web/xmlschema";
-	final static String XML_SCHEMA_CONTACT = "contacts.xsd";
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -74,8 +72,10 @@ public class XCAPServlet extends HttpServlet {
 			throw new IllegalStateException("auid is null");
 		}
 		if (auid.equals(Constants.APP_USAGE_CONTACT)) {
-			jndi = XCAPDatebaseLocalIfc.CONTACT_LOCAL_JNDI;
-		} else {
+			jndi = XCAPDatebaseLocalIfc.UAB_CONTACTS_LOCAL_JNDI;
+		} else if(auid.equals(Constants.APP_USAGE_SINGSPACE_CONTACT)){
+			jndi = XCAPDatebaseLocalIfc.SING_SPACE_CONTACTS_LOCAL_JNDI;
+		}else{
 			throw new IllegalStateException("other auid not implement...");
 			// other app usage.
 		}
@@ -101,7 +101,7 @@ public class XCAPServlet extends HttpServlet {
 						log.info("result xml :" + result);
 						PrintWriter writer = resp.getWriter();
 						writer.print(result);
-						// writer.close();
+						writer.close();
 					}
 				} else {
 					// 404
@@ -110,8 +110,7 @@ public class XCAPServlet extends HttpServlet {
 				}
 				break;
 			case PUT:
-				BufferedReader reader = req.getReader();
-				Scanner scanner = new Scanner(reader);
+				Scanner scanner = new Scanner(req.getReader());
 				StringBuilder xmlBuilder = new StringBuilder();
 				while (scanner.hasNextLine()) {
 					xmlBuilder.append(scanner.nextLine());
@@ -121,7 +120,7 @@ public class XCAPServlet extends HttpServlet {
 					String appSchema = null;
 
 					if (auid.equals(Constants.APP_USAGE_CONTACT)) {
-						appSchema = XML_SCHEMA_CONTACT;
+						appSchema = Constants.XML_SCHEMA_CONTACT;
 					} else {
 						// other app usage.
 						resp.sendError(HttpServletResponse.SC_NOT_FOUND,
@@ -131,7 +130,7 @@ public class XCAPServlet extends HttpServlet {
 					int result = -1;
 					try {
 						String filePath = this.getServletContext().getRealPath(
-								SCHEMA_DIR.concat("/").concat(appSchema));
+								Constants.SCHEMA_DIR.concat("/").concat(appSchema));
 
 						// xml form not-well-formed
 						// validate document.
@@ -151,6 +150,8 @@ public class XCAPServlet extends HttpServlet {
 							resp.setStatus(ResultData.STATUS_409);
 							resp.setContentType("text/xml");
 							resp.getWriter().append(resultData.getXml());
+						}else if(resultData.getstatus() == ResultData.STATUS_200){
+							resp.setStatus(HttpServletResponse.SC_OK);
 						}
 					} else {
 						String xmlError = "";

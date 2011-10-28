@@ -12,9 +12,9 @@ import org.junit.Test;
 public class TestGet extends TestBase{
 	public static Logger log = Logger.getLogger(TestGet.class);	
 	
-	final static String phoneNo = "8613714532530"; 
-	final static String token = "YPRG0MWas7e6lM6sQ9CL4mxbtGk49jB-SNgtULIamd1SwAeSqwV0bw**";
-	
+	final static String phoneNo = "8613480783139"; 
+	final static String token = "DDcs3x7JwQQwqvOT751dhxPUTartlMV70DRk28fiJjRSwAeSqwV0bw**";
+
 	@Before 
 	public void runBeforeTest(){
 	} 
@@ -62,18 +62,23 @@ public class TestGet extends TestBase{
 	@Test
 	public void getLeafNodeByTagName(){
 		int i = 2;
+		String url = constructUrl(phoneNo, token);
+		String nodeSelector = null;
 		switch (i) {
 		case 0:
-			//tag name
+			//tag name/tagName
 			break;
 		case 1:
-			//index
+			//index/tagName
+			int index = 1;
+			nodeSelector = construct_I_T_Leaf(index, TageName.contactName);
+			url = url.concat(nodeSelector);
+			getReqClient(url);
 			break;
 		case 2:
-			//attr
-			String url = constructUrl(phoneNo, token);
+			//attr/tagName
 			String uniqueAttr = "9999939999"; // method.
-			String nodeSelector = construct_A_T_Leaf(uniqueAttr, TageName.contactName);
+			nodeSelector = construct_A_T_Leaf(uniqueAttr, TageName.contactName);
 			url = url.concat(nodeSelector);
 			log.info(url);
 			getReqClient(url);

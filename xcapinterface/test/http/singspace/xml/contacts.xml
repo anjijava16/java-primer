@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<contacts xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<contact>
+<!--	<contact_id>1</contact_id>
+		<user_id>14</user_id>
+		<nickname>ickname</nickname>
+		<origin>2</origin>
+		<status>1</status> 
+		
+		//query where status equal 1
+		First Name 和 Last Name即可， First Name对应given name, Last Name对应family name
+		http://www.faqs.org/rfcs/rfc2426.html
+ -->
+		<dispName>Yang Test</dispName>
+		<name>
+			<fName>Xun</fName>
+			<lName>Frank</lName>
+		</name>
+		<bday>2008-12-15</bday>
+		<adr>宣武区西便门内大街85号</adr>
+		<label></label>
+		<tel>		
+			<item type="">12453456346</item>
+			<item type="CELL">13691417240</item>
+			<item type="HOME">01068747151</item>
+			<item type="WORK">01068747151</item>
+			<item type="FAX;HOME">9141724</item>
+			<item type="FAX;WORK">3424424</item>
+		</tel>
+		<email>
+			<item type="">xie@gmail.com</item>
+			<item type="">hong@hotmail.com</item>
+			<item type="HOME">ong@hotmail.com</item>
+			<item type="WORK">xie@gmail.com</item>
+		</email>
+		<title>engineer</title>
+		<org></org>
+		<note></note>
+		<url></url>
+		<mobile>
+			<item>13112693777</item>
+			<item>13434226677</item>
+			<item>18927308777</item>
+		</mobile>
+		<index>Y</index>
+		<xtends></xtends>
+		<syncPhone>0</syncPhone>
+		<photoId>23</photoId>
+		<lastModify>2011-10-20 12:58:22</lastModify>
+	</contact>
+	<contact>
+	 <!-- ... -->
+	</contact>
+</contacts>

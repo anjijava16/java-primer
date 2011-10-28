@@ -1,8 +1,6 @@
 package com.xcap.ejb;
 
 import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,11 +38,17 @@ import com.xcap.ifc.Contact;
 import com.xcap.ifc.XCAPDatebaseLocalIfc;
 import com.xcap.ifc.error.XCAPErrors;
 
+/**
+ * UAB contact xcap interface.
+ * @author slieer
+ * Create Date2011-10-28
+ * version 1.0
+ */
 @Stateless
 @Local(value = XCAPDatebaseLocalIfc.class)
-@LocalBinding(jndiBinding = "ContactListsApp/local")
-public class ContactListsAppEjb implements XCAPDatebaseLocalIfc {
-	public static final Logger log = Logger.getLogger(ContactListsAppEjb.class);
+@LocalBinding(jndiBinding = XCAPDatebaseLocalIfc.UAB_CONTACTS_LOCAL_JNDI)
+public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
+	public static final Logger log = Logger.getLogger(UABContactsAppEjb.class);
 
 	final static String NODE_CONTACTS = "contacts";
 	final static String NODE_CONTACT = "contact";
@@ -85,7 +89,9 @@ public class ContactListsAppEjb implements XCAPDatebaseLocalIfc {
 			constructContactNode(xmlBuilder, list);
 			
 			xmlBuilder.append("</contacts>");
-			return new ResultData(ResultData.STATUS_200,xmlBuilder.toString());
+			if(list != null && list.size() != 0){
+				return new ResultData(ResultData.STATUS_200,xmlBuilder.toString());				
+			}
 		}else{			
 			log.info("decode node selector:" + nodeSelector + " userId:" + userId);
 			if(nodeSelector.startsWith(Constants.APP_USAGE_CONTACT)){
@@ -128,7 +134,7 @@ public class ContactListsAppEjb implements XCAPDatebaseLocalIfc {
 		}
 		
 		log.info("ejb server return 404 error.");
-		return new ResultData(ResultData.STATUS_404, null);
+		return new ResultData(ResultData.STATUS_404, "");
 	}
 
 	public ResultData put(String userId, String nodeSelector, String xml) {
@@ -326,6 +332,7 @@ public class ContactListsAppEjb implements XCAPDatebaseLocalIfc {
 		if(nodeSelector == null || nodeSelector.equals(NODE_CONTACTS)){
 			log.info("delete all by userId " + userId);
 			contactsDao.deleteContacts(Long.valueOf(userId));
+			return new ResultData(ResultData.STATUS_200,"");
 		}else{
 			String[] selectors = nodeSelector.split("/");
 			if(selectors.length == 2){
@@ -551,8 +558,8 @@ public class ContactListsAppEjb implements XCAPDatebaseLocalIfc {
 	 */
 	private ResultData getSecondLevelXml(String userId, String condition1) {
 		log.info("--------------condition1:" + condition1);
-		if(condition1.startsWith(ContactListsAppEjb.NODE_CONTACT)){
-			if(condition1.equals(ContactListsAppEjb.NODE_CONTACT)){
+		if(condition1.startsWith(UABContactsAppEjb.NODE_CONTACT)){
+			if(condition1.equals(UABContactsAppEjb.NODE_CONTACT)){
 				long size = onlyReadContactsDao.getListSize(userId);
 				if(size == 0){
 					log.info("was not found in the document.");
@@ -592,7 +599,7 @@ public class ContactListsAppEjb implements XCAPDatebaseLocalIfc {
 			}else{
 				return new ResultData(ResultData.STATUS_404, "");
 			}
-		}else if(condition1.startsWith(ContactListsAppEjb.NODE_LIST)){
+		}else if(condition1.startsWith(UABContactsAppEjb.NODE_LIST)){
 			 
 		}
 		

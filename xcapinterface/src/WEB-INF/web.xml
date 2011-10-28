@@ -36,6 +36,12 @@
 		<servlet-name>xcapcaps</servlet-name>
 		<servlet-class>com.xcap.web.XcapCaps</servlet-class>
 	</servlet>
+	
+	<servlet>
+		<servlet-name>xmlSchema</servlet-name>
+		<servlet-class>com.xcap.web.SchemaServlet</servlet-class>
+	</servlet>
+	
 	<servlet-mapping>
 		<servlet-name>xcap</servlet-name>
 		<url-pattern>/xcap/*</url-pattern>
@@ -43,6 +49,10 @@
 	<servlet-mapping>
 		<servlet-name>xcapcaps</servlet-name>
 		<url-pattern>/xcap-caps</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>xmlSchema</servlet-name>
+		<url-pattern>/xcap-schema</url-pattern>
 	</servlet-mapping>
 	
 </web-app>
