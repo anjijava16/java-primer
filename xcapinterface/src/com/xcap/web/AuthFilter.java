@@ -17,8 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
-import sun.reflect.generics.tree.Tree;
-
 import com.xcap.ifc.Constants;
 import com.xcap.ifc.XCAPDatebaseLocalIfc.ResultData;
 import com.xcap.ifc.error.XCAPErrors;
@@ -26,9 +24,9 @@ import com.xcap.web.AuthFilter.Url.Field;
 
 /**
  * 
- * version 1.0<br>
- * Create Date 2011-10-14<br>
- * @author slieer<br>
+ * <li>version 1.0</li>
+ * <li>Create Date 2011-10-14<li>
+ * <li>author slieer<li>
  */
 
 public class AuthFilter implements Filter {

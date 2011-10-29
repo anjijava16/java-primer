@@ -2,13 +2,13 @@ package com.xcap.ifc;
 
 /**
  * 
- * version 1.0
- * Create Date 2011-10-14
- * @author slieer
+ *<li> version 1.0</li>
+ *<li> Create Date 2011-10-14</li>
+ *<li> author slieer</li>
  */
 public class Constants {
-	public final static String APP_USAGE_CONTACT = "contacts";
-	public final static String APP_USAGE_SINGSPACE_CONTACT = "SingSpaceContacts";
+	public final static String APP_USAGE_CONTACT = "UABContacts";
+	public final static String APP_USAGE_SINGSPACE_CONTACT = "SingSpacesContacts";
 	
 	public final static String SCHEMA_DIR = "/WEB-INF/classes/com/xcap/web/xmlschema";
 	public final static String XML_SCHEMA_CONTACT = "contacts.xsd";	

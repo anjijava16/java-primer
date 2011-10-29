@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <contacts xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<contact>
 <!--	<contact_id>1</contact_id>
 		<user_id>14</user_id>
 		<nickname>ickname</nickname>
@@ -10,15 +9,30 @@
 		//query where status equal 1
 		First Name 和 Last Name即可， First Name对应given name, Last Name对应family name
 		http://www.faqs.org/rfcs/rfc2426.html
+		
+	    <label></label> 
+	    <mobile>
+			<item>13112693777</item>
+			<item>13434226677</item>
+			<item>18927308777</item>
+		</mobile>
+		<index>Y</index>
+		<xtends></xtends>
+		<syncPhone>0</syncPhone>
+		<photoId>23</photoId>
+	
  -->
+	<contact id="1">
 		<dispName>Yang Test</dispName>
 		<name>
-			<fName>Xun</fName>
-			<lName>Frank</lName>
+			<fn>Xun</fn>
+			<ln>Frank</ln>
 		</name>
 		<bday>2008-12-15</bday>
-		<adr>宣武区西便门内大街85号</adr>
-		<label></label>
+		<adr>
+			<item type="WORK">xixiangbuxingjie;;;;;;</item>
+			<item type="HOME">kefalu;;;shenzheng;guangdong;1345641;china</item>
+		</adr>
 		<tel>		
 			<item type="">12453456346</item>
 			<item type="CELL">13691417240</item>
@@ -34,21 +48,16 @@
 			<item type="WORK">xie@gmail.com</item>
 		</email>
 		<title>engineer</title>
-		<org></org>
+		<org>
+			<item>borqs shenzhen</item>
+		</org>
 		<note></note>
-		<url></url>
-		<mobile>
-			<item>13112693777</item>
-			<item>13434226677</item>
-			<item>18927308777</item>
-		</mobile>
-		<index>Y</index>
-		<xtends></xtends>
-		<syncPhone>0</syncPhone>
-		<photoId>23</photoId>
+		<url>
+			<item>http://www.google.com.hk/</item>
+		</url>
 		<lastModify>2011-10-20 12:58:22</lastModify>
 	</contact>
-	<contact>
+	<contact id="2">
 	 <!-- ... -->
 	</contact>
 </contacts>

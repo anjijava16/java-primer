@@ -1,31 +1,21 @@
 package com.xcap.web;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.Reader;
 import java.util.Scanner;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParserFactory;
-import javax.xml.validation.ValidatorHandler;
 
 import org.apache.log4j.Logger;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
 
 import com.borqs.util.Utils;
-import com.sun.tools.ws.processor.model.Request;
 import com.xcap.ifc.Constants;
 import com.xcap.ifc.Constants.HttpMethod;
-import com.xcap.ifc.XCAPDatebaseLocalIfc.ResultData;
 import com.xcap.ifc.XCAPDatebaseLocalIfc;
+import com.xcap.ifc.XCAPDatebaseLocalIfc.ResultData;
 import com.xcap.ifc.XMLValidator;
 import com.xcap.ifc.error.XCAPErrors;
 
