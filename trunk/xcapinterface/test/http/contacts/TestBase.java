@@ -34,7 +34,7 @@ public abstract class TestBase {
 	public enum TageName{contacts,contact,list,contactName, description, createDate, method};
 		
 	public static String constructUrl(String phoneNo, String token) {
-		String url = "http://localhost:8080/xcap-root/contacts/{0}/{1}/index";
+		String url = "http://localhost:8080/xcap-root/UABContacts/{0}/{1}/index";
 		MessageFormat form = new MessageFormat(url);
 		Object[] args = { phoneNo, token };
 		return form.format(args);

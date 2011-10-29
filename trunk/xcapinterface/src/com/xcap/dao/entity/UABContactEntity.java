@@ -12,9 +12,12 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+/**
+ * all field of t_contacts table. 
+ */
 @Entity
 @Table(name="t_contacts")
-public class ContactEntity implements Serializable  {
+public class UABContactEntity implements Serializable  {
 	
 	
 	private static final long serialVersionUID = 1L;

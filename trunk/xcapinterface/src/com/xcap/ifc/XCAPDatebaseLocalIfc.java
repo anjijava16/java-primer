@@ -4,13 +4,13 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 /**
- * @author slieer
- * Create Date 2011-10-28
- * version 1.0
+ *<li> author slieer</li>
+ *<li> Create Date 2011-10-28</li>
+ *<li> version 1.0</li>
  */
 public interface XCAPDatebaseLocalIfc {
 	public static String UAB_CONTACTS_LOCAL_JNDI = "UABContactsApp/local";
-	public static String SING_SPACE_CONTACTS_LOCAL_JNDI = "SingSpaceContactsApp/local";
+	public static String SING_SPACE_CONTACTS_LOCAL_JNDI = "SingSpacesContactsApp/local";
 
 	final static String DATE_FORMAT = "yyyy-MM-dd hh:mm:ss";
 	final static DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);

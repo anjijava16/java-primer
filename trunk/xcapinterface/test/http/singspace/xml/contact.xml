@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<contact>
+	<dispName>Yang Test</dispName>
+	<name>
+		<fn>Xun</fn>
+		<ln>Frank</ln>
+	</name>
+	<bday>2008-12-15</bday>
+	<adr>
+		<item type="WORK">xixiangbuxingjie;;;;;;</item>
+		<item type="HOME">kefalu;;;shenzheng;guangdong;1345641;china</item>
+	</adr>
+	<tel>
+		<item type="">12453456346</item>
+		<item type="CELL">13691417240</item>
+		<item type="HOME">01068747151</item>
+		<item type="WORK">01068747151</item>
+		<item type="FAX;HOME">9141724</item>
+		<item type="FAX;WORK">3424424</item>
+	</tel>
+	<email>
+		<item type="">xie@gmail.com</item>
+		<item type="">hong@hotmail.com</item>
+		<item type="HOME">ong@hotmail.com</item>
+		<item type="WORK">xie@gmail.com</item>
+	</email>
+	<title>engineer</title>
+	<org>
+		<item>borqs shenzhen</item>
+	</org>
+	<note></note>
+	<url>
+		<item>http://www.google.com.hk</item>
+	</url>
+	<lastModify>2011-10-20 12:58:22</lastModify>
+</contact>

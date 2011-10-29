@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <urlrewrite>
 	<rule>
-		<from>^/contacts(/*)|^/presence(/*)</from>
+		<from>^/UABContacts(/*)|^/SingSpacesContacts(/*)</from>
 		<to>/xcap?query=$1</to>
 	</rule>
 	
