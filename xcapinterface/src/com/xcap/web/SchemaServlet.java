@@ -24,9 +24,9 @@ public class SchemaServlet extends HttpServlet {
 		
 		String schemaName = "";
 		if(auid.equals(Constants.APP_USAGE_CONTACT)){
-			schemaName = Constants.XML_SCHEMA_CONTACT;
+			schemaName = Constants.XML_SCHEMA_UAB_CONTACT;
 		}else if(auid.equals(Constants.APP_USAGE_SINGSPACE_CONTACT)){
-			schemaName = "";
+			schemaName = Constants.XML_SCHEMA_SINGSPACES_CONTACT;
 		}
 		String schemaPath = Constants.SCHEMA_DIR.concat(schemaName);
 		Scanner scanner = new Scanner(new FileReader(schemaPath));

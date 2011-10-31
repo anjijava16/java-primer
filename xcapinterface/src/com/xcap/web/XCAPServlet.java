@@ -110,8 +110,10 @@ public class XCAPServlet extends HttpServlet {
 					String appSchema = null;
 
 					if (auid.equals(Constants.APP_USAGE_CONTACT)) {
-						appSchema = Constants.XML_SCHEMA_CONTACT;
-					} else {
+						appSchema = Constants.XML_SCHEMA_UAB_CONTACT;
+					} else if(auid.equals(Constants.APP_USAGE_SINGSPACE_CONTACT)){
+						appSchema = Constants.XML_SCHEMA_SINGSPACES_CONTACT;
+					}else{
 						// other app usage.
 						resp.sendError(HttpServletResponse.SC_NOT_FOUND,
 								"auid is not implement");

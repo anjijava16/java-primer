@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<contact>
+<contact id="1">
 	<dispName>Yang Test</dispName>
 	<name>
 		<fn>Xun</fn>
 		<ln>Frank</ln>
 	</name>
+	<title>engineer</title>
 	<bday>2008-12-15</bday>
 	<adr>
 		<item type="WORK">xixiangbuxingjie;;;;;;</item>
@@ -24,13 +25,12 @@
 		<item type="HOME">ong@hotmail.com</item>
 		<item type="WORK">xie@gmail.com</item>
 	</email>
-	<title>engineer</title>
 	<org>
 		<item>borqs shenzhen</item>
 	</org>
-	<note></note>
 	<url>
-		<item>http://www.google.com.hk</item>
+		<item>http://www.google.com.hk/</item>
 	</url>
+	<note>ss</note>
 	<lastModify>2011-10-20 12:58:22</lastModify>
 </contact>
