@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="jbossws-jsr181pojo.war" default="war" basedir=".">
+    <property name="build.classes"  
+    	location="E:/BorqsWorkspace/MyGoogleCode/java-primer/ejbpro/target/classes"/>
+
+    <property name="build.dist"  
+    	location="E:/BorqsWorkspace/MyGoogleCode/java-primer/ejbpro/target/dist"/>
+ 	
+ 	<property name="jboss.deploy.dir"
+ 		location="D:/devTools/jboss-5.1.0.GA/server/default/deploy"></property>
+ 	
+ 	<property name="war.name"
+ 		value="jbossws-samples-jsr181pojo.war"></property>
+ 	
+	<target name="war">
+		<war warfile="${build.dist}/${war.name}"
+			webxml="web.xml">
+			<classes dir="${build.classes}">
+				<include name="org/webservices/jbossWS/JSEBean01.class" />
+			</classes>
+		</war>
+	</target>
+	
+	<target name="deploy">
+	    <copy todir="${jboss.deploy.dir}">
+	      <fileset dir="${build.dist}">
+	        <include name="${war.name}"/>	        
+	      </fileset>
+	    </copy>
+	</target>
+</project>
