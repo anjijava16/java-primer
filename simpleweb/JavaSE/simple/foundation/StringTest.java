@@ -5,6 +5,9 @@ import java.net.URLDecoder;
 import java.util.EnumMap;
 import java.util.Map;
 
+import org.junit.Test;
+import org.junit.experimental.theories.suppliers.TestedOn;
+
 import simple.foundation.a11.f;
 
 public class StringTest {
@@ -22,7 +25,15 @@ public class StringTest {
 		UrlParser.test();
 		
 	}
-		
+	
+	@Test
+	public void split(){
+		String s = "Greg;Zhang;;;";
+		s = "HOME:;;\\;llll;7676;76767;567567 567;76657565|HOME:;;省;城市;街道;邮政编码;国家|HOME:;;;;;77;|HOME:;;;;;;ffff|HOME:;;;67;5;777;|HOME:;;;;567;;|HOME:;;;;56756;;|";
+		String[] arr = s.split("\\|");
+		System.out.println(arr);
+	}
+	
 	static class UrlParser{
 		static void test(){
 			String url = "/xcap-root/contacts/8613480783139/DDcs3x7JwQQwqvOT751dhyp3s2od75lFbuwRL9UfCpJSwAeSqwV0bw**/index/~~/contacts/list%5B@name=%22close-friends%22%5D/contact%5B1%5D";
