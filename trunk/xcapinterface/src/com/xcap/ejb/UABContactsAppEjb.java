@@ -47,7 +47,7 @@ import com.xcap.ifc.error.XCAPErrors;
 @Local(value = XCAPDatebaseLocalIfc.class)
 @LocalBinding(jndiBinding = XCAPDatebaseLocalIfc.UAB_CONTACTS_LOCAL_JNDI)
 public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
-	public static final Logger log = Logger.getLogger(UABContactsAppEjb.class);
+	public final static Logger log = Logger.getLogger(UABContactsAppEjb.class);
 
 	final static String NODE_CONTACTS = "contacts";
 	final static String NODE_CONTACT = "contact";
@@ -81,13 +81,14 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 		
 		if (nodeSelector == null || nodeSelector.equals(Constants.APP_USAGE_CONTACT)) {
 			log.info("----------nodeSelector11:" + nodeSelector);
-			xmlBuilder.append("<contacts xmlns=\"contact-lists\" ")
-			.append("xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ")					
+			xmlBuilder.append("<".concat(NODE_CONTACTS))
+			.append(" xmlns=\"contacts\" ")
+			.append("xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ")
 			.append("xsi:schemaLocation=\"contact-lists site/contact-list-1.xsd\">");
 			List<UABContactEntity> list = contactsDao.getList(userId);
 			constructContactNode(xmlBuilder, list);
 			
-			xmlBuilder.append("</contacts>");
+			xmlBuilder.append("</".concat(NODE_CONTACTS).concat(">"));
 			if(list != null && list.size() != 0){
 				return new ResultData(ResultData.STATUS_200,xmlBuilder.toString());				
 			}
