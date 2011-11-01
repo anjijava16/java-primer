@@ -29,10 +29,10 @@ import javax.persistence.Table;
 @NamedQueries({
     @NamedQuery(name="listByUserIdAndStatus", 
     		query="from SingSpacesContactEntity s where s.userId = :userId and s.contactStatus = :status"),
-    @NamedQuery(name="getByUserIdAndId", query="from SingSpacesContactEntity s where userId = :userId and contactId = id")
+    @NamedQuery(name="getByUserIdAndIdAndStatus", query="from SingSpacesContactEntity s where s.userId = :userId and s.contactId = id and s.contactStatus = :status")
 })
 @NamedNativeQueries({
-	@NamedNativeQuery(name="byIndex",query="select * from t_user_contacts where userId = :userId limit :index,1",
+	@NamedNativeQuery(name="byIndexAndStatus",query="select * from t_user_contacts s where s.userId = :userId and s.contact_status = :status limit :index,1",
 		resultClass=SingSpacesContactEntity.class)
 })
 @Entity
@@ -270,4 +270,23 @@ public class SingSpacesContactEntity implements Serializable {
 	public void setSyncPhone(Byte syncPhone) {
 		this.syncPhone = syncPhone;
 	}
+
+	@Override
+	public String toString() {
+		return "SingSpacesContactEntity [contactId=" + contactId
+				+ ", contactFN=" + contactFN + ", contactN=" + contactN
+				+ ", contactNickName=" + contactNickName + ", contactBDay="
+				+ contactBDay + ", contactADR=" + contactADR
+				+ ", contactLabel=" + contactLabel + ", contactTEL="
+				+ contactTEL + ", contactEmail=" + contactEmail
+				+ ", contactTitle=" + contactTitle + ", contactORG="
+				+ contactORG + ", contactNote=" + contactNote + ", lastModify="
+				+ lastModify + ", contactURL=" + contactURL
+				+ ", contactXtends=" + contactXtends + ", contactMobile="
+				+ contactMobile + ", contactIndex=" + contactIndex
+				+ ", contactStatus=" + contactStatus + ", origin=" + origin
+				+ ", syncPhone=" + syncPhone + ", userId=" + userId + "]";
+	}
+	
+	
 }
