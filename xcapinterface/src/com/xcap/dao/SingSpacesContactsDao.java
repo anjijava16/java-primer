@@ -20,13 +20,30 @@ public class SingSpacesContactsDao {
 	}
 	
 	public SingSpacesContactEntity getById(long userId,long id){
-		Query query = em.createNamedQuery("getByUserIdAndId");
+		Query query = em.createNamedQuery("getByUserIdAndIdAndStatus");
 		query.setParameter("userId", userId);
 		query.setParameter("id", id);
+		query.setParameter("status", 1);
 		
 		@SuppressWarnings("unchecked")
 		List<SingSpacesContactEntity> list = query.getResultList();
 		return list.size() > 0 ? list.get(0) : null;
+	}
+	
+	public SingSpacesContactEntity getByIndex(long userId, int index){
+		Query query = em.createNamedQuery("byIndexAndStatus");
+		query.setParameter("userId", userId);
+		query.setParameter("index", index);
+		query.setParameter("status", 1);
+
+		@SuppressWarnings("unchecked")
+		List<SingSpacesContactEntity> list = query.getResultList();
+		
+		return list.size() > 0 ? list.get(0) : null;
+	}
+	
+	public SingSpacesContactEntity getByUniqueAttr(long userId, int uniqueAttr){
+		return getById(userId, uniqueAttr);
 	}
 	
 	public List<SingSpacesContactEntity> getList(long userId, int status){

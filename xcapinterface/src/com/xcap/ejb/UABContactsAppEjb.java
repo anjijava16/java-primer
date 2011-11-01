@@ -68,7 +68,7 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 	@PersistenceContext(unitName="UABXCAP")
 	EntityManager em;
 
-	UABContactDao contactsDao;
+	private static UABContactDao contactsDao;
 	
 	@PostConstruct
 	public void postConstruct() {
