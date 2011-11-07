@@ -15,30 +15,36 @@ public class TestGet extends TestBase{
 	final static String phoneNo = "8613480783139"; 
 	final static String token = "DDcs3x7JwQQwqvOT751dhxPUTartlMV70DRk28fiJjRSwAeSqwV0bw**";
 
+	final static String url = constructUrl(phoneNo, token);
+
 	@Before 
 	public void runBeforeTest(){
 	} 
 	
 	@Test
 	public void getDocument(){
-		String url = constructUrl(phoneNo, token);
 		getReqClient(url);
 	}
 
 	@Test
+	public void getDocumentByTagName(){
+		String u = url.concat("/~~/contacts");
+		getReqClient(u);
+	}
+	
+	
+	@Test
 	public void getNodeByIndex(){
-		String url = constructUrl(phoneNo, token);
-		int index = 2;
+		int index = 1;
 		String nodeSelector = constructSelectorByIndex(index);
-		url = url.concat(nodeSelector);
-		System.out.println("url:" + url);
-		getReqClient(url);
+		String u = url.concat(nodeSelector);
+		System.out.println("url:" + u);
+		getReqClient(u);
 		
 	}
 	
 	@Test
 	public void getNodeByUniqueAttr(){
-		String url = constructUrl(phoneNo, token);
 /*		String nodeSelector = "/~~/contacts/contact{0}{1}method={2}8405566{2}{3}";
 		MessageFormat form = new MessageFormat(nodeSelector);
 		Object[] args = {LEFT_SQUARE_BRACKET, AT,DOUBLE_QUOTATION_MARKS, RIGHT_SQUARE_BRACKET};
@@ -46,15 +52,14 @@ public class TestGet extends TestBase{
 */		
 		String method = "46546464646";
 		String nodeSelector = constructSelectorByUniqueAttr(method);
-		url = url.concat(nodeSelector);
+		String u = url.concat(nodeSelector);
 		
-		System.out.println("url:" + url);
-		getReqClient(url);		
+		System.out.println("url:" + u);
+		getReqClient(u);		
 	}
 	
 	@Test
 	public void getNodeByTagName(){
-		String url = constructUrl(phoneNo, token);
 		String nodeSelector = constructSelectorByTagName();		
 		getReqClient(url.concat(nodeSelector));
 	}	
@@ -62,7 +67,7 @@ public class TestGet extends TestBase{
 	@Test
 	public void getLeafNodeByTagName(){
 		int i = 2;
-		String url = constructUrl(phoneNo, token);
+		String u = null;
 		String nodeSelector = null;
 		switch (i) {
 		case 0:
@@ -72,16 +77,16 @@ public class TestGet extends TestBase{
 			//index/tagName
 			int index = 1;
 			nodeSelector = construct_I_T_Leaf(index, TageName.contactName);
-			url = url.concat(nodeSelector);
-			getReqClient(url);
+			u = url.concat(nodeSelector);
+			getReqClient(u);
 			break;
 		case 2:
 			//attr/tagName
 			String uniqueAttr = "9999939999"; // method.
 			nodeSelector = construct_A_T_Leaf(uniqueAttr, TageName.contactName);
-			url = url.concat(nodeSelector);
-			log.info(url);
-			getReqClient(url);
+			u = url.concat(nodeSelector);
+			log.info(u);
+			getReqClient(u);
 			break;
 		}
 		

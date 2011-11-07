@@ -1,7 +1,9 @@
-package http.contacts;
+package http.singcontacts;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.text.DecimalFormat;
+import java.text.Format;
 import java.text.MessageFormat;
 import java.util.Scanner;
 
@@ -20,19 +22,24 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.log4j.Logger;
 
+import com.sun.xml.internal.ws.message.StringHeader;
+
 public abstract class TestBase {
 	public static Logger log = Logger.getLogger(TestBase.class);
 	
+	public static String XML_TEXT_TAGNAME = "#text";
 	public static String CODING = "UTF-8";
 	public static String LEFT_SQUARE_BRACKET = "%5B";
 	public static String RIGHT_SQUARE_BRACKET = "%5D";
 	public static String AT = "%40";
 	public static String DOUBLE_QUOTATION_MARKS  = "%22";
 	
-	public enum TageName{contacts,contact,list,contactName, description, createDate, method};
+	public enum TagName{contacts,contact}
+	public enum TagNameThirdLayer{adr,name,tel,email,org,url,dispName,bday,title,note,lastModify}
+	public enum TagNameFourthLayer{fn,ln,item}
 		
 	public static String constructUrl(String phoneNo, String token) {
-		String baseUrl = "http://localhost:8080/xcap-root/UABContacts/{0}/{1}/index";
+		String baseUrl = "http://localhost:8080/xcap-root/SingSpacesContacts/{0}/{1}/index";
 		MessageFormat form = new MessageFormat(baseUrl);
 		Object[] args = { phoneNo, token };
 		return form.format(args);
@@ -46,51 +53,17 @@ public abstract class TestBase {
 		return form.format(args);
 	}
 	
-	public static String constructSelectorByUniqueAttr(String method){
-		String nodeSelector = "/~~/contacts/contact{0}{1}method={2}{3}{2}{4}";
+	public static String constructSelectorByUniqueAttr(String contactId){
+		String nodeSelector = "/~~/contacts/contact{0}{1}id={2}{3}{2}{4}";
 		
 		MessageFormat form = new MessageFormat(nodeSelector);
-		Object[] args = {LEFT_SQUARE_BRACKET, AT,DOUBLE_QUOTATION_MARKS, method, RIGHT_SQUARE_BRACKET};
+		//form.setFormats(new Format[]{new DecimalFormat("")});
+		Object[] args = {LEFT_SQUARE_BRACKET, AT,DOUBLE_QUOTATION_MARKS, contactId, RIGHT_SQUARE_BRACKET};
 		return form.format(args);
 	}
-
-	public static String constructSelectorByTagName(){
-		String nodeSelector = "/~~/contacts/contact";
-		return nodeSelector;
-	}
-	
-	public static String construct_T_T_Leaf(TageName tageName){
-		String firstLevelSelector = constructSelectorByTagName();
-		return firstLevelSelector.concat("/").concat(tageName.name());
-	}
-	
-	public static String construct_I_T_Leaf(int index ,TageName tageName){
-		String firstLevelSelector = constructSelectorByIndex(index);
-		firstLevelSelector = firstLevelSelector.concat("/").concat(tageName.name());
-		
-		return firstLevelSelector;
-	}
-
-	public static String construct_A_T_Leaf(String uniqueAttr, TageName tageName){
-		String firstLevelSelector = constructSelectorByUniqueAttr(uniqueAttr);
-		String nodeSelector = firstLevelSelector.concat("/").concat(tageName.name());
-		return nodeSelector;
-	}	
-	
-	public static String construct_T_I_Leaf(TageName tageName){
-		return null;
-	}	
-	
-	public static String construct_I_I_eafSelector(TageName tageName){
-		return null;
-	}	
-
-	public static String construct_A_I_eafSelector(TageName tageName){
-		return null;
-	}	
 	
 	public static File getXmlFilePath(String fileName){
-		return new File("test/http/contacts/".concat(fileName));
+		return new File("test/http/singcontacts/xml/".concat(fileName));
 	}
 	
 	public static void getReqClient(String url) {

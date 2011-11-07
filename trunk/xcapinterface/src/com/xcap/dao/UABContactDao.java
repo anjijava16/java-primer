@@ -34,12 +34,12 @@ public class UABContactDao {
 	 * @return null or list(size > 0)
 	 */
 	@TransactionAttribute(value=TransactionAttributeType.NEVER)
-	public List<UABContactEntity> getList(String userId){
+	public List<UABContactEntity> getList(long userId){
 		return get(userId,-1);	
 	}
 	
 	@TransactionAttribute(value=TransactionAttributeType.NEVER)
-	public long getListSize(String userId){
+	public long getListSize(long userId){
 		String sql = "select count(id) from t_contacts where user_id = :user_id";
 		Query query = em.createNativeQuery(sql);
 		query.setParameter("user_id", userId);
@@ -54,7 +54,7 @@ public class UABContactDao {
 	 * @return null or a contact
 	 */
 	@TransactionAttribute(value=TransactionAttributeType.NEVER)
-	public UABContactEntity getById(String userId,long contactId){
+	public UABContactEntity getById(long userId,long contactId){
 		StringBuilder temp = new StringBuilder("select * from t_contacts where id=:id and user_id=:userId");
 		Query query = em.createNativeQuery(temp.toString(), UABContactEntity.class);
 		query.setParameter("id", contactId);
@@ -71,13 +71,13 @@ public class UABContactDao {
 	 * @return a contact or null;
 	 */
 	@TransactionAttribute(value=TransactionAttributeType.NEVER)
-	public UABContactEntity getByIndex(String userId,int index){
+	public UABContactEntity getByIndex(long userId,int index){
 		List<UABContactEntity> list = get(userId, index);
 		return list != null && list.size() > 0 ? list.get(0) : null;
 	}
 	
 	@TransactionAttribute(value=TransactionAttributeType.NEVER)
-	public UABContactEntity getByContactMethod(String userId,String method){
+	public UABContactEntity getByContactMethod(long userId,String method){
 		StringBuilder temp = new StringBuilder("select * from t_contacts where contact_method=:method and user_id=:userId");
 		Query query = em.createNativeQuery(temp.toString(), UABContactEntity.class);
 		query.setParameter("method", method);
@@ -97,7 +97,7 @@ public class UABContactDao {
 	 */
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(value=TransactionAttributeType.NEVER)
-	private List<UABContactEntity> get(String userId,int index){
+	private List<UABContactEntity> get(long userId,int index){
 		String sql = null; 
 		
 		if(index < 0){

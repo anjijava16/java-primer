@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <contacts xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<contact id="1">
+	<contact>
 		<dispName>Yang Test</dispName>
 		<name>
 			<fn>Xun</fn>
@@ -33,9 +33,11 @@
 			<item>http://www.google.com.hk/</item>
 		</url>
 		<note>ss</note>
-		<lastModify>2011-10-20 12:58:22</lastModify>
+		<!-- 
+		 <lastModify>2011-10-20 12:58:22</lastModify>
+		 -->
 	</contact>
-	<contact id="2">
+	<contact>
 		<dispName>slie</dispName>
 		<name>
 			<fn>yu</fn>
@@ -70,6 +72,8 @@
 			<item>http://www.google.com.hk/</item>
 		</url>
 		<note></note>
-		<lastModify>2011-10-20 12:58:22</lastModify>		
+		<!-- 
+		 <lastModify>2011-10-20 12:58:22</lastModify>		
+		 -->
 	</contact>
 </contacts>

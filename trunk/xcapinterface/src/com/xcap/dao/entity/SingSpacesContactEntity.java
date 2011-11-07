@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.ColumnResult;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,6 +19,7 @@ import javax.persistence.NamedNativeQueries;
 import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 /**
  * all field of t_user_contacts table.
@@ -29,12 +31,21 @@ import javax.persistence.Table;
 @NamedQueries({
     @NamedQuery(name="listByUserIdAndStatus", 
     		query="from SingSpacesContactEntity s where s.userId = :userId and s.contactStatus = :status"),
-    @NamedQuery(name="getByUserIdAndIdAndStatus", query="from SingSpacesContactEntity s where s.userId = :userId and s.contactId = id and s.contactStatus = :status")
+    @NamedQuery(name="getByUserIdAndIdAndStatus", 
+    		query="from SingSpacesContactEntity s where s.userId = :userId and s.contactId = :id and s.contactStatus = :status")
 })
 @NamedNativeQueries({
-	@NamedNativeQuery(name="byIndexAndStatus",query="select * from t_user_contacts s where s.userId = :userId and s.contact_status = :status limit :index,1",
-		resultClass=SingSpacesContactEntity.class)
+	@NamedNativeQuery(name="byIndexAndStatus",
+			query="select * from t_user_contacts s where s.user_id = :userId and s.contact_status = :status limit :index,1",
+			resultClass=SingSpacesContactEntity.class),
+	@NamedNativeQuery(name="listSizeByUserIdAndStatus",
+		    query="select count(s.contact_id) size from t_user_contacts s where s.user_id = :userId and s.contact_status = :status",		   
+		    resultSetMapping="listSizeByUserIdAndStatusMap"
+	)
 })
+
+@SqlResultSetMapping(name="listSizeByUserIdAndStatusMap",columns=@ColumnResult(name="size"))
+ 
 @Entity
 @Table(name = "t_user_contacts")
 public class SingSpacesContactEntity implements Serializable {
