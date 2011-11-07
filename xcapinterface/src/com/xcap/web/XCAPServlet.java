@@ -71,6 +71,7 @@ public class XCAPServlet extends HttpServlet {
 		}
 
 		XCAPDatebaseLocalIfc xcapIfc = (XCAPDatebaseLocalIfc) Utils.lookupEJB(jndi);
+		log.info("-----------xcapIfc proxy:" + xcapIfc);
 		if (xcapIfc != null) {
 			HttpMethod httpMethod = HttpMethod.valueOf(method);
 			switch (httpMethod) {
@@ -78,17 +79,15 @@ public class XCAPServlet extends HttpServlet {
 			case POST:
 				resp.setContentType("text/xml");
 				// call ifc
-				if (auid.equals(Constants.APP_USAGE_CONTACT)) {
-					// log.info("---------------------queryString:" +
-					// queryString);
+				if (auid.equals(Constants.APP_USAGE_CONTACT) || auid.equals(Constants.APP_USAGE_SINGSPACE_CONTACT)) {
 					ResultData data = xcapIfc.get(userId, nodeSelector);
 					String result = data.getXml();
 					if (data.getstatus() != HttpServletResponse.SC_OK) {
-						log.info("error status code is " + data.getstatus());
+						log.info("------error status code is " + data.getstatus());
 						resp.setStatus(data.getstatus());
 						resp.sendError(data.getstatus(), data.getXml());
 					} else {
-						log.info("result xml :" + result);
+						log.info("------result xml :" + result);
 						PrintWriter writer = resp.getWriter();
 						writer.print(result);
 						writer.close();
