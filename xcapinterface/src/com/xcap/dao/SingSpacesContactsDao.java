@@ -39,14 +39,14 @@ public class SingSpacesContactsDao {
 	/**
 	 * 
 	 * @param userId
-	 * @param index >=0
+	 * @param index >=1
 	 * @return
 	 */
 	@TransactionAttribute(value=TransactionAttributeType.NEVER)
 	public SingSpacesContactEntity getByIndex(long userId, int index){
 		Query query = em.createNamedQuery("byIndexAndStatus");
 		query.setParameter("userId", userId);
-		query.setParameter("index", index);
+		query.setParameter("index", index -1);
 		query.setParameter("status", STATUS);
 
 		@SuppressWarnings("unchecked")

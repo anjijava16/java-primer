@@ -346,52 +346,31 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 		    }else if(SingConstant.isThirdLayerLeafNode(topTagName) 
 		    		|| SingConstant.isThirdLayerNotLeafNode(topTagName)
 		    		|| SingConstant.isFourthLayerLeafNode(topTagName)){
-		    	
+		    	SingSpacesContactEntity selectorRecord = null;
 	    		//selector:
 	    		//by tag name
 	    		if(secondLayerSelector.equals(NODE_CONTACT)){
 	    			long size = contactsDao.getListSize(userId);
-	    			switch ((int)size) {
-					case 0:
-						List<SingSpacesContactEntity> conatcts = xmlToEntitys(element);
-						contactsDao.save(userId,conatcts);
-						break;
-					case 1:
-						//delete first record by userId
-						contactsDao.deleteContactByIndexSelector(userId, 1);
-						conatcts = xmlToEntitys(element);
-						contactsDao.save(userId,conatcts);
-						break;
-					}
+	    			if(size == 1){
+	    				selectorRecord = contactsDao.getByIndex(userId, 1);
+	    			}
 	    		}else if(secondLayerSelector.matches(SingConstant.PATTERN_CONTACT_INDEX)){
 	    			//by index
 	    			int index = SingConstant.getIndex(secondLayerSelector);
-	    			if(index >= 1){
-	    				long size = contactsDao.getListSize(userId);
-	    				if(index <= size){
-	    					//update
-	    					contactsDao.deleteContactByIndexSelector(userId, index);
-			    			List<SingSpacesContactEntity> list = xmlToEntitys(element);
-			    			contactsDao.save(userId, list);
-	    				}else if(index == size +1){
-	    					//add
-			    			List<SingSpacesContactEntity> list = xmlToEntitys(element);
-			    			contactsDao.save(userId, list);
-	    				}
+	    			long size = contactsDao.getListSize(userId);
+	    			if(index >= 1 && index <= size){
+	    				selectorRecord = contactsDao.getByIndex(userId, index);
 	    			}
 	    			
 	    		}else if(secondLayerSelector.matches(SingConstant.PATTERN_CONTACT_UNIQUE_ATTR)){
 	    			//by unique attr(contact id.)
 	    			long attr = SingConstant.getUniqueAttrValue(secondLayerSelector);
-	    			SingSpacesContactEntity en = contactsDao.getByUniqueAttr(userId, attr);
-	    			if(en != null){
-	    				em.remove(en);
-	    			}
-	    			List<SingSpacesContactEntity> list = xmlToEntitys(element);
-	    			contactsDao.save(userId, list);
+	    			selectorRecord = contactsDao.getByUniqueAttr(userId, attr);
 	    		}
 	    		
-		    	
+		    	if(selectorRecord != null){
+		    		if(thirdLayerSeletor != null && thirdLayerSeletor.eq )
+		    	}
 		    	//selector:
 		    	//by tag neme
 		    	//by index
@@ -520,7 +499,7 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 			long count = contactsDao.getListSize(userIdTemp);
 			log.info("get contact by tagName, record count is " + count);
 			if(count == 1){
-				return contactsDao.getByIndex(userIdTemp, 0);				
+				return contactsDao.getByIndex(userIdTemp, 1);				
 			}
 		} else if (secondSelector
 				.matches(SingConstant.PATTERN_CONTACT_INDEX)) {
