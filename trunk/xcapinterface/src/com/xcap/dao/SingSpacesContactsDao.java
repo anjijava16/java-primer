@@ -99,7 +99,7 @@ public class SingSpacesContactsDao {
 	public int deleteContactByIndexSelector(long userId, int index){
 		
 		if(index >= 1){
-			SingSpacesContactEntity entity = getByIndex(userId,index - 1);			
+			SingSpacesContactEntity entity = getByIndex(userId,index);			
 			if(entity != null){
 				em.remove(entity);
 				return 1;
