@@ -4,7 +4,6 @@ import http.singcontacts.TestBase;
 
 import java.io.File;
 import java.io.StringReader;
-import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -90,7 +89,7 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 	@Override
 	public ResultData get(String userId, String nodeSelector) {
 		long userIdTemp = Long.valueOf(userId);
-		if(isDocSelector(nodeSelector)){
+		if(SingConstant.isDocSelector(nodeSelector)){
 			log.info("------------------get singspaces document ");
 			
 			StringBuilder builder = new StringBuilder();
@@ -119,12 +118,12 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 				}else if(nodePartArr.length == 3){ //third layer selector.
 					String thridSelector =  nodePartArr[2];
 					SingSpacesContactEntity entity = getEntity(secondSelector, userIdTemp);
-					if(thridSelector.matches(SelectorPattern.PATTERN_THIRD_LAYER_SELECTOR_BY_INDEX)){
+					if(thridSelector.matches(SingConstant.PATTERN_THIRD_LAYER_SELECTOR_BY_INDEX)){
 						int end = thridSelector.indexOf("[");
 						log.info("--------thridSelector  by index:" + thridSelector);
 						thridSelector = thridSelector.substring(0, end);
 					}
-					String entityFieldName = SelectorPattern.titleFieldMapping.get(thridSelector);
+					String entityFieldName = SingConstant.titleFieldMapping.get(thridSelector);
 					if(entityFieldName != null && entity != null){
 						String fieldValue = null; 
 						try {
@@ -134,15 +133,15 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 							log.error(e.getMessage());
 						}
 						String xml = null;
-						if(isThirdLayerNotLeafNode(thridSelector)){
-							xml = SelectorPattern.SIMPLE_NODE_FORMAT.format(new Object[]{secondSelector,fieldValue});
+						if(SingConstant.isThirdLayerNotLeafNode(thridSelector)){
+							xml = SingConstant.SIMPLE_NODE_FORMAT.format(new Object[]{secondSelector,fieldValue});
 							
-						}else if(isThirdLayerLeafNode(thridSelector)){
+						}else if(SingConstant.isThirdLayerLeafNode(thridSelector)){
 							String[][] part = splitByVerticalLineAndColon(fieldValue);
 							xml = constructItemsNode(thridSelector,part);
 						} else if (entityFieldName.equals(NODE_NAME)){							
 							String[] namePartArr = fieldValue.split(";");
-							xml = SelectorPattern.NAME_NODE_FORMAT.format(new Object[]{namePartArr[0], namePartArr[1]});
+							xml = SingConstant.NAME_NODE_FORMAT.format(new Object[]{namePartArr[0], namePartArr[1]});
 						}
 						if(xml != null){
 							return new ResultData(ResultData.STATUS_200, xml);							
@@ -153,16 +152,16 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 					String thridSelector =  nodePartArr[2];
 					String fourthSelector =  nodePartArr[3];
 					
-					if(thridSelector.matches(SelectorPattern.PATTERN_THIRD_LAYER_SELECTOR_BY_INDEX)){
+					if(thridSelector.matches(SingConstant.PATTERN_THIRD_LAYER_SELECTOR_BY_INDEX)){
 						int end = thridSelector.indexOf("[");
 						log.info("--------thridSelector  by index:" + thridSelector);
 						thridSelector = thridSelector.substring(0, end);
 					}
 					
-					if(isThirdLayerNotLeafNode(thridSelector) || thridSelector.equals(NODE_NAME)){
+					if(SingConstant.isThirdLayerNotLeafNode(thridSelector) || thridSelector.equals(NODE_NAME)){
 						SingSpacesContactEntity entity = getEntity(secondSelector, userIdTemp);
 						
-						String entityFieldName = SelectorPattern.titleFieldMapping.get(thridSelector);
+						String entityFieldName = SingConstant.titleFieldMapping.get(thridSelector);
 						if(entityFieldName != null && entity != null){
 							String fieldValue = null;
 							try {
@@ -178,7 +177,7 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 									constructItemNode(result,valueArray[0]); 
 									return new ResultData(ResultData.STATUS_200, result.toString());
 								}
-							}else if (fourthSelector.matches(SelectorPattern.PATTERN_FOURTH_SELECTOR_INDEX)){
+							}else if (fourthSelector.matches(SingConstant.PATTERN_FOURTH_SELECTOR_INDEX)){
 								if(valueArray != null){
 									Pattern p = Pattern.compile("\\d+");
 									Matcher match = p.matcher(nodeSelector);
@@ -192,7 +191,7 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 										}
  									}
 								}
-							}else if(fourthSelector.matches(SelectorPattern.PATTERN_FOURTH_SELECTOR_UNIQUE_ATTR)){
+							}else if(fourthSelector.matches(SingConstant.PATTERN_FOURTH_SELECTOR_UNIQUE_ATTR)){
 								if(valueArray != null){
 									int beginIndex = secondSelector.indexOf("=\"");
 									int endIndex = secondSelector.indexOf("\"]");
@@ -230,7 +229,7 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 										}										
 									}
 								}
-							}else if(fourthSelector.equals(NODE_FN) || fourthSelector.matches(SelectorPattern.PATTERN_FOURTH_SELECTOR_FN_INDEX)){
+							}else if(fourthSelector.equals(NODE_FN) || fourthSelector.matches(SingConstant.PATTERN_FOURTH_SELECTOR_FN_INDEX)){
 								if(fieldValue != null){
 									String[] nameArray = fieldValue.split(";");
 									if(nameArray.length > 1){
@@ -239,7 +238,7 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 									}
 								}
 								
-							}else if(fourthSelector.equals(NODE_LN) || fourthSelector.matches(SelectorPattern.PATTERN_FOURTH_SELECTOR_LN_INDEX)){
+							}else if(fourthSelector.equals(NODE_LN) || fourthSelector.matches(SingConstant.PATTERN_FOURTH_SELECTOR_LN_INDEX)){
 								String[] nameArray = fieldValue.split(";");
 								if(nameArray.length > 1){
 									return  new ResultData(ResultData.STATUS_200, "<".concat(NODE_LN).concat(">").concat(nameArray[1]).concat("</" + NODE_LN + ">"));
@@ -273,14 +272,16 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 			e.printStackTrace();
 		}
 		
-		if(isDocSelector(nodeSelector)){
+		if(SingConstant.isDocSelector(nodeSelector)){
+			List<SingSpacesContactEntity> conatcts = xmlToEntitys(element);
 			
+			contactsDao.save(userId,conatcts);
 		}else{
 			String secondLayerSelector = null; 
 			String thirdLayerSeletor = null;
 			String fourthLayerSelector = null;
+			String selectorArr[] = nodeSelector.split("/");
 			if(nodeSelector != null){
-				String selectorArr[] = nodeSelector.split("/");
 				if(selectorArr.length == 2){
 					secondLayerSelector = selectorArr[1];
 				}else if(selectorArr.length == 3){
@@ -295,10 +296,110 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 		    log.info("------------document top tag name is:" + topTagName + ". secondLayerSelector:" + secondLayerSelector
 		    		+ " thirdLayerSeletor:" + thirdLayerSeletor + " fourthLayerSelector:" + fourthLayerSelector);
 
-		    
+		    if(topTagName.equals(NODE_CONTACT)){
+		    	if(thirdLayerSeletor == null && thirdLayerSeletor == null){
+		    		//selector:
+		    		//by tag name
+		    		if(secondLayerSelector.equals(NODE_CONTACT)){
+		    			long size = contactsDao.getListSize(userId);
+		    			switch ((int)size) {
+						case 0:
+							List<SingSpacesContactEntity> conatcts = xmlToEntitys(element);
+							contactsDao.save(userId,conatcts);
+							break;
+						case 1:
+							//delete first record by userId
+							contactsDao.deleteContactByIndexSelector(userId, 1);
+							conatcts = xmlToEntitys(element);
+							contactsDao.save(userId,conatcts);
+							break;
+						}
+		    		}else if(secondLayerSelector.matches(SingConstant.PATTERN_CONTACT_INDEX)){
+		    			//by index
+		    			int index = SingConstant.getIndex(secondLayerSelector);
+		    			if(index >= 1){
+		    				long size = contactsDao.getListSize(userId);
+		    				if(index <= size){
+		    					//update
+		    					contactsDao.deleteContactByIndexSelector(userId, index);
+				    			List<SingSpacesContactEntity> list = xmlToEntitys(element);
+				    			contactsDao.save(userId, list);
+		    				}else if(index == size +1){
+		    					//add
+				    			List<SingSpacesContactEntity> list = xmlToEntitys(element);
+				    			contactsDao.save(userId, list);
+		    				}
+		    			}
+		    			
+		    		}else if(secondLayerSelector.matches(SingConstant.PATTERN_CONTACT_UNIQUE_ATTR)){
+		    			//by unique attr(contact id.)
+		    			long attr = SingConstant.getUniqueAttrValue(secondLayerSelector);
+		    			SingSpacesContactEntity en = contactsDao.getByUniqueAttr(userId, attr);
+		    			if(en != null){
+		    				em.remove(en);
+		    			}
+		    			List<SingSpacesContactEntity> list = xmlToEntitys(element);
+		    			contactsDao.save(userId, list);
+		    		}
+		    		
+		    	}
+		    }else if(SingConstant.isThirdLayerLeafNode(topTagName) 
+		    		|| SingConstant.isThirdLayerNotLeafNode(topTagName)
+		    		|| SingConstant.isFourthLayerLeafNode(topTagName)){
+		    	
+	    		//selector:
+	    		//by tag name
+	    		if(secondLayerSelector.equals(NODE_CONTACT)){
+	    			long size = contactsDao.getListSize(userId);
+	    			switch ((int)size) {
+					case 0:
+						List<SingSpacesContactEntity> conatcts = xmlToEntitys(element);
+						contactsDao.save(userId,conatcts);
+						break;
+					case 1:
+						//delete first record by userId
+						contactsDao.deleteContactByIndexSelector(userId, 1);
+						conatcts = xmlToEntitys(element);
+						contactsDao.save(userId,conatcts);
+						break;
+					}
+	    		}else if(secondLayerSelector.matches(SingConstant.PATTERN_CONTACT_INDEX)){
+	    			//by index
+	    			int index = SingConstant.getIndex(secondLayerSelector);
+	    			if(index >= 1){
+	    				long size = contactsDao.getListSize(userId);
+	    				if(index <= size){
+	    					//update
+	    					contactsDao.deleteContactByIndexSelector(userId, index);
+			    			List<SingSpacesContactEntity> list = xmlToEntitys(element);
+			    			contactsDao.save(userId, list);
+	    				}else if(index == size +1){
+	    					//add
+			    			List<SingSpacesContactEntity> list = xmlToEntitys(element);
+			    			contactsDao.save(userId, list);
+	    				}
+	    			}
+	    			
+	    		}else if(secondLayerSelector.matches(SingConstant.PATTERN_CONTACT_UNIQUE_ATTR)){
+	    			//by unique attr(contact id.)
+	    			long attr = SingConstant.getUniqueAttrValue(secondLayerSelector);
+	    			SingSpacesContactEntity en = contactsDao.getByUniqueAttr(userId, attr);
+	    			if(en != null){
+	    				em.remove(en);
+	    			}
+	    			List<SingSpacesContactEntity> list = xmlToEntitys(element);
+	    			contactsDao.save(userId, list);
+	    		}
+	    		
+		    	
+		    	//selector:
+		    	//by tag neme
+		    	//by index
+		    	//by unique attr(contact id.)
+		    }
 		}
 		
-		return null;
+		return new ResultData(ResultData.STATUS_404, "");
 	}
 
 	@Override
@@ -306,37 +407,13 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 		return null;
 	}
 	
-	/**
-	 * 
-	 * @param nodeSelector
-	 * @return param 1 is document selector return true;
-	 */
-	private static boolean isDocSelector(String nodeSelector) {
-		return nodeSelector == null || nodeSelector.equals(NODE_CONTACTS);
-	}	
-	
-	private static boolean isThirdLayerLeafNode(String thridSelector) {
-		return (thridSelector.equals(NODE_DISPNAME)
-				|| thridSelector.equals(NODE_BDAY)
-				|| thridSelector.equals(NODE_TITLE)
-				|| thridSelector.equals(NODE_NOTE) || thridSelector
-				.equals(NODE_LASTMODIFY)) ? true : false;
-	}
-
-	private static boolean isThirdLayerNotLeafNode(String thridSelector) {
-		return thridSelector.equals(NODE_ADR) || thridSelector.equals(NODE_TEL)
-				|| thridSelector.equals(NODE_EMAIL)
-				|| thridSelector.equals(NODE_ORG)
-				|| thridSelector.equals(NODE_URL) ? true : false;
-
-	}
 	
 	/**
 	 * @author slieer
 	 * Create Date2011-11-1
 	 * version 1.0
 	 */
-	static class SelectorPattern{
+	static class SingConstant{
 		final static String PATTERN_THIRD_LAYER_SELECTOR_BY_INDEX = "^\\w+\\[1\\]$";
 
 		final static String PATTERN_CONTACT_INDEX = "^contact\\[\\d+\\]$";
@@ -370,6 +447,71 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 			
 			titleFieldMapping.put(NODE_URL, "contactURL");
 		}
+				
+		static boolean isThirdLayerLeafNode(String tagName){
+			return tagName.equals(NODE_DISPNAME) 
+			|| tagName.equals(NODE_BDAY) 
+			|| tagName.equals(NODE_TITLE) 
+			|| tagName.equals(NODE_NOTE) 
+			|| tagName.equals(NODE_LASTMODIFY) ? true : false; 
+		}
+		
+		static boolean isThirdLayerNotLeafNode(String tagName){
+			return isIncludeItemNode(tagName) || tagName.equals(NODE_NAME)  ? true : false;
+		}
+
+		static boolean isIncludeItemNode(String tagName){
+			return tagName.equals(NODE_ADR)
+			|| tagName.equals(NODE_TEL) 
+			||tagName.equals(NODE_EMAIL) 
+			||tagName.equals(NODE_ORG) || tagName.equals(NODE_URL) ? true : false;
+		}		
+		static boolean isFourthLayerLeafNode(String tagName){
+			return tagName.equals(NODE_FN) 
+			|| tagName.equals(NODE_LN) 
+			|| tagName.equals(NODE_ITEM) ? true : false;
+		}
+		
+		/**
+		 * @param nodeSelector
+		 * @return param 1 is document selector return true;
+		 */
+		static boolean isDocSelector(String nodeSelector) {
+			return nodeSelector == null || nodeSelector.equals(NODE_CONTACTS);
+		}
+		
+		/**
+		 * 
+		 * @param nodeSelector
+		 * @return match \\d+ ,return first match, or -1
+		 */
+		static int getIndex(String nodeSelector){
+			Pattern p = Pattern.compile("\\d+");
+		
+			Matcher match = p.matcher(nodeSelector);
+			if(match.find()){
+				String indexTemp = match.group(0);
+				return Integer.valueOf(indexTemp);
+			}
+		 return -1;
+		}
+		
+		/**
+		 * 
+		 * @param nodeSelector
+		 * @return contactId or -1
+		 */
+		static long getUniqueAttrValue(String nodeSelector){
+			int beginIndex = nodeSelector.indexOf("=\"");
+			int endIndex = nodeSelector.indexOf("\"]");
+
+			if (beginIndex != -1 && endIndex != -1 && beginIndex < endIndex) {
+				String contactId = nodeSelector.substring(beginIndex, endIndex); //is attribute type
+				return Long.valueOf(contactId);
+			
+			}
+			return -1;
+		}
 	}
 	
 	private static SingSpacesContactEntity getEntity(String secondSelector,long userIdTemp) {
@@ -381,7 +523,7 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 				return contactsDao.getByIndex(userIdTemp, 0);				
 			}
 		} else if (secondSelector
-				.matches(SelectorPattern.PATTERN_CONTACT_INDEX)) {
+				.matches(SingConstant.PATTERN_CONTACT_INDEX)) {
 			// by index
 			log.info("get contact by index, index selector:" + secondSelector);
 			Pattern p = Pattern.compile("\\d+");
@@ -394,7 +536,7 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 
 			}
 		}else if (secondSelector
-				.matches(SelectorPattern.PATTERN_CONTACT_UNIQUE_ATTR)) {
+				.matches(SingConstant.PATTERN_CONTACT_UNIQUE_ATTR)) {
 			// by unique attr
 			log.info("get contact by unique attr, unique attr selector:" + secondSelector);
 			int beginIndex = secondSelector.indexOf("=\"");
@@ -442,17 +584,17 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 			String[][] orgInfo = splitByVerticalLineAndColon(org);
 			String[][] urlInfo = splitByVerticalLineAndColon(url);
 			
-			builder.append(SelectorPattern.SIMPLE_NODE_FORMAT.format(new Object[]{NODE_DISPNAME, fn == null ? "" : fn}))
-			.append(SelectorPattern.NAME_NODE_FORMAT.format(new Object[]{namePartArr.length > 0 ?namePartArr[0] : "", namePartArr.length > 1 ?namePartArr[1] : ""}))
-			.append(SelectorPattern.SIMPLE_NODE_FORMAT.format(new Object[]{NODE_BDAY, bday == null ? "" : bday}))
+			builder.append(SingConstant.SIMPLE_NODE_FORMAT.format(new Object[]{NODE_DISPNAME, fn == null ? "" : fn}))
+			.append(SingConstant.NAME_NODE_FORMAT.format(new Object[]{namePartArr.length > 0 ?namePartArr[0] : "", namePartArr.length > 1 ?namePartArr[1] : ""}))
+			.append(SingConstant.SIMPLE_NODE_FORMAT.format(new Object[]{NODE_BDAY, bday == null ? "" : bday}))
 			.append(constructItemsNode(NODE_ADR, adrInfo))
 			.append(constructItemsNode(NODE_TEL, telInfo))
 			.append(constructItemsNode(NODE_EMAIL, emailInfo))
-			.append(SelectorPattern.SIMPLE_NODE_FORMAT.format(new Object[]{NODE_TITLE,title == null ? "" : title}))
+			.append(SingConstant.SIMPLE_NODE_FORMAT.format(new Object[]{NODE_TITLE,title == null ? "" : title}))
 			.append(constructItemsNode(NODE_ORG, orgInfo ))    /*org*/
-			.append(SelectorPattern.SIMPLE_NODE_FORMAT.format(new Object[]{NODE_NOTE, note == null ? "" : note}))
+			.append(SingConstant.SIMPLE_NODE_FORMAT.format(new Object[]{NODE_NOTE, note == null ? "" : note}))
 			.append(constructItemsNode(NODE_URL, urlInfo))
-			.append(SelectorPattern.SIMPLE_NODE_FORMAT.format(new Object[]{NODE_LASTMODIFY,dateFormat.format(last)}));
+			.append(SingConstant.SIMPLE_NODE_FORMAT.format(new Object[]{NODE_LASTMODIFY,dateFormat.format(last)}));
 			
 			builder.append("</".concat(NODE_CONTACT).concat(">"));
 			return true;
@@ -540,11 +682,7 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 		result.append(value);
 		result.append("</".concat(NODE_ITEM).concat(">"));
 	}
-	
-	private static void deconstructItemNode(){
 		
-	}
-	
 	@Test
 	public void test(){
 		File xmlFile = TestBase.getXmlFilePath("example-new-contacts.xml");
@@ -590,20 +728,12 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 				NodeList childList = ch.getChildNodes();
 				if(! nodeName.equals("#text") && childList.getLength() != 0){
 					
-					if(nodeName.equals(NODE_DISPNAME) 
-							|| nodeName.equals(NODE_BDAY) 
-							|| nodeName.equals(NODE_TITLE) 
-							|| nodeName.equals(NODE_NOTE) 
-							|| nodeName.equals(NODE_LASTMODIFY)){
+					if(SingConstant.isThirdLayerLeafNode(nodeName)){
 						//System.out.println("-----------leaf node----");
 						Node node1 = childList.item(0);
 						nodeValue = node1.getNodeValue();
 												
-					}else if(nodeName.equals(NODE_ADR)
-							||nodeName.equals(NODE_TEL) 
-							||nodeName.equals(NODE_EMAIL) 
-							||nodeName.equals(NODE_ORG) 
-							||nodeName.equals(NODE_URL)){
+					}else if(SingConstant.isIncludeItemNode(nodeName)){
 						//System.out.println("-----------include item node----");
 						for(int k = 0; k < childList.getLength(); k++){
 							Node itemNode = childList.item(k);
@@ -646,8 +776,7 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 						}
 					}	
 					
-					
-					String fieldName = SelectorPattern.titleFieldMapping.get(nodeName);
+					String fieldName = SingConstant.titleFieldMapping.get(nodeName);
 					//System.out.println("------------" + fieldName + ":" + nodeName + "=" + nodeValue);
 					try {
 						BeanUtils.setProperty(entity, fieldName, nodeValue);

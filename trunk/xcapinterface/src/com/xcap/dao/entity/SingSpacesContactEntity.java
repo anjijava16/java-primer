@@ -20,6 +20,7 @@ import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SqlResultSetMapping;
+import javax.persistence.SqlResultSetMappings;
 import javax.persistence.Table;
 /**
  * all field of t_user_contacts table.
@@ -30,22 +31,28 @@ import javax.persistence.Table;
 
 @NamedQueries({
     @NamedQuery(name="listByUserIdAndStatus", 
-    		query="from SingSpacesContactEntity s where s.userId = :userId and s.contactStatus = :status"),
+    	query="from SingSpacesContactEntity s where s.userId = :userId and s.contactStatus = :status"),
     @NamedQuery(name="getByUserIdAndIdAndStatus", 
-    		query="from SingSpacesContactEntity s where s.userId = :userId and s.contactId = :id and s.contactStatus = :status")
+    	query="from SingSpacesContactEntity s where s.userId = :userId and s.contactId = :id and s.contactStatus = :status")
 })
 @NamedNativeQueries({
 	@NamedNativeQuery(name="byIndexAndStatus",
-			query="select * from t_user_contacts s where s.user_id = :userId and s.contact_status = :status limit :index,1",
-			resultClass=SingSpacesContactEntity.class),
+		query="select * from t_user_contacts s where s.user_id = :userId and s.contact_status = :status limit :index,1",
+		resultClass=SingSpacesContactEntity.class),
 	@NamedNativeQuery(name="listSizeByUserIdAndStatus",
-		    query="select count(s.contact_id) size from t_user_contacts s where s.user_id = :userId and s.contact_status = :status",		   
-		    resultSetMapping="listSizeByUserIdAndStatusMap"
+		query="select count(s.contact_id) size from t_user_contacts s where s.user_id = :userId and s.contact_status = :status",		   
+		resultSetMapping="listSizeByUserIdAndStatusMap"
+	),
+	@NamedNativeQuery(name="queryContactId",
+		query="select id from t_user_contacts where user_id = :userId limit :index,1",
+		resultSetMapping="sqlMappingContactId"
 	)
 })
 
-@SqlResultSetMapping(name="listSizeByUserIdAndStatusMap",columns=@ColumnResult(name="size"))
- 
+@SqlResultSetMappings({
+	@SqlResultSetMapping(name="listSizeByUserIdAndStatusMap",columns=@ColumnResult(name="size")),
+	@SqlResultSetMapping(name="sqlMappingContactId",columns=@ColumnResult(name="id")),
+})		 
 @Entity
 @Table(name = "t_user_contacts")
 public class SingSpacesContactEntity implements Serializable {
