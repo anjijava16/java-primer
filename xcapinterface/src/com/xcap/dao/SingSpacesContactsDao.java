@@ -36,6 +36,12 @@ public class SingSpacesContactsDao {
 		return list.size() > 0 ? list.get(0) : null;
 	}
 	
+	/**
+	 * 
+	 * @param userId
+	 * @param index >=0
+	 * @return
+	 */
 	@TransactionAttribute(value=TransactionAttributeType.NEVER)
 	public SingSpacesContactEntity getByIndex(long userId, int index){
 		Query query = em.createNamedQuery("byIndexAndStatus");
@@ -76,5 +82,29 @@ public class SingSpacesContactsDao {
 		return re.longValue();
 	}
 	
+	public void save(long userId, SingSpacesContactEntity en){
+		
+	}
 	
+	public void save(long userId, List<SingSpacesContactEntity> list){
+		
+	}
+	
+	
+	/**
+	 * @param userId
+	 * @param index >= 1
+	 * @return -1 index invalid ,or delete OK.
+	 */
+	public int deleteContactByIndexSelector(long userId, int index){
+		
+		if(index >= 1){
+			SingSpacesContactEntity entity = getByIndex(userId,index - 1);			
+			if(entity != null){
+				em.remove(entity);
+				return 1;
+			}
+		}
+		return -1;
+	}
 }
