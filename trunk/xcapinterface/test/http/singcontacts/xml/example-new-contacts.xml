@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<contacts xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<contacts xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="file:///E:/BorqsWorkspace/workspace/xcapinterface/test/http/singcontacts/xml/SingSpacesContacts.xsd">
 	<contact>
 		<dispName>Yang Test</dispName>
 		<name>
@@ -12,7 +12,7 @@
 			<item type="WORK">xixiangbuxingjie;;;;;;</item>
 			<item type="HOME">kefalu;;;shenzheng;guangdong;1345641;china</item>
 		</adr>
-		<tel>		
+		<tel>
 			<item type="">12453456346</item>
 			<item type="CELL">13691417240</item>
 			<item type="HOME">01068747151</item>
@@ -49,7 +49,7 @@
 			<item type="WORK">xixiangbuxingjie;;;;;;</item>
 			<item type="HOME">kefalu;;;shenzheng;guangdong;1345641;china</item>
 		</adr>
-		<tel>		
+		<tel>
 			<item type="">12453456346</item>
 			<item type="CELL">13691417240</item>
 			<item type="HOME">01068747151</item>
@@ -71,7 +71,7 @@
 			<item>http://www.google.com.hk/</item>
 			<item>http://www.google.com.hk/</item>
 		</url>
-		<note></note>
+		<note/>
 		<!-- 
 		 <lastModify>2011-10-20 12:58:22</lastModify>		
 		 -->

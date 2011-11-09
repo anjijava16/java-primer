@@ -4,6 +4,7 @@ import http.singcontacts.TestBase;
 
 import java.io.File;
 import java.io.StringReader;
+import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -38,7 +39,6 @@ import com.xcap.ifc.XCAPDatebaseLocalIfc;
 import com.xcap.ifc.error.XCAPErrors;
 
 /**
- * 
  * <li>author slieer</li>
  * <li>Create Date 2011-10-29</li>
  * <li>version 1.0</li>
@@ -82,7 +82,7 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 	
 	@PostConstruct
 	public void postConstruct() {
-		//contactsDao = new SingSpacesContactsDao(em);
+		contactsDao = new SingSpacesContactsDao(em);
 	}
 	
 	
@@ -177,7 +177,7 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 									constructItemNode(result,valueArray[0]); 
 									return new ResultData(ResultData.STATUS_200, result.toString());
 								}
-							}else if (fourthSelector.matches(SingConstant.PATTERN_FOURTH_SELECTOR_INDEX)){
+							}else if (fourthSelector.matches(SingConstant.PATTERN_FOURTH_ITEM_SELECTOR_INDEX)){
 								if(valueArray != null){
 									Pattern p = Pattern.compile("\\d+");
 									Matcher match = p.matcher(nodeSelector);
@@ -191,7 +191,7 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 										}
  									}
 								}
-							}else if(fourthSelector.matches(SingConstant.PATTERN_FOURTH_SELECTOR_UNIQUE_ATTR)){
+							}else if(fourthSelector.matches(SingConstant.PATTERN_FOURTH_ITEM_SELECTOR_UNIQUE_ATTR)){
 								if(valueArray != null){
 									int beginIndex = secondSelector.indexOf("=\"");
 									int endIndex = secondSelector.indexOf("\"]");
@@ -334,51 +334,116 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 		    		}else if(secondLayerSelector.matches(SingConstant.PATTERN_CONTACT_UNIQUE_ATTR)){
 		    			//by unique attr(contact id.)
 		    			long attr = SingConstant.getUniqueAttrValue(secondLayerSelector);
-		    			SingSpacesContactEntity en = contactsDao.getByUniqueAttr(userId, attr);
-		    			if(en != null){
-		    				em.remove(en);
+		    			if(attr != -1){
+		    				SingSpacesContactEntity en = contactsDao.getByUniqueAttr(userId, attr);
+		    				if(en != null){
+		    					em.remove(en);
+		    				}		    				
 		    			}
 		    			List<SingSpacesContactEntity> list = xmlToEntitys(element);
 		    			contactsDao.save(userId, list);
 		    		}
 		    		
 		    	}
-		    }else if(SingConstant.isThirdLayerLeafNode(topTagName) 
-		    		|| SingConstant.isThirdLayerNotLeafNode(topTagName)
-		    		|| SingConstant.isFourthLayerLeafNode(topTagName)){
-		    	SingSpacesContactEntity selectorRecord = null;
-	    		//selector:
-	    		//by tag name
-	    		if(secondLayerSelector.equals(NODE_CONTACT)){
-	    			long size = contactsDao.getListSize(userId);
-	    			if(size == 1){
-	    				selectorRecord = contactsDao.getByIndex(userId, 1);
-	    			}
-	    		}else if(secondLayerSelector.matches(SingConstant.PATTERN_CONTACT_INDEX)){
-	    			//by index
-	    			int index = SingConstant.getIndex(secondLayerSelector);
-	    			long size = contactsDao.getListSize(userId);
-	    			if(index >= 1 && index <= size){
-	    				selectorRecord = contactsDao.getByIndex(userId, index);
-	    			}
-	    			
-	    		}else if(secondLayerSelector.matches(SingConstant.PATTERN_CONTACT_UNIQUE_ATTR)){
-	    			//by unique attr(contact id.)
-	    			long attr = SingConstant.getUniqueAttrValue(secondLayerSelector);
-	    			selectorRecord = contactsDao.getByUniqueAttr(userId, attr);
-	    		}
+		    }else if(topTagName.equals(SingConstant.getNodeNameByThirdSelector(thirdLayerSeletor))){
+		    	SingSpacesContactEntity selectorRecord = secondLayerSelectorResult(
+						userId, secondLayerSelector);
 	    		
 		    	if(selectorRecord != null){
-		    		if(thirdLayerSeletor != null && thirdLayerSeletor.eq )
+		    		NodeList nodelist = element.getChildNodes();
+		    		String fieldValue = null;
+		    		if(SingConstant.isThirdLayerLeafNode(topTagName)){
+						Node node1 = nodelist.item(0);
+						fieldValue = node1.getNodeValue();
+		    		}else if(SingConstant.isIncludeItemNode(topTagName)){
+		    			fieldValue = xmlItemNodeToString(nodelist);
+		    		}else if(NODE_NAME.equals(topTagName)){
+						fieldValue = xmlNameNodeToString(nodelist);
+		    		}
+		    		
+	    			String fieldName = SingConstant.titleFieldMapping.get(topTagName);
+	    			try {
+	    				BeanUtils.setProperty(selectorRecord, fieldName, fieldValue);
+	    				em.merge(selectorRecord);
+	    			} catch (Exception e) {
+	    				e.printStackTrace();
+	    			}		    					    		
 		    	}
-		    	//selector:
-		    	//by tag neme
-		    	//by index
-		    	//by unique attr(contact id.)
+		    }else if(SingConstant.isFourthLayerLeafNode(topTagName)){
+		    	String fieldName = SingConstant.titleFieldMapping.get(topTagName);
+		    	String fieldValue = null;
+		    	SingSpacesContactEntity selectorRecord = secondLayerSelectorResult(userId,secondLayerSelector);
+		    	try {
+					fieldValue = BeanUtils.getProperty(selectorRecord, fieldName);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		    	
+		    	//String thirdLayerNodeName = SingConstant.getNodeNameByThirdSelector(thirdLayerSeletor); //be equivalent to bean field name.
+		    	if(fourthLayerSelector.equals(NODE_FN) 
+		    			||fourthLayerSelector.matches(SingConstant.PATTERN_FOURTH_SELECTOR_FN_INDEX)){
+		    		Node node1 = element.getChildNodes().item(0);
+					String ValueFromXml = node1.getNodeValue();
+		    		int index = fieldValue.indexOf(";");
+		    		fieldValue = ValueFromXml.concat(fieldName.substring(index));
+		    	}else if(fourthLayerSelector.equals(NODE_LN) || fourthLayerSelector.matches(SingConstant.PATTERN_FOURTH_SELECTOR_LN_INDEX)){
+		    		Node node1 = element.getChildNodes().item(0);
+					String ValueFromXml = node1.getNodeValue();
+		    		int index = fieldValue.indexOf(";");
+		    		int nextIndex = fieldValue.indexOf(";", index);
+		    		fieldValue = ValueFromXml.concat(fieldName.substring(index, nextIndex));
+		    		
+		    	}else if(fourthLayerSelector.equals(NODE_ITEM)){
+		    		//item.
+		    		String[] part = fieldValue.split(";");
+		    		if(part.length <= 1){
+		    			NodeList list = element.getChildNodes();
+		    			fieldValue = xmlItemNodeToString(list);		    			
+		    		}
+		    		
+		    	}else if(fourthLayerSelector.matches(SingConstant.PATTERN_FOURTH_ITEM_SELECTOR_INDEX)){
+		    		String[] part = fieldValue.split(";");
+		    		int index = SingConstant.getIndex(fourthLayerSelector);
+		    		if(index <= part.length){
+		    			//modify item
+		    		}else if(index == part.length + 1){
+		    			//add item
+		    		}
+		    	}else if(fourthLayerSelector.matches(SingConstant.PATTERN_FOURTH_ITEM_SELECTOR_UNIQUE_ATTR)){
+		    		
+		    	}
 		    }
 		}
 		
 		return new ResultData(ResultData.STATUS_404, "");
+	}
+
+
+	private static SingSpacesContactEntity secondLayerSelectorResult(long userId,
+			String secondLayerSelector) {
+		SingSpacesContactEntity selectorRecord = null;
+		//selector:
+		//by tag name
+		if(secondLayerSelector.equals(NODE_CONTACT)){
+			long size = contactsDao.getListSize(userId);
+			if(size == 1){
+				selectorRecord = contactsDao.getByIndex(userId, 1);
+			}
+		}else if(secondLayerSelector.matches(SingConstant.PATTERN_CONTACT_INDEX)){
+			//by index
+			int index = SingConstant.getIndex(secondLayerSelector);
+			long size = contactsDao.getListSize(userId);
+			if(index >= 1 && index <= size){
+				selectorRecord = contactsDao.getByIndex(userId, index);
+			}
+			
+		}else if(secondLayerSelector.matches(SingConstant.PATTERN_CONTACT_UNIQUE_ATTR)){
+			//by unique attr(contact id.)
+			long attr = SingConstant.getUniqueAttrValue(secondLayerSelector);
+			selectorRecord = contactsDao.getByUniqueAttr(userId, attr);
+		}
+		return selectorRecord;
 	}
 
 	@Override
@@ -398,15 +463,17 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 		final static String PATTERN_CONTACT_INDEX = "^contact\\[\\d+\\]$";
 		final static String PATTERN_CONTACT_UNIQUE_ATTR  = "^contact\\[@".concat(NODE_ATTR_ID).concat("=\"\\S+\"\\]$");
 		
-		final static String PATTERN_FOURTH_SELECTOR_INDEX = "^item\\[\\d+\\]$";
-		final static String PATTERN_FOURTH_SELECTOR_UNIQUE_ATTR = "^item\\[@".concat(NODE_ATTR_TYPE).concat("=\"\\S+\"\\]$");
+		final static String PATTERN_FOURTH_ITEM_SELECTOR_INDEX = "^item\\[\\d+\\]$";
+		final static String PATTERN_FOURTH_ITEM_SELECTOR_UNIQUE_ATTR = "^item\\[@".concat(NODE_ATTR_TYPE).concat("=\"\\S+\"\\]$");
 		
 		final static String PATTERN_FOURTH_SELECTOR_FN_INDEX = "^fn\\[1\\]$";
 		final static String PATTERN_FOURTH_SELECTOR_LN_INDEX = "^ln\\[1\\]$";
+		//final static String PATTERN_THIRD_SELECTOR_INDEX = "^\\w+\\[1\\]?+$";
 		
 		final static MessageFormat SIMPLE_NODE_FORMAT = new MessageFormat("<{0}>{1}</{0}>");
 		final static MessageFormat NAME_NODE_FORMAT = new MessageFormat("<name><fn>{0}</fn><ln>{1}</ln></name>");
 		
+
 		final static Map<String,String> titleFieldMapping = new HashMap<String, String>(32);
 		static {
 			titleFieldMapping.put(NODE_NAME, "contactFN");
@@ -428,27 +495,40 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 		}
 				
 		static boolean isThirdLayerLeafNode(String tagName){
-			return tagName.equals(NODE_DISPNAME) 
+			return tagName == null ? false :
+			tagName.equals(NODE_DISPNAME) 
 			|| tagName.equals(NODE_BDAY) 
 			|| tagName.equals(NODE_TITLE) 
 			|| tagName.equals(NODE_NOTE) 
-			|| tagName.equals(NODE_LASTMODIFY) ? true : false; 
+			|| tagName.equals(NODE_LASTMODIFY); 
 		}
 		
 		static boolean isThirdLayerNotLeafNode(String tagName){
-			return isIncludeItemNode(tagName) || tagName.equals(NODE_NAME)  ? true : false;
+			return isIncludeItemNode(tagName) || tagName.equals(NODE_NAME);
 		}
 
 		static boolean isIncludeItemNode(String tagName){
-			return tagName.equals(NODE_ADR)
+			return tagName == null ? false : tagName.equals(NODE_ADR)
 			|| tagName.equals(NODE_TEL) 
 			||tagName.equals(NODE_EMAIL) 
-			||tagName.equals(NODE_ORG) || tagName.equals(NODE_URL) ? true : false;
+			||tagName.equals(NODE_ORG) || tagName.equals(NODE_URL);
 		}		
 		static boolean isFourthLayerLeafNode(String tagName){
-			return tagName.equals(NODE_FN) 
+			return tagName == null ? false : tagName.equals(NODE_FN) 
 			|| tagName.equals(NODE_LN) 
-			|| tagName.equals(NODE_ITEM) ? true : false;
+			|| tagName.equals(NODE_ITEM);
+		}
+		
+		static String getNodeNameByThirdSelector(String thirdSelector){
+			if(thirdSelector != null){
+				if(isThirdLayerLeafNode(thirdSelector) || isThirdLayerNotLeafNode(thirdSelector)){
+					return thirdSelector;
+				}else if(thirdSelector.matches(PATTERN_THIRD_LAYER_SELECTOR_BY_INDEX)){
+					String temp = thirdSelector.substring(0, thirdSelector.length() -3);
+					return (isThirdLayerLeafNode(temp) || isThirdLayerNotLeafNode(temp)) ? temp : null;
+				}				
+			}
+			return null;
 		}
 		
 		/**
@@ -486,7 +566,9 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 
 			if (beginIndex != -1 && endIndex != -1 && beginIndex < endIndex) {
 				String contactId = nodeSelector.substring(beginIndex, endIndex); //is attribute type
-				return Long.valueOf(contactId);
+				if(contactId.matches("\\d+")){
+					return Long.valueOf(contactId);					
+				}
 			
 			}
 			return -1;
@@ -714,45 +796,9 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 												
 					}else if(SingConstant.isIncludeItemNode(nodeName)){
 						//System.out.println("-----------include item node----");
-						for(int k = 0; k < childList.getLength(); k++){
-							Node itemNode = childList.item(k);
-							if(! itemNode.getNodeName().equals("#text")){
-								Node item = itemNode.getChildNodes().item(0);
-								NamedNodeMap attrMap = itemNode.getAttributes();
-								Node type = null;
-								if(attrMap != null){
-									type = attrMap.getNamedItem("type");									
-								}
-								
-								String tempType = (type  != null) ? type .getNodeValue() : "";
-								String nodeVal = item.getNodeValue();
-								String tempVal = tempType.concat(":").concat(nodeVal).concat(";");
-								if(nodeValue == null){
-									nodeValue = tempVal;
-								}else{
-									nodeValue.concat(tempVal);
-								}
-								
-								log.info("nodeValue".concat(":").concat(nodeValue));
-								//System.out.println(tempType.concat(":").concat(nodeVal).concat(";"));
-								//System.out.println(nodeName + ":"+ itemNode + ":" + item + ":" + (type  != null ? type .getNodeValue() : "-"));								
-							}
-						}
+						nodeValue = xmlItemNodeToString(childList);
 					}else if(nodeName.equals(NODE_NAME)){
-						for(int k = 0; k < childList.getLength(); k++){
-							Node nameNode = childList.item(k);
-							String nameNodeName = nameNode.getNodeName();
-							if(nameNodeName.equals(NODE_FN) || nameNodeName.equals(NODE_LN)){
-								String namePart = nameNode.getChildNodes().item(0).getNodeValue() + ";";									
-								if(nodeValue == null){
-									nodeValue = namePart;
-								}else{
-									nodeValue = nodeValue.concat(namePart);
-								}
-								//System.out.println("name:" + nodeValue);
-								
-							}
-						}
+						nodeValue = xmlNameNodeToString(childList);
 					}	
 					
 					String fieldName = SingConstant.titleFieldMapping.get(nodeName);
@@ -770,5 +816,55 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 			System.out.println(entity);
 		}
 		return list;
+	}
+	
+	public static String xmlItemNodeToString(NodeList childList){
+		String nodeValue = null;
+		for(int k = 0; k < childList.getLength(); k++){
+			Node itemNode = childList.item(k);
+			if(! itemNode.getNodeName().equals("#text")){
+				Node item = itemNode.getChildNodes().item(0);
+				NamedNodeMap attrMap = itemNode.getAttributes();
+				Node type = null;
+				if(attrMap != null){
+					type = attrMap.getNamedItem("type");									
+				}
+				
+				String tempType = (type  != null) ? type .getNodeValue() : "";
+				String nodeVal = item.getNodeValue();
+				String tempVal = tempType.concat(":").concat(nodeVal).concat(";");
+				if(nodeValue == null){
+					nodeValue = tempVal;
+				}else{
+					nodeValue.concat(tempVal);
+				}
+				
+				log.info("nodeValue".concat(":").concat(nodeValue));
+				//System.out.println(tempType.concat(":").concat(nodeVal).concat(";"));
+				//System.out.println(nodeName + ":"+ itemNode + ":" + item + ":" + (type  != null ? type .getNodeValue() : "-"));								
+			}
+		}
+		return nodeValue;
+	}
+	
+	public static String xmlNameNodeToString(NodeList childList) {
+		String nodeValue = null;
+		for (int k = 0; k < childList.getLength(); k++) {
+			Node nameNode = childList.item(k);
+			String nameNodeName = nameNode.getNodeName();
+			if (nameNodeName.equals(NODE_FN) || nameNodeName.equals(NODE_LN)) {
+				String namePart = nameNode.getChildNodes().item(0)
+						.getNodeValue()
+						+ ";";
+				if (nodeValue == null) {
+					nodeValue = namePart;
+				} else {
+					nodeValue = nodeValue.concat(namePart);
+				}
+				// System.out.println("name:" + nodeValue);
+
+			}
+		}
+		return nodeValue;
 	}
 }
