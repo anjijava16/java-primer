@@ -12,6 +12,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -28,6 +29,16 @@ public class TestSingPut extends TestBase{
 		
 	}
 	
+	@Test
+	public void testTelXml(){
+		File xmlFile = getXmlFilePath("example-new-tel.xml");
+		
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+	    factory.setNamespaceAware(true);
+		
+	}
+	
+	@Ignore
 	@Test
 	public void testContactsXmlParser(){
 		File xmlFile = getXmlFilePath("example-new-contacts.xml");
