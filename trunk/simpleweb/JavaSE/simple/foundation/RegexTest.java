@@ -3,6 +3,8 @@ package simple.foundation;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.junit.Test;
+
 
 public class RegexTest {
 	final static String METHOD_NODE = "method"; 
@@ -42,9 +44,24 @@ public class RegexTest {
 		return null;
 	}
 
+	@Test
+	public void test1(){
+		String m = "^\\w+\\[1\\]?+$";
+		Pattern p = Pattern.compile(m);
+		String input = "11afasd[1]";
+		Matcher match = p.matcher(input);
+		if(match.find()){
+			String re = match.group(0);
+			re = re.substring(0, re.length() -3);
+			System.out.println(re);
+		}else{
+			System.out.println("no match.");
+		}
+	}
+	
 	
 	public static void test(){
-		String condition1 = "contact[2]";
+		String condition1 = "[contact[2]";
 		
 			
 		if(condition1.matches("^contact\\[\\d+\\]$")){
