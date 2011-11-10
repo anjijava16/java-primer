@@ -25,6 +25,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.LocalBinding;
+import org.jboss.ws.metadata.wsse.Sign;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -116,32 +117,45 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 						}
 					}
 				}else if(nodePartArr.length == 3){ //third layer selector.
+					
 					String thridSelector =  nodePartArr[2];
 					SingSpacesContactEntity entity = getEntity(secondSelector, userIdTemp);
 					if(thridSelector.matches(SingConstant.PATTERN_THIRD_LAYER_SELECTOR_BY_INDEX)){
+						//enable thridSelector as node tag name. 
 						int end = thridSelector.indexOf("[");
 						log.info("--------thridSelector  by index:" + thridSelector);
 						thridSelector = thridSelector.substring(0, end);
 					}
 					String entityFieldName = SingConstant.titleFieldMapping.get(thridSelector);
+					log.info("entityFieldName:" + entityFieldName);
 					if(entityFieldName != null && entity != null){
 						String fieldValue = null; 
 						try {
 							fieldValue = BeanUtils.getSimpleProperty(entity, entityFieldName);
+							log.info("fieldValue:" + fieldValue);
 						} catch (Exception e) {
 							e.printStackTrace();
 							log.error(e.getMessage());
 						}
 						String xml = null;
-						if(SingConstant.isThirdLayerNotLeafNode(thridSelector)){
-							xml = SingConstant.SIMPLE_NODE_FORMAT.format(new Object[]{secondSelector,fieldValue});
-							
-						}else if(SingConstant.isThirdLayerLeafNode(thridSelector)){
+						if(SingConstant.isThirdLayerLeafNode(thridSelector)){
+							log.info("get ThirdLayerLeafNode...");
+							xml = SingConstant.SIMPLE_NODE_FORMAT.format(new Object[]{thridSelector,fieldValue});							
+						}else if(SingConstant.isIncludeItemNode(thridSelector)){
+							log.info("get ThirdLayerNotLeafNode and not name node......");
 							String[][] part = splitByVerticalLineAndColon(fieldValue);
 							xml = constructItemsNode(thridSelector,part);
-						} else if (entityFieldName.equals(NODE_NAME)){							
+						} else if (thridSelector.equals(NODE_NAME)){
+							log.info("get name node...");
 							String[] namePartArr = fieldValue.split(";");
-							xml = SingConstant.NAME_NODE_FORMAT.format(new Object[]{namePartArr[0], namePartArr[1]});
+							String fn = "", ln = "";
+							if(namePartArr.length == 1){
+								fn = namePartArr[0];
+							}else {
+								fn = namePartArr[0];
+								ln = namePartArr[1];
+							}
+							xml = SingConstant.NAME_NODE_FORMAT.format(new Object[]{fn, ln});
 						}
 						if(xml != null){
 							return new ResultData(ResultData.STATUS_200, xml);							
@@ -447,8 +461,28 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 	}
 
 	@Override
-	public ResultData delete(String userId, String nodeSelector) {
-		return null;
+	public ResultData delete(String userId_, String nodeSelector) {
+		long userId = Long.valueOf(userId_);
+		int effectRows = -1;
+		if(nodeSelector != null && nodeSelector.equals(NODE_CONTACTS)){
+			//delete all
+			effectRows = contactsDao.deleteByUserId(userId);
+		}else{
+			String[] selParts = nodeSelector.split("/");
+			if(selParts != null && selParts.length ==2 && selParts[0].equals(NODE_CONTACTS)){
+				if(selParts[1].equals(NODE_CONTACT)){
+					//delete by first
+				}else if(selParts[1].matches(SingConstant.PATTERN_CONTACT_INDEX)){
+					int index = SingConstant.getIndex(nodeSelector);
+					effectRows = contactsDao.deleteContactByIndexSelector(userId, index);
+				}else if(selParts[1].matches(SingConstant.PATTERN_CONTACT_UNIQUE_ATTR)){
+					long contactId = SingConstant.getUniqueAttrValue(nodeSelector);
+					effectRows = contactsDao.deleteByUserId(userId, contactId);
+				}
+			}
+		}
+		
+		return new ResultData(effectRows == -1 ? ResultData.STATUS_404 : ResultData.STATUS_200, "");
 	}
 	
 	
@@ -473,11 +507,13 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 		final static MessageFormat SIMPLE_NODE_FORMAT = new MessageFormat("<{0}>{1}</{0}>");
 		final static MessageFormat NAME_NODE_FORMAT = new MessageFormat("<name><fn>{0}</fn><ln>{1}</ln></name>");
 		
-
+		/**
+		 * xml node tag name--> entity bean field. 
+		 */
 		final static Map<String,String> titleFieldMapping = new HashMap<String, String>(32);
 		static {
-			titleFieldMapping.put(NODE_NAME, "contactFN");
-			titleFieldMapping.put(NODE_DISPNAME,"contactN");
+			titleFieldMapping.put(NODE_NAME, "contactN");
+			titleFieldMapping.put(NODE_DISPNAME,"contactFN");
 			
 			titleFieldMapping.put(NODE_BDAY, "contactBDay");
 			titleFieldMapping.put(NODE_ADR, "contactADR");
@@ -704,7 +740,7 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 	}
 	
 	/**
-	 * construct this node:
+	 * construct and return this node:
 	 * 	<email>
 	 *		<item type="">xie@gmail.com</item>
 	 *		<item type="PREF">hong@hotmail.com</item>
