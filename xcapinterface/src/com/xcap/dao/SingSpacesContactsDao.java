@@ -83,11 +83,24 @@ public class SingSpacesContactsDao {
 	}
 	
 	public void save(long userId, SingSpacesContactEntity en){
-		
+		en.setUserId(userId);
+		em.persist(en);
 	}
 	
 	public void save(long userId, List<SingSpacesContactEntity> list){
-		
+		for(SingSpacesContactEntity en : list){
+			save(userId, en);
+		}
+	}
+	
+	public int deleteByUserId(long userId){
+		Query query = em.createNamedQuery("deleteByUserId");
+		return query.executeUpdate();
+	}
+
+	public int deleteByUserId(long userId,long contactId){
+		Query query = em.createNamedQuery("deleteByUserIdAndContactId");
+		return query.executeUpdate();
 	}
 	
 	

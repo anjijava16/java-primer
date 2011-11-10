@@ -1,9 +1,3 @@
-/**
- * @author Brin.Liu
- * @email liubilin@gmail.com
- * @version 0.1
- *          <p>
- */
 package com.xcap.dao.entity;
 
 import java.io.Serializable;
@@ -33,7 +27,12 @@ import javax.persistence.Table;
     @NamedQuery(name="listByUserIdAndStatus", 
     	query="from SingSpacesContactEntity s where s.userId = :userId and s.contactStatus = :status"),
     @NamedQuery(name="getByUserIdAndIdAndStatus", 
-    	query="from SingSpacesContactEntity s where s.userId = :userId and s.contactId = :id and s.contactStatus = :status")
+    	query="from SingSpacesContactEntity s where s.userId = :userId and s.contactId = :id and s.contactStatus = :status"),
+    @NamedQuery(name="deleteByUserId",
+    	query="delete from SingSpacesContactEntity c where c.userId = :userId"),
+    @NamedQuery(name="deleteByUserIdAndContactId",
+    	query="delete from SingSpacesContactEntity c where c.userId = :userId and c.contactId = :contactId")
+    
 })
 @NamedNativeQueries({
 	@NamedNativeQuery(name="byIndexAndStatus",

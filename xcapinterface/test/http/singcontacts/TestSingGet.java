@@ -37,7 +37,7 @@ public class TestSingGet extends TestBase{
 	
 	@Test
 	public void getContactNodebyIndex(){
-		String sel = constructSelectorByIndex(1);
+		String sel = constructSecondLayerSelectorByIndex(10);
 		String u = url.concat(sel);
 		getReqClient(u);		
 	}
@@ -45,19 +45,40 @@ public class TestSingGet extends TestBase{
 	@Test
 	public void getContactNodebyUniqueAttr(){
 		long contactId = 23479;
-		String sel = constructSelectorByUniqueAttr(String.valueOf(contactId));
+		String sel = constructSecondLayerSelectorByUniqueAttr(String.valueOf(contactId));
 		String u = url.concat(sel);
 		getReqClient(u);
 	}
 	
+	/**
+	 * second layer is unique attribute selector.
+	 * third layer is tag name selector/index selector.
+	 */
 	@Test
-	public void getTagName(){
-		
+	public void getNameBy_a_i(){
+		long contactId = 23488;
+		String sel = constructSecondLayerSelectorByUniqueAttr(String.valueOf(contactId));
+		//String u = url.concat(sel).concat("/name");
+		String u = url.concat(sel).concat("/name").concat(LEFT_SQUARE_BRACKET).concat("1").concat(RIGHT_SQUARE_BRACKET);
+		getReqClient(u);
+	}
+	
+	/**
+	 * lst layer  attr sel
+	 * sec layer tag name sel
+	 */
+	@Test
+	public void getDispNameBy_a_t(){
+		long contactId = 23488;
+		String sel = constructSecondLayerSelectorByUniqueAttr(String.valueOf(contactId)).concat("/dispName");
+		getReqClient(url.concat(sel));
 	}
 
 	@Test
-	public void getByIndex(){
-		
+	public void getEmalBy_a_t(){
+		long contactId = 23488;
+		String sel = constructSecondLayerSelectorByUniqueAttr(String.valueOf(contactId)).concat("/email");
+		getReqClient(url.concat(sel));
 	}
-
+	
 }

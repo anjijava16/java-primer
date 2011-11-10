@@ -29,10 +29,14 @@ public abstract class TestBase {
 	
 	public static String XML_TEXT_TAGNAME = "#text";
 	public static String CODING = "UTF-8";
+	/** [ */
 	public static String LEFT_SQUARE_BRACKET = "%5B";
-	public static String RIGHT_SQUARE_BRACKET = "%5D";
-	public static String AT = "%40";
-	public static String DOUBLE_QUOTATION_MARKS  = "%22";
+	/**]*/
+	public static String RIGHT_SQUARE_BRACKET = "%5D";  //]
+	/**@*/
+	public static String AT = "%40"; //@
+	/**"*/
+	public static String DOUBLE_QUOTATION_MARKS  = "%22"; //"
 	
 	public enum TagName{contacts,contact}
 	public enum TagNameThirdLayer{adr,name,tel,email,org,url,dispName,bday,title,note,lastModify}
@@ -45,7 +49,7 @@ public abstract class TestBase {
 		return form.format(args);
 	}
 	
-	public static String constructSelectorByIndex(int index){
+	public static String constructSecondLayerSelectorByIndex(int index){
 		String nodeSelector = "/~~/contacts/contact{0}{1}{2}";
 		
 		MessageFormat form = new MessageFormat(nodeSelector);
@@ -53,7 +57,7 @@ public abstract class TestBase {
 		return form.format(args);
 	}
 	
-	public static String constructSelectorByUniqueAttr(String contactId){
+	public static String constructSecondLayerSelectorByUniqueAttr(String contactId){
 		String nodeSelector = "/~~/contacts/contact{0}{1}id={2}{3}{2}{4}";
 		
 		MessageFormat form = new MessageFormat(nodeSelector);
