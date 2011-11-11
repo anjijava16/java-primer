@@ -1,16 +1,11 @@
 package http.singcontacts;
 
 import java.io.File;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathFactory;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -19,24 +14,64 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
 
 import com.xcap.dao.entity.SingSpacesContactEntity;
 
 public class TestSingPut extends TestBase{
+	final static String phoneNo = "8613480783139"; 
+	final static String token = "DDcs3x7JwQQwqvOT751dhxPUTartlMV70DRk28fiJjRSwAeSqwV0bw**";
+
+	final static String url = constructUrl(phoneNo, token);
+	
+	File contactsFile = getXmlFilePath("example-new-contacts.xml");
+	File contactFile = getXmlFilePath("example-new-contact.xml");
+
 	@Test
-	public void testPutContacts(){
-		
+	public void putContactsDocument(){
+		if(contactsFile.exists()){
+			try {
+				putReqClient(url, contactsFile);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}			
+		}else{
+			System.out.println("file not find.");
+		}
 	}
 	
 	@Test
-	public void testTelXml(){
-		File xmlFile = getXmlFilePath("example-new-tel.xml");
-		
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-	    factory.setNamespaceAware(true);
-		
+	public void putContactByAttrSelector(){
+		String contactId = "1";
+		String u = url.concat(constructSecondLayerSelectorByUniqueAttr(contactId));
+		if(contactFile.exists()){
+			try {
+				putReqClient(u, contactFile);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}			
+		}else{
+			System.out.println("file not find.");
+		}		
 	}
+	
+	/**
+	 * 在jboss 5.1下 ,put 操作有错。
+	 */
+	@Test
+	public void testHttpPut(){
+		String url = "http://localhost:8080/xcap-root/http-put-test";
+		
+		try {
+			putReqClient(url, contactsFile);
+			//putReqClient(url, contactFile);
+			//File txtFile =  getXmlFilePath("http-put-test.xml");
+			//putReqClient(url, txtFile);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	
 	@Ignore
 	@Test

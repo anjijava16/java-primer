@@ -4,7 +4,6 @@ import http.singcontacts.TestBase;
 
 import java.io.File;
 import java.io.StringReader;
-import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,8 +23,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
-import org.jboss.ejb3.annotation.LocalBinding;
-import org.jboss.ws.metadata.wsse.Sign;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -46,7 +43,7 @@ import com.xcap.ifc.error.XCAPErrors;
  */
 @Stateless
 @Local(value = XCAPDatebaseLocalIfc.class)
-@LocalBinding(jndiBinding = XCAPDatebaseLocalIfc.SING_SPACE_CONTACTS_LOCAL_JNDI)
+@org.jboss.annotation.ejb.LocalBinding(jndiBinding = XCAPDatebaseLocalIfc.SING_SPACE_CONTACTS_LOCAL_JNDI)
 public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 	public static final Logger log = Logger.getLogger(SingSpacesContactsAppEjb.class);
 

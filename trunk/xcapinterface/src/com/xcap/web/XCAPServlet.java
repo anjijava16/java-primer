@@ -1,5 +1,6 @@
 package com.xcap.web;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
@@ -99,6 +100,12 @@ public class XCAPServlet extends HttpServlet {
 				}
 				break;
 			case PUT:
+/*				BufferedReader re1 =req.getReader();
+				String str = null;
+				while((str = re1.readLine()) != null){
+					log.info(str);
+				}
+*/				
 				Scanner scanner = new Scanner(req.getReader());
 				StringBuilder xmlBuilder = new StringBuilder();
 				while (scanner.hasNextLine()) {

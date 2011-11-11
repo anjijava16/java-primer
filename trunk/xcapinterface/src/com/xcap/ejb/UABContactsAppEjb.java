@@ -19,7 +19,7 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
-import org.jboss.ejb3.annotation.LocalBinding;
+import org.jboss.annotation.ejb.LocalBinding;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;

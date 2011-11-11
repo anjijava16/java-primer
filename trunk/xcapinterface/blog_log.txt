@@ -1,0 +1,162 @@
+2011-11-11 10:48:25,962 [main] [org.apache.http.impl.conn.SingleClientConnManager] [DEBUG] - Get connection for route HttpRoute[{}->http://localhost:8080]
+2011-11-11 10:48:25,976 [main] [org.apache.http.impl.conn.DefaultClientConnectionOperator] [DEBUG] - Connecting to localhost:8080
+2011-11-11 10:48:25,989 [main] [org.apache.http.client.protocol.RequestAddCookies] [DEBUG] - CookieSpec selected: best-match
+2011-11-11 10:48:26,000 [main] [org.apache.http.client.protocol.RequestAuthCache] [DEBUG] - Auth cache not set in the context
+2011-11-11 10:48:26,000 [main] [org.apache.http.impl.client.DefaultHttpClient] [DEBUG] - Attempt 1 to execute request
+2011-11-11 10:48:26,000 [main] [org.apache.http.impl.conn.DefaultClientConnection] [DEBUG] - Sending request: PUT /xcap-root/UABContacts/8613480783139/DDcs3x7JwQQwqvOT751dhxPUTartlMV70DRk28fiJjRSwAeSqwV0bw**/index HTTP/1.1
+2011-11-11 10:48:26,001 [main] [org.apache.http.wire] [DEBUG] - >> "PUT /xcap-root/UABContacts/8613480783139/DDcs3x7JwQQwqvOT751dhxPUTartlMV70DRk28fiJjRSwAeSqwV0bw**/index HTTP/1.1[\r][\n]"
+2011-11-11 10:48:26,002 [main] [org.apache.http.wire] [DEBUG] - >> "Transfer-Encoding: chunked[\r][\n]"
+2011-11-11 10:48:26,002 [main] [org.apache.http.wire] [DEBUG] - >> "Content-Type: text/xml[\r][\n]"
+2011-11-11 10:48:26,002 [main] [org.apache.http.wire] [DEBUG] - >> "Host: localhost:8080[\r][\n]"
+2011-11-11 10:48:26,002 [main] [org.apache.http.wire] [DEBUG] - >> "Connection: Keep-Alive[\r][\n]"
+2011-11-11 10:48:26,002 [main] [org.apache.http.wire] [DEBUG] - >> "User-Agent: Apache-HttpClient/4.1.2 (java 1.5)[\r][\n]"
+2011-11-11 10:48:26,002 [main] [org.apache.http.wire] [DEBUG] - >> "[\r][\n]"
+2011-11-11 10:48:26,002 [main] [org.apache.http.headers] [DEBUG] - >> PUT /xcap-root/UABContacts/8613480783139/DDcs3x7JwQQwqvOT751dhxPUTartlMV70DRk28fiJjRSwAeSqwV0bw**/index HTTP/1.1
+2011-11-11 10:48:26,002 [main] [org.apache.http.headers] [DEBUG] - >> Transfer-Encoding: chunked
+2011-11-11 10:48:26,003 [main] [org.apache.http.headers] [DEBUG] - >> Content-Type: text/xml
+2011-11-11 10:48:26,003 [main] [org.apache.http.headers] [DEBUG] - >> Host: localhost:8080
+2011-11-11 10:48:26,003 [main] [org.apache.http.headers] [DEBUG] - >> Connection: Keep-Alive
+2011-11-11 10:48:26,003 [main] [org.apache.http.headers] [DEBUG] - >> User-Agent: Apache-HttpClient/4.1.2 (java 1.5)
+2011-11-11 10:48:26,018 [main] [org.apache.http.wire] [DEBUG] - >> "1f4[\r][\n]"
+2011-11-11 10:48:26,018 [main] [org.apache.http.wire] [DEBUG] - >> "<?xml version="1.0" encoding="UTF-8"?>[\r][\n]"
+2011-11-11 10:48:26,018 [main] [org.apache.http.wire] [DEBUG] - >> "<contacts xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"[\r][\n]"
+2011-11-11 10:48:26,018 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9]xsi:schemaLocation="contacts contacts.xsd">[\r][\n]"
+2011-11-11 10:48:26,018 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9]<contact method="13510776272">[\r][\n]"
+2011-11-11 10:48:26,018 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9][0x9]<contactName>Gykooooox</contactName>[\r][\n]"
+2011-11-11 10:48:26,018 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9]</contact>[\r][\n]"
+2011-11-11 10:48:26,018 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9]<contact method="84236457">[\r][\n]"
+2011-11-11 10:48:26,018 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9][0x9]<contactName>[0xe7][0xbf][0x9f][0xe5][0xb0][0x8f][0xe6][0x96][0x8c]</contactName>[\r][\n]"
+2011-11-11 10:48:26,018 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9]</contact>[\r][\n]"
+2011-11-11 10:48:26,018 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9]<contact method="46546464646">[\r][\n]"
+2011-11-11 10:48:26,019 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9][0x9]<contactName>yuankang</contactName>[\r][\n]"
+2011-11-11 10:48:26,019 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9]</contact>[\r][\n]"
+2011-11-11 10:48:26,019 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9]<contact method="156445564641">[\r][\n]"
+2011-11-11 10:48:26,019 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9][0x9]<contactName>yuanka</contactName>[\r][\n]"
+2011-11-11 10:48:26,019 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9]</contact>[\r][\n]"
+2011-11-11 10:48:26,019 [main] [org.apache.http.wire] [DEBUG] - >> "</contacts>"
+2011-11-11 10:48:26,019 [main] [org.apache.http.wire] [DEBUG] - >> "[\r][\n]"
+2011-11-11 10:48:26,019 [main] [org.apache.http.wire] [DEBUG] - >> "0[\r][\n]"
+2011-11-11 10:48:26,019 [main] [org.apache.http.wire] [DEBUG] - >> "[\r][\n]"
+2011-11-11 10:48:26,590 [main] [org.apache.http.wire] [DEBUG] - << "HTTP/1.1 200 OK[\r][\n]"
+2011-11-11 10:48:26,592 [main] [org.apache.http.wire] [DEBUG] - << "Server: Apache-Coyote/1.1[\r][\n]"
+2011-11-11 10:48:26,592 [main] [org.apache.http.wire] [DEBUG] - << "X-Powered-By: Servlet 2.5; JBoss-5.0/JBossWeb-2.1[\r][\n]"
+2011-11-11 10:48:26,592 [main] [org.apache.http.wire] [DEBUG] - << "Content-Length: 0[\r][\n]"
+2011-11-11 10:48:26,593 [main] [org.apache.http.wire] [DEBUG] - << "Date: Fri, 11 Nov 2011 02:48:26 GMT[\r][\n]"
+2011-11-11 10:48:26,593 [main] [org.apache.http.wire] [DEBUG] - << "[\r][\n]"
+2011-11-11 10:48:26,593 [main] [org.apache.http.impl.conn.DefaultClientConnection] [DEBUG] - Receiving response: HTTP/1.1 200 OK
+2011-11-11 10:48:26,594 [main] [org.apache.http.headers] [DEBUG] - << HTTP/1.1 200 OK
+2011-11-11 10:48:26,594 [main] [org.apache.http.headers] [DEBUG] - << Server: Apache-Coyote/1.1
+2011-11-11 10:48:26,594 [main] [org.apache.http.headers] [DEBUG] - << X-Powered-By: Servlet 2.5; JBoss-5.0/JBossWeb-2.1
+2011-11-11 10:48:26,594 [main] [org.apache.http.headers] [DEBUG] - << Content-Length: 0
+2011-11-11 10:48:26,594 [main] [org.apache.http.headers] [DEBUG] - << Date: Fri, 11 Nov 2011 02:48:26 GMT
+2011-11-11 10:48:26,597 [main] [org.apache.http.impl.client.DefaultHttpClient] [DEBUG] - Connection can be kept alive indefinitely
+2011-11-11 10:48:26,603 [main] [org.apache.http.impl.conn.SingleClientConnManager] [DEBUG] - Releasing connection org.apache.http.impl.conn.SingleClientConnManager$ConnAdapter@1bfc93a
+2011-11-11 10:48:26,603 [main] [org.apache.http.impl.conn.DefaultClientConnection] [DEBUG] - Connection shut down
+2011-11-11 12:04:16,634 [main] [org.apache.http.impl.conn.SingleClientConnManager] [DEBUG] - Get connection for route HttpRoute[{}->http://localhost:8080]
+2011-11-11 12:04:16,656 [main] [org.apache.http.impl.conn.DefaultClientConnectionOperator] [DEBUG] - Connecting to localhost:8080
+2011-11-11 12:04:16,670 [main] [org.apache.http.client.protocol.RequestAddCookies] [DEBUG] - CookieSpec selected: best-match
+2011-11-11 12:04:16,682 [main] [org.apache.http.client.protocol.RequestAuthCache] [DEBUG] - Auth cache not set in the context
+2011-11-11 12:04:16,683 [main] [org.apache.http.impl.client.DefaultHttpClient] [DEBUG] - Attempt 1 to execute request
+2011-11-11 12:04:16,683 [main] [org.apache.http.impl.conn.DefaultClientConnection] [DEBUG] - Sending request: PUT /xcap-root/UABContacts/8613480783139/DDcs3x7JwQQwqvOT751dhxPUTartlMV70DRk28fiJjRSwAeSqwV0bw**/index HTTP/1.1
+2011-11-11 12:04:16,684 [main] [org.apache.http.wire] [DEBUG] - >> "PUT /xcap-root/UABContacts/8613480783139/DDcs3x7JwQQwqvOT751dhxPUTartlMV70DRk28fiJjRSwAeSqwV0bw**/index HTTP/1.1[\r][\n]"
+2011-11-11 12:04:16,685 [main] [org.apache.http.wire] [DEBUG] - >> "Transfer-Encoding: chunked[\r][\n]"
+2011-11-11 12:04:16,685 [main] [org.apache.http.wire] [DEBUG] - >> "Content-Type: text/xml[\r][\n]"
+2011-11-11 12:04:16,685 [main] [org.apache.http.wire] [DEBUG] - >> "Host: localhost:8080[\r][\n]"
+2011-11-11 12:04:16,685 [main] [org.apache.http.wire] [DEBUG] - >> "Connection: Keep-Alive[\r][\n]"
+2011-11-11 12:04:16,685 [main] [org.apache.http.wire] [DEBUG] - >> "User-Agent: Apache-HttpClient/4.1.2 (java 1.5)[\r][\n]"
+2011-11-11 12:04:16,686 [main] [org.apache.http.wire] [DEBUG] - >> "[\r][\n]"
+2011-11-11 12:04:16,686 [main] [org.apache.http.headers] [DEBUG] - >> PUT /xcap-root/UABContacts/8613480783139/DDcs3x7JwQQwqvOT751dhxPUTartlMV70DRk28fiJjRSwAeSqwV0bw**/index HTTP/1.1
+2011-11-11 12:04:16,686 [main] [org.apache.http.headers] [DEBUG] - >> Transfer-Encoding: chunked
+2011-11-11 12:04:16,686 [main] [org.apache.http.headers] [DEBUG] - >> Content-Type: text/xml
+2011-11-11 12:04:16,686 [main] [org.apache.http.headers] [DEBUG] - >> Host: localhost:8080
+2011-11-11 12:04:16,686 [main] [org.apache.http.headers] [DEBUG] - >> Connection: Keep-Alive
+2011-11-11 12:04:16,686 [main] [org.apache.http.headers] [DEBUG] - >> User-Agent: Apache-HttpClient/4.1.2 (java 1.5)
+2011-11-11 12:04:16,687 [main] [org.apache.http.wire] [DEBUG] - >> "1f4[\r][\n]"
+2011-11-11 12:04:16,687 [main] [org.apache.http.wire] [DEBUG] - >> "<?xml version="1.0" encoding="UTF-8"?>[\r][\n]"
+2011-11-11 12:04:16,687 [main] [org.apache.http.wire] [DEBUG] - >> "<contacts xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"[\r][\n]"
+2011-11-11 12:04:16,687 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9]xsi:schemaLocation="contacts contacts.xsd">[\r][\n]"
+2011-11-11 12:04:16,688 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9]<contact method="13510776272">[\r][\n]"
+2011-11-11 12:04:16,688 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9][0x9]<contactName>Gykooooox</contactName>[\r][\n]"
+2011-11-11 12:04:16,688 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9]</contact>[\r][\n]"
+2011-11-11 12:04:16,688 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9]<contact method="84236457">[\r][\n]"
+2011-11-11 12:04:16,688 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9][0x9]<contactName>[0xe7][0xbf][0x9f][0xe5][0xb0][0x8f][0xe6][0x96][0x8c]</contactName>[\r][\n]"
+2011-11-11 12:04:16,688 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9]</contact>[\r][\n]"
+2011-11-11 12:04:16,688 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9]<contact method="46546464646">[\r][\n]"
+2011-11-11 12:04:16,688 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9][0x9]<contactName>yuankang</contactName>[\r][\n]"
+2011-11-11 12:04:16,688 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9]</contact>[\r][\n]"
+2011-11-11 12:04:16,689 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9]<contact method="156445564641">[\r][\n]"
+2011-11-11 12:04:16,689 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9][0x9]<contactName>yuanka</contactName>[\r][\n]"
+2011-11-11 12:04:16,689 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9]</contact>[\r][\n]"
+2011-11-11 12:04:16,689 [main] [org.apache.http.wire] [DEBUG] - >> "</contacts>"
+2011-11-11 12:04:16,689 [main] [org.apache.http.wire] [DEBUG] - >> "[\r][\n]"
+2011-11-11 12:04:16,689 [main] [org.apache.http.wire] [DEBUG] - >> "0[\r][\n]"
+2011-11-11 12:04:16,689 [main] [org.apache.http.wire] [DEBUG] - >> "[\r][\n]"
+2011-11-11 12:04:16,736 [main] [org.apache.http.wire] [DEBUG] - << "HTTP/1.1 200 OK[\r][\n]"
+2011-11-11 12:04:16,738 [main] [org.apache.http.wire] [DEBUG] - << "Server: Apache-Coyote/1.1[\r][\n]"
+2011-11-11 12:04:16,738 [main] [org.apache.http.wire] [DEBUG] - << "X-Powered-By: Servlet 2.5; JBoss-5.0/JBossWeb-2.1[\r][\n]"
+2011-11-11 12:04:16,738 [main] [org.apache.http.wire] [DEBUG] - << "Content-Length: 0[\r][\n]"
+2011-11-11 12:04:16,738 [main] [org.apache.http.wire] [DEBUG] - << "Date: Fri, 11 Nov 2011 04:04:16 GMT[\r][\n]"
+2011-11-11 12:04:16,739 [main] [org.apache.http.wire] [DEBUG] - << "[\r][\n]"
+2011-11-11 12:04:16,739 [main] [org.apache.http.impl.conn.DefaultClientConnection] [DEBUG] - Receiving response: HTTP/1.1 200 OK
+2011-11-11 12:04:16,740 [main] [org.apache.http.headers] [DEBUG] - << HTTP/1.1 200 OK
+2011-11-11 12:04:16,740 [main] [org.apache.http.headers] [DEBUG] - << Server: Apache-Coyote/1.1
+2011-11-11 12:04:16,740 [main] [org.apache.http.headers] [DEBUG] - << X-Powered-By: Servlet 2.5; JBoss-5.0/JBossWeb-2.1
+2011-11-11 12:04:16,740 [main] [org.apache.http.headers] [DEBUG] - << Content-Length: 0
+2011-11-11 12:04:16,740 [main] [org.apache.http.headers] [DEBUG] - << Date: Fri, 11 Nov 2011 04:04:16 GMT
+2011-11-11 12:04:16,743 [main] [org.apache.http.impl.client.DefaultHttpClient] [DEBUG] - Connection can be kept alive indefinitely
+2011-11-11 12:04:16,748 [main] [org.apache.http.impl.conn.SingleClientConnManager] [DEBUG] - Releasing connection org.apache.http.impl.conn.SingleClientConnManager$ConnAdapter@1bfc93a
+2011-11-11 12:04:16,748 [main] [org.apache.http.impl.conn.DefaultClientConnection] [DEBUG] - Connection shut down
+2011-11-11 12:04:29,667 [main] [org.apache.http.impl.conn.SingleClientConnManager] [DEBUG] - Get connection for route HttpRoute[{}->http://localhost:8080]
+2011-11-11 12:04:29,673 [main] [org.apache.http.impl.conn.DefaultClientConnectionOperator] [DEBUG] - Connecting to localhost:8080
+2011-11-11 12:04:29,686 [main] [org.apache.http.client.protocol.RequestAddCookies] [DEBUG] - CookieSpec selected: best-match
+2011-11-11 12:04:29,697 [main] [org.apache.http.client.protocol.RequestAuthCache] [DEBUG] - Auth cache not set in the context
+2011-11-11 12:04:29,697 [main] [org.apache.http.impl.client.DefaultHttpClient] [DEBUG] - Attempt 1 to execute request
+2011-11-11 12:04:29,697 [main] [org.apache.http.impl.conn.DefaultClientConnection] [DEBUG] - Sending request: PUT /xcap-root/UABContacts/8613480783139/DDcs3x7JwQQwqvOT751dhxPUTartlMV70DRk28fiJjRSwAeSqwV0bw**/index HTTP/1.1
+2011-11-11 12:04:29,698 [main] [org.apache.http.wire] [DEBUG] - >> "PUT /xcap-root/UABContacts/8613480783139/DDcs3x7JwQQwqvOT751dhxPUTartlMV70DRk28fiJjRSwAeSqwV0bw**/index HTTP/1.1[\r][\n]"
+2011-11-11 12:04:29,699 [main] [org.apache.http.wire] [DEBUG] - >> "Transfer-Encoding: chunked[\r][\n]"
+2011-11-11 12:04:29,699 [main] [org.apache.http.wire] [DEBUG] - >> "Content-Type: text/xml[\r][\n]"
+2011-11-11 12:04:29,699 [main] [org.apache.http.wire] [DEBUG] - >> "Host: localhost:8080[\r][\n]"
+2011-11-11 12:04:29,699 [main] [org.apache.http.wire] [DEBUG] - >> "Connection: Keep-Alive[\r][\n]"
+2011-11-11 12:04:29,699 [main] [org.apache.http.wire] [DEBUG] - >> "User-Agent: Apache-HttpClient/4.1.2 (java 1.5)[\r][\n]"
+2011-11-11 12:04:29,699 [main] [org.apache.http.wire] [DEBUG] - >> "[\r][\n]"
+2011-11-11 12:04:29,699 [main] [org.apache.http.headers] [DEBUG] - >> PUT /xcap-root/UABContacts/8613480783139/DDcs3x7JwQQwqvOT751dhxPUTartlMV70DRk28fiJjRSwAeSqwV0bw**/index HTTP/1.1
+2011-11-11 12:04:29,699 [main] [org.apache.http.headers] [DEBUG] - >> Transfer-Encoding: chunked
+2011-11-11 12:04:29,699 [main] [org.apache.http.headers] [DEBUG] - >> Content-Type: text/xml
+2011-11-11 12:04:29,700 [main] [org.apache.http.headers] [DEBUG] - >> Host: localhost:8080
+2011-11-11 12:04:29,700 [main] [org.apache.http.headers] [DEBUG] - >> Connection: Keep-Alive
+2011-11-11 12:04:29,700 [main] [org.apache.http.headers] [DEBUG] - >> User-Agent: Apache-HttpClient/4.1.2 (java 1.5)
+2011-11-11 12:04:29,700 [main] [org.apache.http.wire] [DEBUG] - >> "1f4[\r][\n]"
+2011-11-11 12:04:29,700 [main] [org.apache.http.wire] [DEBUG] - >> "<?xml version="1.0" encoding="UTF-8"?>[\r][\n]"
+2011-11-11 12:04:29,700 [main] [org.apache.http.wire] [DEBUG] - >> "<contacts xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"[\r][\n]"
+2011-11-11 12:04:29,700 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9]xsi:schemaLocation="contacts contacts.xsd">[\r][\n]"
+2011-11-11 12:04:29,701 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9]<contact method="13510776272">[\r][\n]"
+2011-11-11 12:04:29,701 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9][0x9]<contactName>Gykooooox</contactName>[\r][\n]"
+2011-11-11 12:04:29,701 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9]</contact>[\r][\n]"
+2011-11-11 12:04:29,701 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9]<contact method="84236457">[\r][\n]"
+2011-11-11 12:04:29,701 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9][0x9]<contactName>[0xe7][0xbf][0x9f][0xe5][0xb0][0x8f][0xe6][0x96][0x8c]</contactName>[\r][\n]"
+2011-11-11 12:04:29,701 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9]</contact>[\r][\n]"
+2011-11-11 12:04:29,701 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9]<contact method="46546464646">[\r][\n]"
+2011-11-11 12:04:29,701 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9][0x9]<contactName>yuankang</contactName>[\r][\n]"
+2011-11-11 12:04:29,701 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9]</contact>[\r][\n]"
+2011-11-11 12:04:29,701 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9]<contact method="156445564641">[\r][\n]"
+2011-11-11 12:04:29,702 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9][0x9]<contactName>yuanka</contactName>[\r][\n]"
+2011-11-11 12:04:29,702 [main] [org.apache.http.wire] [DEBUG] - >> "[0x9]</contact>[\r][\n]"
+2011-11-11 12:04:29,702 [main] [org.apache.http.wire] [DEBUG] - >> "</contacts>"
+2011-11-11 12:04:29,702 [main] [org.apache.http.wire] [DEBUG] - >> "[\r][\n]"
+2011-11-11 12:04:29,702 [main] [org.apache.http.wire] [DEBUG] - >> "0[\r][\n]"
+2011-11-11 12:04:29,702 [main] [org.apache.http.wire] [DEBUG] - >> "[\r][\n]"
+2011-11-11 12:04:29,713 [main] [org.apache.http.wire] [DEBUG] - << "HTTP/1.1 200 OK[\r][\n]"
+2011-11-11 12:04:29,715 [main] [org.apache.http.wire] [DEBUG] - << "Server: Apache-Coyote/1.1[\r][\n]"
+2011-11-11 12:04:29,715 [main] [org.apache.http.wire] [DEBUG] - << "X-Powered-By: Servlet 2.5; JBoss-5.0/JBossWeb-2.1[\r][\n]"
+2011-11-11 12:04:29,715 [main] [org.apache.http.wire] [DEBUG] - << "Content-Length: 0[\r][\n]"
+2011-11-11 12:04:29,715 [main] [org.apache.http.wire] [DEBUG] - << "Date: Fri, 11 Nov 2011 04:04:29 GMT[\r][\n]"
+2011-11-11 12:04:29,716 [main] [org.apache.http.wire] [DEBUG] - << "[\r][\n]"
+2011-11-11 12:04:29,716 [main] [org.apache.http.impl.conn.DefaultClientConnection] [DEBUG] - Receiving response: HTTP/1.1 200 OK
+2011-11-11 12:04:29,716 [main] [org.apache.http.headers] [DEBUG] - << HTTP/1.1 200 OK
+2011-11-11 12:04:29,717 [main] [org.apache.http.headers] [DEBUG] - << Server: Apache-Coyote/1.1
+2011-11-11 12:04:29,717 [main] [org.apache.http.headers] [DEBUG] - << X-Powered-By: Servlet 2.5; JBoss-5.0/JBossWeb-2.1
+2011-11-11 12:04:29,717 [main] [org.apache.http.headers] [DEBUG] - << Content-Length: 0
+2011-11-11 12:04:29,717 [main] [org.apache.http.headers] [DEBUG] - << Date: Fri, 11 Nov 2011 04:04:29 GMT
+2011-11-11 12:04:29,720 [main] [org.apache.http.impl.client.DefaultHttpClient] [DEBUG] - Connection can be kept alive indefinitely
+2011-11-11 12:04:29,723 [main] [org.apache.http.impl.conn.SingleClientConnManager] [DEBUG] - Releasing connection org.apache.http.impl.conn.SingleClientConnManager$ConnAdapter@6e293a
+2011-11-11 12:04:29,724 [main] [org.apache.http.impl.conn.DefaultClientConnection] [DEBUG] - Connection shut down
