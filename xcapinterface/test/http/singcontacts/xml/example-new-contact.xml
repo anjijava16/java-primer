@@ -1,36 +1,37 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<contact id="1">
-	<dispName>Yang Test</dispName>
-	<name>
-		<fn>Xun</fn>
-		<ln>Frank</ln>
-	</name>
-	<title>engineer</title>
-	<bday>2008-12-15</bday>
-	<adr>
-		<item type="WORK">xixiangbuxingjie;;;;;;</item>
-		<item type="HOME">kefalu;;;shenzheng;guangdong;1345641;china</item>
-	</adr>
-	<tel>
-		<item type="">12453456346</item>
-		<item type="CELL">13691417240</item>
-		<item type="HOME">01068747151</item>
-		<item type="WORK">01068747151</item>
-		<item type="FAX;HOME">9141724</item>
-		<item type="FAX;WORK">3424424</item>
-	</tel>
-	<email>
-		<item type="">xie@gmail.com</item>
-		<item type="">hong@hotmail.com</item>
-		<item type="HOME">ong@hotmail.com</item>
-		<item type="WORK">xie@gmail.com</item>
-	</email>
-	<org>
-		<item>borqs shenzhen</item>
-	</org>
-	<url>
-		<item>http://www.google.com.hk/</item>
-	</url>
-	<note>ss</note>
-	<lastModify>2011-10-20 12:58:22</lastModify>
-</contact>
+	<contact>
+		<dispName>hi slieer</dispName>
+		<name>
+			<fn>Xun</fn>
+			<ln>Frank</ln>
+		</name>
+		<title>engineer</title>
+		<bday>2008-12-15</bday>
+		<adr>
+			<item type="WORK">xixiangbuxingjie;;;;;;</item>
+			<item type="HOME">kefalu;;;shenzheng;guangdong;1345641;china</item>
+		</adr>
+		<tel>
+			<item type="">12453456346</item>
+			<item type="CELL">13691417240</item>
+			<item type="HOME">01068747151</item>
+			<item type="WORK">01068747151</item>
+			<item type="FAX;HOME">9141724</item>
+			<item type="FAX;WORK">3424424</item>
+		</tel>
+		<email>
+			<item type="">xie@gmail.com</item>
+			<item type="PREF">hong@hotmail.com</item>
+			<item type="HOME">ong@hotmail.com</item>
+			<item type="WORK">xie@gmail.com</item>
+		</email>
+		<org>
+			<item>borqs shenzhen</item>
+		</org>
+		<url>
+			<item>http://www.google.com.hk/</item>
+		</url>
+		<note>ss</note>
+		<!-- 
+		 <lastModify>2011-10-20 12:58:22</lastModify>
+		 -->
+	</contact>

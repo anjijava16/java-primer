@@ -1,5 +1,6 @@
 package com.xcap.web;
 
+import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -10,27 +11,38 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 import com.xcap.ifc.Constants;
 
 public class SchemaServlet extends HttpServlet {
 	private static final long serialVersionUID = -3000270206818419378L;
-	
+
+	// test put.
+	@Override
+	protected void doPut(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		
+		BufferedReader reader = req.getReader();
+		String line = null;
+		while ((line = reader.readLine()) != null) {
+			System.out.println(line);
+		}
+	}
+
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		String auid = req.getParameter("");
 		PrintWriter writer = resp.getWriter();
-		
+
 		String schemaName = "";
-		if(auid.equals(Constants.APP_USAGE_CONTACT)){
+		if (auid.equals(Constants.APP_USAGE_CONTACT)) {
 			schemaName = Constants.XML_SCHEMA_UAB_CONTACT;
-		}else if(auid.equals(Constants.APP_USAGE_SINGSPACE_CONTACT)){
+		} else if (auid.equals(Constants.APP_USAGE_SINGSPACE_CONTACT)) {
 			schemaName = Constants.XML_SCHEMA_SINGSPACES_CONTACT;
 		}
 		String schemaPath = Constants.SCHEMA_DIR.concat(schemaName);
 		Scanner scanner = new Scanner(new FileReader(schemaPath));
-		while(scanner.hasNextLine()){
+		while (scanner.hasNextLine()) {
 			String line = scanner.nextLine();
 			writer.print(line);
 		}
@@ -38,7 +50,7 @@ public class SchemaServlet extends HttpServlet {
 		writer.flush();
 		writer.close();
 	}
-	
+
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {

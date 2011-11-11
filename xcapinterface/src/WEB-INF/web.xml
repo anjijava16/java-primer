@@ -50,9 +50,16 @@
 		<servlet-name>xcapcaps</servlet-name>
 		<url-pattern>/xcap-caps</url-pattern>
 	</servlet-mapping>
-	<servlet-mapping>
+<!-- 
+ 	<servlet-mapping>
 		<servlet-name>xmlSchema</servlet-name>
 		<url-pattern>/xcap-schema</url-pattern>
 	</servlet-mapping>
+ -->
 	
+ 	<servlet-mapping>
+		<servlet-name>xmlSchema</servlet-name>
+		<url-pattern>/http-put-test</url-pattern>
+	</servlet-mapping>
+		
 </web-app>
