@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <contacts xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<contact>
-		<dispName>Yang Test</dispName>
+		<dispName>slieer-plus</dispName>
 		<name>
-			<fn>Xun</fn>
-			<ln>Frank</ln>
+			<fn>s</fn>
+			<ln>p</ln>
 		</name>
 		<title>engineer</title>
-		<bday>2008-12-15</bday>
+		<bday>2018-12-15</bday>
 		<adr>
-			<item type="WORK">xixiangbuxingjie;;;;;;</item>
-			<item type="HOME">kefalu;;;shenzheng;guangdong;1345641;china</item>
+			<item type="WORK">-xixiangbuxingjie;;;;;;</item>
+			<item type="HOME">-kefalu;;;shenzheng;guangdong;1345641;china</item>
 		</adr>
 		<tel>
 			<item type="">12453456346</item>
@@ -32,13 +32,13 @@
 		<url>
 			<item>http://www.google.com.hk/</item>
 		</url>
-		<note>ss</note>
+		<note>s---s</note>
 		<!-- 
 		 <lastModify>2011-10-20 12:58:22</lastModify>
 		 -->
 	</contact>
 	<contact>
-		<dispName>slie</dispName>
+		<dispName>slieer</dispName>
 		<name>
 			<fn>yu</fn>
 			<ln>slieer</ln>
