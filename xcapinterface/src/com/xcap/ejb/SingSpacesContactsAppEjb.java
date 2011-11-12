@@ -285,8 +285,9 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 		
 		if(SingConstant.isDocSelector(nodeSelector)){
 			List<SingSpacesContactEntity> conatcts = xmlToEntitys(element);
-			
+			contactsDao.deleteByUserId(userId);
 			contactsDao.save(userId,conatcts);
+			return new ResultData(ResultData.STATUS_200, "");
 		}else{
 			String secondLayerSelector = null; 
 			String thirdLayerSeletor = null;
@@ -806,11 +807,13 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 	private static List<SingSpacesContactEntity> xmlToEntitys(Element conatcts){
 		List<SingSpacesContactEntity> list = new ArrayList<SingSpacesContactEntity>();
 		NodeList nodes = conatcts.getElementsByTagName(NODE_CONTACT);
+		log.info("contact size is " + nodes.getLength());
 		for (int i = 0; i < nodes.getLength(); i++) {
 			Node node = nodes.item(i);
 			NodeList children = node.getChildNodes();
 			
 			SingSpacesContactEntity entity = new SingSpacesContactEntity();
+			entity.setLastModify(new Date());
 			list.add(entity);
 			
 			for(int j = 0; j < children.getLength(); j++){
@@ -838,7 +841,6 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 					//System.out.println("------------" + fieldName + ":" + nodeName + "=" + nodeValue);
 					try {
 						BeanUtils.setProperty(entity, fieldName, nodeValue);
-						
 					} catch (Exception e) {
 						log.info("bean set property Exception");
 						e.printStackTrace();
@@ -846,7 +848,7 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 				}
 			}
 
-			System.out.println(entity);
+			log.info(entity);
 		}
 		return list;
 	}
@@ -865,14 +867,14 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 				
 				String tempType = (type  != null) ? type .getNodeValue() : "";
 				String nodeVal = item.getNodeValue();
-				String tempVal = tempType.concat(":").concat(nodeVal).concat(";");
+				String tempVal = tempType.concat(":").concat(nodeVal);
 				if(nodeValue == null){
-					nodeValue = tempVal;
+					nodeValue = tempVal.concat("|");
 				}else{
-					nodeValue.concat(tempVal);
+					nodeValue = nodeValue.concat(tempVal).concat("|");
 				}
 				
-				log.info("nodeValue".concat(":").concat(nodeValue));
+				//log.info("nodeValue".concat(":").concat(nodeValue));
 				//System.out.println(tempType.concat(":").concat(nodeVal).concat(";"));
 				//System.out.println(nodeName + ":"+ itemNode + ":" + item + ":" + (type  != null ? type .getNodeValue() : "-"));								
 			}

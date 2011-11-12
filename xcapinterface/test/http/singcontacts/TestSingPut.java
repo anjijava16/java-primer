@@ -54,6 +54,33 @@ public class TestSingPut extends TestBase{
 		}		
 	}
 	
+	@Test
+	public void putContactByIndexSelector(){
+		
+	}
+	
+	@Test
+	public void putContactByTagNameSelector(){
+		
+	}
+	
+	@Test
+	public void putNameByTagName(){
+		
+	}
+	
+	@Test
+	public void putNameByAttr(){
+		
+	}
+
+	
+	@Test
+	public void putNameByTagIndex(){
+		
+	}
+	
+	
 	/**
 	 * 在jboss 5.1下 ,put 操作有错。
 	 */
@@ -71,7 +98,6 @@ public class TestSingPut extends TestBase{
 			e.printStackTrace();
 		}
 	}
-	
 	
 	@Ignore
 	@Test
