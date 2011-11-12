@@ -22,7 +22,12 @@
 		<servlet-name>protected</servlet-name>
 		<servlet-class>com.web.ProtectedServlet</servlet-class>
 	</servlet>
-
+	
+	<servlet>
+		<servlet-name>PutServlet</servlet-name>
+		<servlet-class>com.web.PutServlet</servlet-class>
+	</servlet>
+	
 	<servlet-mapping>
 		<servlet-name>Quercus Servlet</servlet-name>
 		<url-pattern>*.php</url-pattern>
@@ -37,7 +42,11 @@
 		<servlet-name>protected</servlet-name>
 		<url-pattern>/protected</url-pattern>
 	</servlet-mapping>   
-
+	
+	<servlet-mapping>
+		<servlet-name>PutServlet</servlet-name>
+		<url-pattern>/PutServlet</url-pattern>
+	</servlet-mapping>
 	<!--
 	最后在tomcat-users.xml文件增加实体，   
   		<user name="newuser" password="tomcat" roles="begjsp"/>   
