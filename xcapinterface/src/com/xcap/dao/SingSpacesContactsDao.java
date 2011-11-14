@@ -8,7 +8,12 @@ import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import org.apache.log4j.Logger;
+
+import sun.util.logging.resources.logging;
+
 import com.xcap.dao.entity.SingSpacesContactEntity;
+import com.xcap.ejb.SingSpacesContactsAppEjb;
 
 /**
  * 
@@ -17,6 +22,7 @@ import com.xcap.dao.entity.SingSpacesContactEntity;
  *<li>version 1.0</li>
  */
 public class SingSpacesContactsDao {
+	public static final Logger log = Logger.getLogger(SingSpacesContactsDao.class);	
 	final static byte STATUS = 1;
 	
 	private EntityManager em;
@@ -84,7 +90,9 @@ public class SingSpacesContactsDao {
 	
 	public void save(long userId, SingSpacesContactEntity en){
 		en.setUserId(userId);
+		en.setContactStatus(STATUS);
 		em.persist(en);
+		log.info("persist singspaces contact, id=" + en.getContactId());
 	}
 	
 	public void save(long userId, List<SingSpacesContactEntity> list){
@@ -95,6 +103,7 @@ public class SingSpacesContactsDao {
 	
 	public int deleteByUserId(long userId){
 		Query query = em.createNamedQuery("deleteByUserId");
+		query.setParameter("userId", userId);
 		return query.executeUpdate();
 	}
 

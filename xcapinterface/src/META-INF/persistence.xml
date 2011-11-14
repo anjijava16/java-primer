@@ -5,7 +5,7 @@
     <jta-data-source>java:/MySqlDSUABXCAP</jta-data-source>
     <properties>
       <property name="hibernate.hbm2ddl.auto" value="update"/>
-	  <property name="hibernate.show_sql" value="false"/>
+	  <property name="hibernate.show_sql" value="true"/>
 	  <property name="hibernate.format_sql" value="true"/> 
       <property name="dialect" value="org.hibernate.dialect.MySQLDialect"></property>
     </properties>
@@ -16,7 +16,7 @@
     <jta-data-source>java:/MySqlDSSingSpacesXCAP</jta-data-source>
     <properties>
       <property name="hibernate.hbm2ddl.auto" value="update"/>
-	  <property name="hibernate.show_sql" value="false"/>
+	  <property name="hibernate.show_sql" value="true"/>
 	  <property name="hibernate.format_sql" value="true"/> 
       <property name="dialect" value="org.hibernate.dialect.MySQLDialect"></property>
     </properties>

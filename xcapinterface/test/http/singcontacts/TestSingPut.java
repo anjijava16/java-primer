@@ -25,7 +25,8 @@ public class TestSingPut extends TestBase{
 	
 	File contactsFile = getXmlFilePath("example-new-contacts.xml");
 	File contactFile = getXmlFilePath("example-new-contact.xml");
-
+	File contactFile_1 = getXmlFilePath("example-new-contact-2nd.xml");
+	
 	@Test
 	public void putContactsDocument(){
 		if(contactsFile.exists()){
@@ -56,11 +57,23 @@ public class TestSingPut extends TestBase{
 	
 	@Test
 	public void putContactByIndexSelector(){
-		
+		int index = 4;
+		String u = url.concat(constructSecondLayerSelectorByIndex(index));
+		try {
+			putReqClient(u, contactFile_1);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Test
 	public void putContactByTagNameSelector(){
+		String u = url.concat("/conatct");
+		try {
+			putReqClient(u, null);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 	}
 	
@@ -80,10 +93,43 @@ public class TestSingPut extends TestBase{
 		
 	}
 	
+	@Test
+	public void putEmailByTagName(){
+		
+	}
+	
+	@Test
+	public void putEmailByIndex(){
+		
+	}
+	
+	//@Ignore
+	@Test
+	public void testContactPut(){
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+	    factory.setNamespaceAware(true);
+	    
+	    Document doc = null;
+	    Element element = null;
+	    String topTagName = null;
+		try {
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			doc = builder.parse(contactsFile);	
+			
+			element = doc.getDocumentElement();
+			topTagName = element.getTagName();		
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		//NodeList list = element.getElementsByTagName("contact");
+		NodeList lis = doc.getElementsByTagName("contact");
+		System.out.println(lis.getLength());
+	}
 	
 	/**
 	 * 在jboss 5.1下 ,put 操作有错。
 	 */
+	@Ignore
 	@Test
 	public void testHttpPut(){
 		String url = "http://localhost:8080/xcap-root/http-put-test";

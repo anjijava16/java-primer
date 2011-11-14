@@ -120,11 +120,12 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 					if(thridSelector.matches(SingConstant.PATTERN_THIRD_LAYER_SELECTOR_BY_INDEX)){
 						//enable thridSelector as node tag name. 
 						int end = thridSelector.indexOf("[");
-						log.info("--------thridSelector  by index:" + thridSelector);
 						thridSelector = thridSelector.substring(0, end);
 					}
+					log.info("get ,thridSelector:" + thridSelector);
 					String entityFieldName = SingConstant.titleFieldMapping.get(thridSelector);
 					log.info("entityFieldName:" + entityFieldName);
+					log.info("entity.toString:" + entity);
 					if(entityFieldName != null && entity != null){
 						String fieldValue = null; 
 						try {
@@ -284,7 +285,7 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 		}
 		
 		if(SingConstant.isDocSelector(nodeSelector)){
-			List<SingSpacesContactEntity> conatcts = xmlToEntitys(element);
+			List<SingSpacesContactEntity> conatcts = xmlToEntitys(doc);
 			contactsDao.deleteByUserId(userId);
 			contactsDao.save(userId,conatcts);
 			return new ResultData(ResultData.STATUS_200, "");
@@ -316,15 +317,15 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 		    			long size = contactsDao.getListSize(userId);
 		    			switch ((int)size) {
 						case 0:
-							List<SingSpacesContactEntity> conatcts = xmlToEntitys(element);
+							List<SingSpacesContactEntity> conatcts = xmlToEntitys(doc);
 							contactsDao.save(userId,conatcts);
-							break;
+							return new ResultData(ResultData.STATUS_200, "");
 						case 1:
 							//delete first record by userId
 							contactsDao.deleteContactByIndexSelector(userId, 1);
-							conatcts = xmlToEntitys(element);
+							conatcts = xmlToEntitys(doc);
 							contactsDao.save(userId,conatcts);
-							break;
+							return new ResultData(ResultData.STATUS_200, "");
 						}
 		    		}else if(secondLayerSelector.matches(SingConstant.PATTERN_CONTACT_INDEX)){
 		    			//by index
@@ -334,17 +335,20 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 		    				if(index <= size){
 		    					//update
 		    					contactsDao.deleteContactByIndexSelector(userId, index);
-				    			List<SingSpacesContactEntity> list = xmlToEntitys(element);
+				    			List<SingSpacesContactEntity> list = xmlToEntitys(doc);
 				    			contactsDao.save(userId, list);
+				    			return new ResultData(ResultData.STATUS_200, "");
 		    				}else if(index == size +1){
 		    					//add
-				    			List<SingSpacesContactEntity> list = xmlToEntitys(element);
+				    			List<SingSpacesContactEntity> list = xmlToEntitys(doc);
 				    			contactsDao.save(userId, list);
+				    			return new ResultData(ResultData.STATUS_200, "");
 		    				}
 		    			}
 		    			
 		    		}else if(secondLayerSelector.matches(SingConstant.PATTERN_CONTACT_UNIQUE_ATTR)){
 		    			//by unique attr(contact id.)
+		    			log.info("put contact by unique attribute...");
 		    			long attr = SingConstant.getUniqueAttrValue(secondLayerSelector);
 		    			if(attr != -1){
 		    				SingSpacesContactEntity en = contactsDao.getByUniqueAttr(userId, attr);
@@ -352,8 +356,9 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 		    					em.remove(en);
 		    				}		    				
 		    			}
-		    			List<SingSpacesContactEntity> list = xmlToEntitys(element);
+		    			List<SingSpacesContactEntity> list = xmlToEntitys(doc);
 		    			contactsDao.save(userId, list);
+		    			return new ResultData(ResultData.STATUS_200, "");
 		    		}
 		    		
 		    	}
@@ -377,6 +382,7 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 	    			try {
 	    				BeanUtils.setProperty(selectorRecord, fieldName, fieldValue);
 	    				em.merge(selectorRecord);
+	    				return new ResultData(ResultData.STATUS_200, "");
 	    			} catch (Exception e) {
 	    				e.printStackTrace();
 	    			}		    					    		
@@ -801,13 +807,13 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 		//System.out.println("topTagName:" + topTagName);
 		NodeList nodes = element.getElementsByTagName("contact");
 		
-		xmlToEntitys(element);
+		xmlToEntitys(doc);
 	}
 	
-	private static List<SingSpacesContactEntity> xmlToEntitys(Element conatcts){
+	private static List<SingSpacesContactEntity> xmlToEntitys(Document conatcts){
 		List<SingSpacesContactEntity> list = new ArrayList<SingSpacesContactEntity>();
 		NodeList nodes = conatcts.getElementsByTagName(NODE_CONTACT);
-		log.info("contact size is " + nodes.getLength());
+		log.info("xml contact size is " + nodes.getLength());
 		for (int i = 0; i < nodes.getLength(); i++) {
 			Node node = nodes.item(i);
 			NodeList children = node.getChildNodes();
