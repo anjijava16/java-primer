@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <digester-rules>
 	<pattern value="academy">
-		<object-create-rule classname="Academy" />
+		<object-create-rule classname="com.xml.apache.digester.academy.Academy" />
 		<set-properties-rule />
 		<pattern value="student">
-			<object-create-rule classname="Student" />
+			<object-create-rule classname="com.xml.apache.digester.academy.Student" />
 			<set-properties-rule />
 			<pattern value="course">
-				<object-create-rule classname="Course" />
+				<object-create-rule classname="com.xml.apache.digester.academy.Course" />
 				<bean-property-setter-rule pattern="id" />
 				<bean-property-setter-rule pattern="name" />
 				<set-next-rule methodname="addCourse" />
@@ -16,7 +16,7 @@
 		</pattern>
 		
 		<pattern value="teacher">
-			<object-create-rule classname="Teacher" />
+			<object-create-rule classname="com.xml.apache.digester.academy.Teacher" />
 			<set-properties-rule />
 			<call-method-rule pattern="certification"
 				methodname="addCertification" paramcount="1" />

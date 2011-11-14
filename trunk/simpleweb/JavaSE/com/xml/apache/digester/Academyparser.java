@@ -1,28 +1,47 @@
 package com.xml.apache.digester;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
-import java.util.Vector;
+import java.net.URL;
 
 import org.apache.commons.digester.Digester;
+import org.apache.commons.digester.xmlrules.DigesterLoader;
 import org.junit.Test;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import com.xml.apache.digester.academy.Academy;
+import com.xml.apache.digester.academy.Course;
+import com.xml.apache.digester.academy.Student;
+import com.xml.apache.digester.academy.Teacher;
+
 public class Academyparser {
-	public void addCourse(){
-		
-	}
+	private String aca = "JavaSE/com/xml/apache/digester/xml.academy.xml";
+	private File xmlFile = new File(aca);
+	private String file = "JavaSE/com/xml/apache/digester/xml.academy.rule.xml";
 	
-	public void addStudent(){
+	@Test
+	public void digestXmlRules(){
+		FileReader characterStream = null;
+		try {
+			characterStream = new FileReader(file);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		InputSource rulesSource = new InputSource(characterStream);
+		Digester digester = DigesterLoader.createDigester(rulesSource);
 		
-	}
-	
-	public void addCertification(){
-		
-	}
-	
-	public void addTeacher(){
-		
+		//URL url= this.getClass().getClassLoader().getResource("xml.academy.xml");
+		try {
+			Academy aca = (Academy)digester.parse(xmlFile);
+			System.out.println(aca);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (SAXException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Test
@@ -51,7 +70,7 @@ public class Academyparser {
 		digester.addCallParam("academy/teacher/certification", 0);
 		digester.addSetNext("academy/teacher", "addTeacher");
 		try {
-			Academy a = (Academy) digester.parse(new File("JavaSE/com/xml/apache/digester/xml.academy.xml"));
+			Academy a = (Academy) digester.parse(xmlFile);
 			System.out.print(a);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -61,116 +80,4 @@ public class Academyparser {
 			e.printStackTrace();
 		}
 	}
-}
-
-class Academy {
-	private String name;
-	private Vector<Student> students;
-	private Vector<Teacher> teachers;
-
-	@Override
-	public String toString() {
-		return "Academy [name=" + name + ", students=" + students
-				+ ", teachers=" + teachers + "]";
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public Vector<Student> getStudents() {
-		return students;
-	}
-
-	public void setStudents(Vector<Student> students) {
-		this.students = students;
-	}
-
-	public Vector<Teacher> getTeachers() {
-		return teachers;
-	}
-
-	public void setTeachers(Vector<Teacher> teachers) {
-		this.teachers = teachers;
-	}
-
-}
-
-class Student {
-	private String name;
-	private String division;
-	private Vector<Course> courses;
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getDivision() {
-		return division;
-	}
-
-	public void setDivision(String division) {
-		this.division = division;
-	}
-
-	public Vector<Course> getCourses() {
-		return courses;
-	}
-
-	public void setCourses(Vector<Course> courses) {
-		this.courses = courses;
-	}
-
-}
-
-class Course {
-	private String id;
-	private String name;
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-}
-
-class Teacher {
-	private String name;
-	private Vector certifications;
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public Vector getCertifications() {
-		return certifications;
-	}
-
-	public void setCertifications(Vector certifications) {
-		this.certifications = certifications;
-	}
-
 }
