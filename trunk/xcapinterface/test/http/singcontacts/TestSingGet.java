@@ -56,7 +56,7 @@ public class TestSingGet extends TestBase{
 	 */
 	@Test
 	public void getNameBy_a_i(){
-		long contactId = 23488;
+		long contactId = 73950;
 		String sel = constructSecondLayerSelectorByUniqueAttr(String.valueOf(contactId));
 		//String u = url.concat(sel).concat("/name");
 		String u = url.concat(sel).concat("/name").concat(LEFT_SQUARE_BRACKET).concat("1").concat(RIGHT_SQUARE_BRACKET);
@@ -69,16 +69,26 @@ public class TestSingGet extends TestBase{
 	 */
 	@Test
 	public void getDispNameBy_a_t(){
-		long contactId = 23488;
+		long contactId = 73950;
 		String sel = constructSecondLayerSelectorByUniqueAttr(String.valueOf(contactId)).concat("/dispName");
 		getReqClient(url.concat(sel));
 	}
 
 	@Test
 	public void getEmalBy_a_t(){
-		long contactId = 23488;
+		long contactId = 73950;
 		String sel = constructSecondLayerSelectorByUniqueAttr(String.valueOf(contactId)).concat("/email");
 		getReqClient(url.concat(sel));
+	}
+
+	/**
+	 * 1st layer  index selector
+	 * 2nd layer tag name selector
+	 * 3rd layer index selector
+	 */	
+	@Test
+	public void getEmailItemBy_i_t_i(){
+		
 	}
 	
 }

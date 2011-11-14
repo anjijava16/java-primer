@@ -1,36 +1,36 @@
 	<contact>
-		<dispName>hi slieer</dispName>
+		<dispName>Chen Jianbin</dispName>
 		<name>
-			<fn>Xun</fn>
-			<ln>Frank</ln>
+			<fn>Chen</fn>
+			<ln>Jianbin</ln>
 		</name>
-		<title>engineer</title>
-		<bday>2008-12-15</bday>
+		<title>actor/director</title>
+		<bday>1970-12-15</bday>
 		<adr>
 			<item type="WORK">xixiangbuxingjie;;;;;;</item>
 			<item type="HOME">kefalu;;;shenzheng;guangdong;1345641;china</item>
 		</adr>
 		<tel>
-			<item type="">12453456346</item>
-			<item type="CELL">13691417240</item>
+			<item type="">1353003</item>
+			<item type="CELL">9954</item>
 			<item type="HOME">01068747151</item>
 			<item type="WORK">01068747151</item>
 			<item type="FAX;HOME">9141724</item>
 			<item type="FAX;WORK">3424424</item>
 		</tel>
 		<email>
-			<item type="">xie@gmail.com</item>
-			<item type="PREF">hong@hotmail.com</item>
-			<item type="HOME">ong@hotmail.com</item>
-			<item type="WORK">xie@gmail.com</item>
+			<item type="">1@gmail.com</item>
+			<item type="PREF">2@hotmail.com</item>
+			<item type="HOME">3@hotmail.com</item>
+			<item type="WORK">4@gmail.com</item>
 		</email>
 		<org>
-			<item>borqs shenzhen</item>
+			<item>Borqs Shaihai</item>
 		</org>
 		<url>
-			<item>http://www.google.com.hk/</item>
+			<item>http://hi.baidu.com/slieer/home</item>
 		</url>
-		<note>ss</note>
+		<note>11月14日早7：40左右，西安太白路与科创路十字西南角嘉天国际公寓一层店铺发生爆炸，冲击波伤及路边公交站侯车人员和行人。</note>
 		<!-- 
 		 <lastModify>2011-10-20 12:58:22</lastModify>
 		 -->
