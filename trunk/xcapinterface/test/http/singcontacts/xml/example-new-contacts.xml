@@ -33,9 +33,6 @@
 			<item>http://www.google.com.hk/</item>
 		</url>
 		<note>s---s</note>
-		<!-- 
-		 <lastModify>2011-10-20 12:58:22</lastModify>
-		 -->
 	</contact>
 	<contact>
 		<dispName>slieer</dispName>
@@ -72,8 +69,5 @@
 			<item>http://www.google.com.hk/</item>
 		</url>
 		<note/>
-		<!-- 
-		 <lastModify>2011-10-20 12:58:22</lastModify>		
-		 -->
 	</contact>
 </contacts>

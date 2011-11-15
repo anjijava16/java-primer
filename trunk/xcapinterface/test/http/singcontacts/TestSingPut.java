@@ -27,6 +27,12 @@ public class TestSingPut extends TestBase{
 	File contactFile = getXmlFilePath("example-new-contact.xml");
 	File contactFile_1 = getXmlFilePath("example-new-contact-2nd.xml");
 	
+	File nameFile = getXmlFilePath("example-new-name.xml");
+	File dispNameFile = getXmlFilePath("example-new-dispName.xml");
+	
+	File telFile = getXmlFilePath("example-new-tel.xml");
+	File emailFile = getXmlFilePath("example-new-email.xml");
+	
 	@Test
 	public void putContactsDocument(){
 		if(contactsFile.exists()){
@@ -42,7 +48,8 @@ public class TestSingPut extends TestBase{
 	
 	@Test
 	public void putContactByAttrSelector(){
-		String contactId = "1";
+		String contactId = "1"; //add
+		//String contactId = "";
 		String u = url.concat(constructSecondLayerSelectorByUniqueAttr(contactId));
 		if(contactFile.exists()){
 			try {
@@ -57,7 +64,7 @@ public class TestSingPut extends TestBase{
 	
 	@Test
 	public void putContactByIndexSelector(){
-		int index = 4;
+		int index = 3;
 		String u = url.concat(constructSecondLayerSelectorByIndex(index));
 		try {
 			putReqClient(u, contactFile_1);
@@ -68,25 +75,35 @@ public class TestSingPut extends TestBase{
 	
 	@Test
 	public void putContactByTagNameSelector(){
-		String u = url.concat("/conatct");
+		String u = url.concat("/~~/conatcts/contact");
 		try {
-			putReqClient(u, null);
+			putReqClient(u, contactFile);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
 	}
 	
+	/**
+	 * lst selector
+	 * 2nd selector: tag name/uniqueAttr/index
+	 * 3rd selector: tag name
+	 */
 	@Test
-	public void putNameByTagName(){
-		
-	}
-	
-	@Test
-	public void putNameByAttr(){
-		
-	}
+	public void putNameNameByTagName(){
+		int index = 0;
+		String contactId = "";
+		String url1 = url.concat(constructSecondLayerSelectorByIndex(index)).concat("/name");
+		String url2 = url.concat(constructSecondLayerSelectorByUniqueAttr(contactId)).concat("/name");
 
+		try {
+			putReqClient(url1, nameFile);
+			putReqClient(url2, nameFile);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	@Test
 	public void putNameByTagIndex(){
@@ -95,7 +112,16 @@ public class TestSingPut extends TestBase{
 	
 	@Test
 	public void putEmailByTagName(){
-		
+		int index = 0;
+		String contactId = "";
+		String url1 = url.concat(constructSecondLayerSelectorByIndex(index)).concat("/email");
+		String url2 = url.concat(constructSecondLayerSelectorByUniqueAttr(contactId)).concat("/email");
+		try {
+			putReqClient(url1, emailFile);
+			putReqClient(url2, emailFile);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Test

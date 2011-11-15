@@ -125,8 +125,8 @@ public abstract class TestBase {
 		HttpClient httpclient = new DefaultHttpClient(cm);
  		HttpDelete httpDelete = new HttpDelete(url);
  		
-		httpclient.execute(httpDelete);
-		 System.out.println("executing request " + httpDelete.getRequestLine());
+		//httpclient.execute(httpDelete);
+		System.out.println("executing request " + httpDelete.getRequestLine());
         response(httpclient, httpDelete);
 	}
 	

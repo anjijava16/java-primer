@@ -102,13 +102,17 @@ public class SingSpacesContactsDao {
 	}
 	
 	public int deleteByUserId(long userId){
+		log.info("delete by user id , userId is " + userId);
 		Query query = em.createNamedQuery("deleteByUserId");
 		query.setParameter("userId", userId);
 		return query.executeUpdate();
 	}
 
 	public int deleteByUserId(long userId,long contactId){
+		log.info("delete by (contactId, userId) ->" + contactId + " " + userId );
 		Query query = em.createNamedQuery("deleteByUserIdAndContactId");
+		query.setParameter("userId", userId);
+		query.setParameter("contactId", contactId);
 		return query.executeUpdate();
 	}
 	
@@ -119,10 +123,11 @@ public class SingSpacesContactsDao {
 	 * @return -1 index invalid ,or delete OK.
 	 */
 	public int deleteContactByIndexSelector(long userId, int index){
-		
+		log.info("delete contact by index, userId,index->" + userId + "," + index);
 		if(index >= 1){
 			SingSpacesContactEntity entity = getByIndex(userId,index);			
 			if(entity != null){
+				log.info("remove sing contact, conttactId is " + entity.getContactId());
 				em.remove(entity);
 				return 1;
 			}

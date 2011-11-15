@@ -373,7 +373,9 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 					if (size == 1) {
 						int affectRows = contactsDao.deleteContacts(userId);
 						return new ResultData(ResultData.STATUS_200, "");
-					} else {
+					} if(size == 0){
+						return new ResultData(ResultData.STATUS_404, "");
+					}else {
 						return new ResultData(ResultData.STATUS_409,
 								new XCAPErrors.CannotDeleteConflictException()
 										.getResponseContent());
