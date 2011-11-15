@@ -91,4 +91,44 @@ public class TestSingGet extends TestBase{
 		
 	}
 	
+	
+	
+	
+	/**
+	 * <li>CELL:+8613910193672|:+861085205599|WORK:+861085205588|WORK:+861085205205|
+	 * <li>:http://www.google.com.hk/|:http://www.google.com.hk/|
+	 * <li>:http://www.utstar.com|WORK:http://www.utstar.com|
+	 * <li>first split by vertical line.
+	 * <li>second split by coln(:)
+	 * @param adr
+	 * @return
+	 */
+	@Test
+	public void splitByVerticalLineAndColon() {
+		//String adr = "CELL:+8613910193672|:+861085205599|WORK:+861085205588|WORK:+861085205205|";
+		//String adr = ":http://www.google.com.hk/|:http://www.google.com.hk/|";
+		String adr = ":http://www.utstar.com|WORK:http://www.utstar.com|";
+		if(adr != null){
+			String[] adrArr = adr.split("\\|");
+			String[][] adrInfo = new String[adrArr.length][];
+			for(int i = 0; i < adrArr.length; i++){
+				String temp = adrArr[i];
+				int splitIndex = temp.indexOf(":");
+				if(splitIndex != -1){
+					adrInfo[i] = new String[2];
+					if(splitIndex == 0){
+						adrInfo[i][0] = "";
+					}else{
+						adrInfo[i][0] = temp.substring(0,splitIndex);						
+					}
+					adrInfo[i][1] = temp.substring(splitIndex + 1, temp.length());
+				}
+			}
+			//adrInfo;
+			
+			System.out.println(adrInfo);
+		}
+	}
+	
+	
 }

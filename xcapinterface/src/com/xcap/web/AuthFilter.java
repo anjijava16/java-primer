@@ -50,7 +50,7 @@ public class AuthFilter implements Filter {
 		resp.setCharacterEncoding("utf-8");
 		
 		Map<Field, String> urlResult = Url.parserUrl(url);
-		log.info("-----------urlResult:" + urlResult);
+		log.info("xcap url data:" + urlResult);
 		if(urlResult != null && urlResult.size() > 0){
 			String token = urlResult.get(Field.TOKEN);
 			String auid = urlResult.get(Field.AUID);
@@ -58,7 +58,7 @@ public class AuthFilter implements Filter {
 			String queryString = urlResult.get(Field.QUERYSTRING);
 			
 			Map<Token.TokenInfo, String> tokenInfo = Token.parseTokenXML(token);
-			log.info("tokenInfo:" + tokenInfo);
+			log.info("token info:" + tokenInfo);
 			
 			if(tokenInfo == null){
 				resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -130,7 +130,7 @@ public class AuthFilter implements Filter {
 		 *         <li> map size==0, url exception(~~ should only one)</li>
 		 */
 		public static Map<Field,String> parserUrl(String url){
-			log.info("---------url:" + url);
+			//log.info("xcap request url:" + url);
 			if(url != null){
 				
 				String[] temps = url.split(Constants.INTERVAL_SIGN);  //split docmuent selector /node document.
@@ -141,12 +141,12 @@ public class AuthFilter implements Filter {
 				if(temps.length == 1){
 					documentSelectorInfo = temps[0].split("/"); 
 				}else if(temps.length == 2){
-					log.info("-------------document selector:" + temps[0] + "  queryString:" + temps[1] + " temp.length:" + temps.length);
+					//log.info("-------------document selector:" + temps[0] + "  queryString:" + temps[1] + " temp.length:" + temps.length);
 					documentSelectorInfo = temps[0].split("/");
 					nodeSelectorInfo = temps[1];
 				}
 				
-				log.info("----------------------documentSelectorInfo.length:" + documentSelectorInfo.length);
+				//log.info("----------------------documentSelectorInfo.length:" + documentSelectorInfo.length);
 				if(documentSelectorInfo != null && documentSelectorInfo.length == 6){
 					//documentSelectorInfo =[, xcap-root, contacts, 8613480783139, DDcs3x7JwQQwqvOT751dhyp3s2od75lFbuwRL9UfCpJSwAeSqwV0bw**, index]
 					int index = 2;

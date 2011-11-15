@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<email>
-	<item type="">xie@gmail.com</item>
-	<item type="PREF">hong@hotmail.com</item>
-	<item type="HOME">ong@hotmail.com</item>
-	<item type="WORK">xie@gmail.com</item>
-</email>
+<tel>
+	<item type="">8888</item>
+	<item type="CELL">9999</item>
+	<item type="FAX;WORK">6666</item>
+</tel>

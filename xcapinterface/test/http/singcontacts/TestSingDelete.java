@@ -19,16 +19,36 @@ public class TestSingDelete extends TestBase{
 		}
 	}
 	
+	/**
+	 * the same as {@link TestSingDelete#delContacts()}
+	 */
 	@Test
-	public void delContactByTagName(){
-		String u = url.concat("/contact");
+	public void delContactsByTagName(){
+		String u = url.concat("/~~/contacts");
 		try {
 			deleteReqClient(u);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+
 	
+	/**
+	 * the same as {@link TestSingDelete#delContacts()}
+	 */
+	@Test
+	public void delContactByTagName(){
+		String u = url.concat("/~~/contacts/contact");
+		try {
+			deleteReqClient(u);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * if by index selected record exist, delete it.
+	 */
 	@Test
 	public void delContactByIndex(){
 		int index = 1;
@@ -42,14 +62,30 @@ public class TestSingDelete extends TestBase{
 
 	@Test
 	public void delContactByUniqueAttr(){
+		//String contactId = "1";
 		String contactId = "1";
 		String u = url.concat(constructSecondLayerSelectorByUniqueAttr(contactId));
 		try {
-			deleteReqClient(contactId);
+			deleteReqClient(u);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
+	@Test
+	public void getUniqueAttrValue(){
+		String nodeSelector = "contact[@id=\"1\"]";
+		int beginIndex = nodeSelector.indexOf("=\"");
+		int endIndex = nodeSelector.indexOf("\"]");
+
+		if (beginIndex != -1 && endIndex != -1 && beginIndex < endIndex) {
+			String contactId = nodeSelector.substring(beginIndex + 2, endIndex); //is attribute type
+			
+			if(contactId.matches("\\d+")){
+				System.out.println(Long.valueOf(contactId));;					
+			}
+		}
+	}
 }
+

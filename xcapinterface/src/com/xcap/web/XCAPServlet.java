@@ -53,7 +53,7 @@ public class XCAPServlet extends HttpServlet {
 		String nodeSelector = (String) req.getAttribute("queryString");
 		String method = (String) req.getAttribute("method");
 
-		log.info("------(method,userId, auid,nodeSelector) = " + method + ","
+		log.info("(method,userId, auid,nodeSelector) = " + method + ","
 				+ userId + "," + auid + "," + nodeSelector);
 
 		String jndi = null;
@@ -71,7 +71,7 @@ public class XCAPServlet extends HttpServlet {
 		}
 
 		XCAPDatebaseLocalIfc xcapIfc = (XCAPDatebaseLocalIfc) Utils.lookupEJB(jndi);
-		log.info("-----------xcapIfc proxy:" + xcapIfc);
+		//log.info("-----------xcapIfc proxy:" + xcapIfc);
 		if (xcapIfc != null) {
 			HttpMethod httpMethod = HttpMethod.valueOf(method);
 			switch (httpMethod) {

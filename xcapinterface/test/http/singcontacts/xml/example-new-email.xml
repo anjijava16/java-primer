@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tel>
-	<item type="">12453456346</item>
-	<item type="CELL">13691417240</item>
-	<item type="HOME">01068747151</item>
-	<item type="WORK">01068747151</item>
-	<item type="FAX;HOME">9141724</item>
-	<item type="FAX;WORK">3424424</item>
-</tel>
+<email>
+	<item type="">a@gmail.com</item>
+	<item type="PREF">b@hotmail.com</item>
+	<item type="HOME">c@hotmail.com</item>
+	<item type="WORK">d@gmail.com</item>
+</email>

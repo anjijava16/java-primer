@@ -34,6 +34,7 @@ import org.xml.sax.InputSource;
 import com.xcap.dao.SingSpacesContactsDao;
 import com.xcap.dao.entity.SingSpacesContactEntity;
 import com.xcap.ifc.XCAPDatebaseLocalIfc;
+import com.xcap.ifc.XCAPDatebaseLocalIfc.ResultData;
 import com.xcap.ifc.error.XCAPErrors;
 
 /**
@@ -209,7 +210,7 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 									int endIndex = secondSelector.indexOf("\"]");
 
 									if (beginIndex != -1 && endIndex != -1 && beginIndex < endIndex) {
-										String contactIdTemp = fourthSelector.substring(beginIndex, endIndex); //is attribute type
+										String contactIdTemp = fourthSelector.substring(beginIndex + 2, endIndex); //is attribute type
 										int isUnique = -1;  //0 OK, 1 not unique.
 										String[] attrNameValue = null;
 										for (int i = 0; i < valueArray.length; i++) {
@@ -468,25 +469,41 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 	public ResultData delete(String userId_, String nodeSelector) {
 		long userId = Long.valueOf(userId_);
 		int effectRows = -1;
-		if(nodeSelector != null && nodeSelector.equals(NODE_CONTACTS)){
+		if(nodeSelector == null || nodeSelector.equals(NODE_CONTACTS)){
 			//delete all
 			effectRows = contactsDao.deleteByUserId(userId);
 		}else{
 			String[] selParts = nodeSelector.split("/");
 			if(selParts != null && selParts.length ==2 && selParts[0].equals(NODE_CONTACTS)){
 				if(selParts[1].equals(NODE_CONTACT)){
-					//delete by first
+					log.info("delete contact by tagName...");
+					long size = contactsDao.getListSize(userId);
+					
+					switch (Long.valueOf(size).intValue()) {
+					case 0:
+						return new ResultData(ResultData.STATUS_404,"");
+					case 1:
+						contactsDao.deleteContactByIndexSelector(userId, 1);
+						return new ResultData(ResultData.STATUS_200, "");
+
+					default:
+						return new ResultData(ResultData.STATUS_409,
+								new XCAPErrors.CannotDeleteConflictException().getResponseContent());
+					}					
 				}else if(selParts[1].matches(SingConstant.PATTERN_CONTACT_INDEX)){
-					int index = SingConstant.getIndex(nodeSelector);
+					int index = SingConstant.getIndex(selParts[1]);
+					log.info("delete contact by index ,index is " + index);
 					effectRows = contactsDao.deleteContactByIndexSelector(userId, index);
 				}else if(selParts[1].matches(SingConstant.PATTERN_CONTACT_UNIQUE_ATTR)){
-					long contactId = SingConstant.getUniqueAttrValue(nodeSelector);
-					effectRows = contactsDao.deleteByUserId(userId, contactId);
+					long contactId = SingConstant.getUniqueAttrValue(selParts[1]);
+					log.info("delete contact by uniqueAttr, (contactId, userId)-> " + contactId + "," + userId);
+				    effectRows = contactsDao.deleteByUserId(userId, contactId);
+					
 				}
 			}
 		}
-		
-		return new ResultData(effectRows == -1 ? ResultData.STATUS_404 : ResultData.STATUS_200, "");
+		log.info("delete ok, effectRows is " + effectRows);
+		return new ResultData(effectRows == 0 ? ResultData.STATUS_404 : ResultData.STATUS_200, "");
 	}
 	
 	
@@ -603,9 +620,9 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 		static long getUniqueAttrValue(String nodeSelector){
 			int beginIndex = nodeSelector.indexOf("=\"");
 			int endIndex = nodeSelector.indexOf("\"]");
-
 			if (beginIndex != -1 && endIndex != -1 && beginIndex < endIndex) {
-				String contactId = nodeSelector.substring(beginIndex, endIndex); //is attribute type
+				String contactId = nodeSelector.substring(beginIndex + 2, endIndex); //is attribute type
+				log.info("getUniqueAttrValue..." + contactId);
 				if(contactId.matches("\\d+")){
 					return Long.valueOf(contactId);					
 				}
@@ -662,6 +679,7 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 	 */
 	private static boolean getContact(SingSpacesContactEntity entity, StringBuilder builder){
 		if(entity != null){
+			log.info(entity);
 			String id = entity.getContactId().toString();
 			builder.append("<".concat(NODE_CONTACT).concat(" id=\"").concat(id).concat("\">"));
 
@@ -716,6 +734,7 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 
 	/**
 	 * <li>CELL:+8613910193672|:+861085205599|WORK:+861085205588|WORK:+861085205205|
+	 * <li>:http://www.google.com.hk/|:http://www.google.com.hk/|
 	 * <li>first split by vertical line.
 	 * <li>second split by coln(:)
 	 * @param adr
@@ -724,20 +743,22 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 	private static String[][] splitByVerticalLineAndColon(String adr) {
 		log.info("splitByVerticalLineAndColon:" + adr);
 		if(adr != null){
-			String[] addrArr = adr.split("\\|");
-			String[][] adrInfo = new String[addrArr.length][];
-			for(int i = 0; i < addrArr.length; i++){
-				String temp = addrArr[i];
-				String[] typeValue = temp.split(":");
-				if(typeValue.length == 2){
-					String[] oneAdr = new String[]{typeValue[0], typeValue[1]};				
-					adrInfo[i] = oneAdr;
-				}else if(typeValue.length == 1){
-					String[] oneAdr = new String[]{"", typeValue[1]};				
-					adrInfo[i] = oneAdr;				
+			String[] adrArr = adr.split("\\|");
+			String[][] adrInfo = new String[adrArr.length][];
+			for(int i = 0; i < adrArr.length; i++){
+				String temp = adrArr[i];
+				int splitIndex = temp.indexOf(":");
+				if(splitIndex != -1){
+					adrInfo[i] = new String[2];
+					if(splitIndex == 0){
+						adrInfo[i][0] = "";
+					}else{
+						adrInfo[i][0] = temp.substring(0,splitIndex);						
+					}
+					adrInfo[i][1] = temp.substring(splitIndex + 1, temp.length());
 				}
 			}
-			return adrInfo;			
+			return adrInfo;
 		}else {
 			return null;
 		}
