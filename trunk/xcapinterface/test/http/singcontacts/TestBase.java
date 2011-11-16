@@ -30,7 +30,7 @@ public abstract class TestBase {
 	public static String XML_TEXT_TAGNAME = "#text";
 	public static String CODING = "UTF-8";
 	/** [ */
-	public static String LEFT_SQUARE_BRACKET = "%5B";
+	public static String LEFT_SQUARE_BRACKET = "%5B"; //[
 	/**]*/
 	public static String RIGHT_SQUARE_BRACKET = "%5D";  //]
 	/**@*/

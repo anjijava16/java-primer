@@ -50,15 +50,19 @@ public class SingSpacesContactsDao {
 	 */
 	@TransactionAttribute(value=TransactionAttributeType.NEVER)
 	public SingSpacesContactEntity getByIndex(long userId, int index){
-		Query query = em.createNamedQuery("byIndexAndStatus");
-		query.setParameter("userId", userId);
-		query.setParameter("index", index -1);
-		query.setParameter("status", STATUS);
-
-		@SuppressWarnings("unchecked")
-		List<SingSpacesContactEntity> list = query.getResultList();
-		
-		return list.size() > 0 ? list.get(0) : null;
+		log.info("get contact by userId,index ,status. userId,index,status:" + userId + "," + index + "," + STATUS);
+		if(index >= 1){
+			Query query = em.createNamedQuery("byIndexAndStatus");
+			query.setParameter("userId", userId);
+			query.setParameter("index", index -1);
+			query.setParameter("status", STATUS);
+			
+			@SuppressWarnings("unchecked")
+			List<SingSpacesContactEntity> list = query.getResultList();
+			
+			return list.size() > 0 ? list.get(0) : null;
+		}
+		return null;
 	}
 	
 	@TransactionAttribute(value=TransactionAttributeType.NEVER)

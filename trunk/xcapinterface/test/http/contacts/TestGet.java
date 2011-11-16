@@ -21,11 +21,17 @@ public class TestGet extends TestBase{
 	public void runBeforeTest(){
 	} 
 	
+	/**
+	 * get contact list by userId.
+	 */
 	@Test
 	public void getDocument(){
 		getReqClient(url);
 	}
 
+	/**
+	 * get contact list by userId.
+	 */
 	@Test
 	public void getDocumentByTagName(){
 		String u = url.concat("/~~/contacts");
@@ -33,6 +39,9 @@ public class TestGet extends TestBase{
 	}
 	
 	
+	/**
+	 * get contact by index.
+	 */
 	@Test
 	public void getNodeByIndex(){
 		int index = 1;
@@ -43,6 +52,9 @@ public class TestGet extends TestBase{
 		
 	}
 	
+	/**
+	 * get contact by unique attr.
+	 */
 	@Test
 	public void getNodeByUniqueAttr(){
 /*		String nodeSelector = "/~~/contacts/contact{0}{1}method={2}8405566{2}{3}";
@@ -58,12 +70,18 @@ public class TestGet extends TestBase{
 		getReqClient(u);		
 	}
 	
+	/**
+	 * get contact by tag name.
+	 */
 	@Test
 	public void getNodeByTagName(){
 		String nodeSelector = constructSelectorByTagName();		
 		getReqClient(url.concat(nodeSelector));
 	}	
 	
+	/**
+	 * get conatctName.
+	 */
 	@Test
 	public void getLeafNodeByTagName(){
 		int i = 2;
@@ -72,24 +90,24 @@ public class TestGet extends TestBase{
 		switch (i) {
 		case 0:
 			//tag name/tagName
+			nodeSelector = construct_T_T_Leaf(TageName.contactName);
+			u = url.concat(nodeSelector);
 			break;
 		case 1:
 			//index/tagName
 			int index = 1;
 			nodeSelector = construct_I_T_Leaf(index, TageName.contactName);
 			u = url.concat(nodeSelector);
-			getReqClient(u);
 			break;
 		case 2:
 			//attr/tagName
 			String uniqueAttr = "9999939999"; // method.
 			nodeSelector = construct_A_T_Leaf(uniqueAttr, TageName.contactName);
 			u = url.concat(nodeSelector);
-			log.info(u);
-			getReqClient(u);
 			break;
 		}
-		
+		log.info(u);
+		getReqClient(u);
 	}
 
 	@Test
