@@ -16,18 +16,27 @@ public class TestSingGet extends TestBase{
 	public void runBeforeTest(){
 	} 
 	
+	/**
+	 * get contact list
+	 */
 	@Test
 	public void getDocument(){
 		log.info("url:" + url);
 		getReqClient(url);
 	}
-
+	
+	/**
+	 * get contact list.
+	 */
 	@Test
 	public void getDocumentByTagName(){
 		String u = url.concat("/~~/contacts");
 		getReqClient(u);
 	}
 	
+	/**
+	 * get contact by tag name.
+	 */
 	@Test
 	public void getContactNodebyTagName(){
 		String sel = "/~~/contacts/contact";
@@ -35,6 +44,9 @@ public class TestSingGet extends TestBase{
 		getReqClient(u);
 	}
 	
+	/**
+	 * get contact by index.
+	 */
 	@Test
 	public void getContactNodebyIndex(){
 		String sel = constructSecondLayerSelectorByIndex(10);
@@ -42,6 +54,9 @@ public class TestSingGet extends TestBase{
 		getReqClient(u);		
 	}
 
+	/**
+	 * get contact by unique attr.
+	 */
 	@Test
 	public void getContactNodebyUniqueAttr(){
 		long contactId = 23479;
@@ -51,6 +66,7 @@ public class TestSingGet extends TestBase{
 	}
 	
 	/**
+	 * get name node.
 	 * second layer is unique attribute selector.
 	 * third layer is tag name selector/index selector.
 	 */
@@ -64,8 +80,9 @@ public class TestSingGet extends TestBase{
 	}
 	
 	/**
-	 * lst layer  attr sel
-	 * sec layer tag name sel
+	 * get dispName node.
+	 * 2nd layer  attr sel
+	 * 3rd layer tag name sel
 	 */
 	@Test
 	public void getDispNameBy_a_t(){
@@ -74,25 +91,53 @@ public class TestSingGet extends TestBase{
 		getReqClient(url.concat(sel));
 	}
 
+	/**
+	 * get email node.
+	 * 2nd layer :  attr
+	 * 3rd layer :  tag name.
+	 */
 	@Test
 	public void getEmalBy_a_t(){
-		long contactId = 73950;
+		long contactId = 73998;
 		String sel = constructSecondLayerSelectorByUniqueAttr(String.valueOf(contactId)).concat("/email");
 		getReqClient(url.concat(sel));
 	}
 
 	/**
-	 * 1st layer  index selector
-	 * 2nd layer tag name selector
-	 * 3rd layer index selector
+	 * get email item node.
+	 * 2nd layer  index selector
+	 * 3rd layer tag name selector
+	 * 4th layer index selector
 	 */	
 	@Test
 	public void getEmailItemBy_i_t_i(){
+		String byIndex = LEFT_SQUARE_BRACKET.concat("1").concat(RIGHT_SQUARE_BRACKET);
+		String itemByIndex = LEFT_SQUARE_BRACKET.concat("1").concat(RIGHT_SQUARE_BRACKET);
+		String reqUrl = url.concat("/~~/contacts/contact" + byIndex + "/email/item").concat(itemByIndex);
 		
+		try {
+			getReqClient(reqUrl);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
-	
-	
-	
+
+	/**
+	 * get name/fn
+	 */
+	@Test
+	public void getNameFn(){
+		String byIndex = LEFT_SQUARE_BRACKET.concat("1").concat(RIGHT_SQUARE_BRACKET);
+		String fnByIndex = LEFT_SQUARE_BRACKET.concat("1").concat(RIGHT_SQUARE_BRACKET);
+		
+		String reqUrl = url.concat("/~~/contacts/contact" + byIndex + "/name/fn");
+		//String reqUrl = url.concat("/~~/contacts/contact" + byIndex + "/name/fn").concat(fnByIndex);
+		try {
+			getReqClient(reqUrl);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+	}
 	
 	/**
 	 * <li>CELL:+8613910193672|:+861085205599|WORK:+861085205588|WORK:+861085205205|

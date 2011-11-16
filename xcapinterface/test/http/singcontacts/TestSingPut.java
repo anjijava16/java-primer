@@ -31,8 +31,13 @@ public class TestSingPut extends TestBase{
 	File dispNameFile = getXmlFilePath("example-new-dispName.xml");
 	
 	File telFile = getXmlFilePath("example-new-tel.xml");
-	File emailFile = getXmlFilePath("example-new-email.xml");
+	File telItemFile = getXmlFilePath("example-new-tel-item.xml");
 	
+	File emailFile = getXmlFilePath("example-new-email.xml");
+	File nameFnFile = getXmlFilePath("example-new-name-fn.xml");
+	/**
+	 * put contacts
+	 */
 	@Test
 	public void putContactsDocument(){
 		if(contactsFile.exists()){
@@ -46,6 +51,9 @@ public class TestSingPut extends TestBase{
 		}
 	}
 	
+	/**
+	 * put contact by uniqueAttr.
+	 */
 	@Test
 	public void putContactByAttrSelector(){
 		String contactId = "1"; //add
@@ -62,9 +70,12 @@ public class TestSingPut extends TestBase{
 		}		
 	}
 	
+	/**
+	 * put contact by index.
+	 */
 	@Test
 	public void putContactByIndexSelector(){
-		int index = 3;
+		int index = 2;
 		String u = url.concat(constructSecondLayerSelectorByIndex(index));
 		try {
 			putReqClient(u, contactFile_1);
@@ -73,6 +84,9 @@ public class TestSingPut extends TestBase{
 		}
 	}
 	
+	/**
+	 * put contact by tag name.
+	 */
 	@Test
 	public void putContactByTagNameSelector(){
 		String u = url.concat("/~~/conatcts/contact");
@@ -83,16 +97,17 @@ public class TestSingPut extends TestBase{
 		}
 		
 	}
-	
+		
 	/**
+	 * put name node.
 	 * lst selector
 	 * 2nd selector: tag name/uniqueAttr/index
 	 * 3rd selector: tag name
 	 */
 	@Test
 	public void putNameNameByTagName(){
-		int index = 0;
-		String contactId = "";
+		int index = 1;
+		String contactId = "73995";
 		String url1 = url.concat(constructSecondLayerSelectorByIndex(index)).concat("/name");
 		String url2 = url.concat(constructSecondLayerSelectorByUniqueAttr(contactId)).concat("/name");
 
@@ -105,15 +120,36 @@ public class TestSingPut extends TestBase{
 		}
 	}
 	
+	/**
+	 * put name node.
+	 */
 	@Test
 	public void putNameByTagIndex(){
+		int index = 1;
+		String contactId = "73998";
+		String byIndex = LEFT_SQUARE_BRACKET.concat("1").concat(RIGHT_SQUARE_BRACKET);
 		
+		String url1 = url.concat(constructSecondLayerSelectorByIndex(index))
+			.concat("/name").concat(byIndex);
+		String url2 = url.concat(constructSecondLayerSelectorByUniqueAttr(contactId))
+			.concat("/name").concat(byIndex);		
+		try {
+			putReqClient(url1, nameFile);
+			putReqClient(url2, nameFile);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
+	/**
+	 * put email node.
+	 */
 	@Test
 	public void putEmailByTagName(){
-		int index = 0;
-		String contactId = "";
+		int index = 1;
+		String contactId = "73998";
+		
 		String url1 = url.concat(constructSecondLayerSelectorByIndex(index)).concat("/email");
 		String url2 = url.concat(constructSecondLayerSelectorByUniqueAttr(contactId)).concat("/email");
 		try {
@@ -124,12 +160,85 @@ public class TestSingPut extends TestBase{
 		}
 	}
 	
+	/**
+	 * put email node.
+	 */
 	@Test
 	public void putEmailByIndex(){
+		int index = 1;
+		String contactId = "73998";
+				
+		String byIndex = LEFT_SQUARE_BRACKET.concat("1").concat(RIGHT_SQUARE_BRACKET);
+
+		String url1 = url.concat(constructSecondLayerSelectorByIndex(index)).concat("/email").concat(byIndex);
+		String url2 = url.concat(constructSecondLayerSelectorByUniqueAttr(contactId)).concat("/email").concat(byIndex);
+		try {
+			putReqClient(url1, emailFile);
+			putReqClient(url2, emailFile);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	@Test
+	public void putDispName(){
+		String byIndex = LEFT_SQUARE_BRACKET.concat("1").concat(RIGHT_SQUARE_BRACKET);
+		String reqUrl = url.concat("/~~/contacts/contact" + byIndex + "/dispName");
+		try {
+			putReqClient(reqUrl, dispNameFile);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void putFN(){
+		String byIndex = LEFT_SQUARE_BRACKET.concat("1").concat(RIGHT_SQUARE_BRACKET);
+		String reqUrl = url.concat("/~~/contacts/contact" + byIndex + "/name/fn");
+		try {
+			putReqClient(reqUrl, nameFnFile);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+	/**
+	 * put tel item 
+	 */
+	@Test
+	public void putItemByTagName(){
+		String contactId = "";
+		String itemIndex = "2";
+		String byIndex = LEFT_SQUARE_BRACKET.concat(itemIndex).concat(RIGHT_SQUARE_BRACKET);
+		String url2 = url.concat(constructSecondLayerSelectorByUniqueAttr(contactId)).concat("/org/item").concat(byIndex);
+		
+		try {
+			putReqClient(url2, telItemFile);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * put tel item 
+	 */
+	@Test
+	public void putItemByIndex(){
+		
+	}
+
+	/**
+	 * put tel item 
+	 */
+	@Test
+	public void putItemByUniqueAttr(){
 		
 	}
 	
-	//@Ignore
+	
+	@Ignore
 	@Test
 	public void testContactPut(){
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -140,16 +249,21 @@ public class TestSingPut extends TestBase{
 	    String topTagName = null;
 		try {
 			DocumentBuilder builder = factory.newDocumentBuilder();
-			doc = builder.parse(contactsFile);	
+			//doc = builder.parse(contactsFile);	
+			doc = builder.parse(nameFnFile);
 			
 			element = doc.getDocumentElement();
 			topTagName = element.getTagName();		
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		Node n = element.getFirstChild();
+		System.out.println(n.getNodeValue());
+		
 		//NodeList list = element.getElementsByTagName("contact");
-		NodeList lis = doc.getElementsByTagName("contact");
-		System.out.println(lis.getLength());
+		//NodeList lis = doc.getElementsByTagName("contact");
+		//System.out.println(lis.getLength());
 	}
 	
 	/**
