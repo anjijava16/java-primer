@@ -209,10 +209,8 @@ public class TestSingPut extends TestBase{
 	 */
 	@Test
 	public void putItemByTagName(){
-		String contactId = "";
-		String itemIndex = "2";
-		String byIndex = LEFT_SQUARE_BRACKET.concat(itemIndex).concat(RIGHT_SQUARE_BRACKET);
-		String url2 = url.concat(constructSecondLayerSelectorByUniqueAttr(contactId)).concat("/org/item").concat(byIndex);
+		String contactId = "74003";
+		String url2 = url.concat(constructSecondLayerSelectorByUniqueAttr(contactId)).concat("/tel/item");
 		
 		try {
 			putReqClient(url2, telItemFile);
@@ -226,7 +224,16 @@ public class TestSingPut extends TestBase{
 	 */
 	@Test
 	public void putItemByIndex(){
+		String contactId = "74003";
+		String itemIndex = "2";
+		String byIndex = LEFT_SQUARE_BRACKET.concat(itemIndex).concat(RIGHT_SQUARE_BRACKET);
+		String url2 = url.concat(constructSecondLayerSelectorByUniqueAttr(contactId)).concat("/tel/item").concat(byIndex);
 		
+		try {
+			putReqClient(url2, telItemFile);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
 	}
 
 	/**
@@ -234,7 +241,42 @@ public class TestSingPut extends TestBase{
 	 */
 	@Test
 	public void putItemByUniqueAttr(){
-		
+		String contactId = "74003";
+		String url2 = url
+				.concat(constructSecondLayerSelectorByUniqueAttr(contactId))
+				.concat("/tel/item")
+				.concat(LEFT_SQUARE_BRACKET + AT + "type=" + DOUBLE_QUOTATION_MARKS +  "work" + DOUBLE_QUOTATION_MARKS + RIGHT_SQUARE_BRACKET);
+
+		try {
+			putReqClient(url2, telItemFile);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Ignore
+	@Test
+	public void testItemPut(){
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+	    factory.setNamespaceAware(true);
+	    
+	    Document doc = null;
+	    Element element = null;
+	    String topTagName = null;
+		try {
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			//doc = builder.parse(contactsFile);	
+			doc = builder.parse(telItemFile);
+			
+			element = doc.getDocumentElement();
+			topTagName = element.getTagName();		
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		String type = element.getAttribute("type");
+		Node n = element.getFirstChild();
+		String value = n.getNodeValue();
+		System.out.println("type,value:" + type + " " + value);
 	}
 	
 	

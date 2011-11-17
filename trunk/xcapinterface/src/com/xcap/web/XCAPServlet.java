@@ -140,6 +140,7 @@ public class XCAPServlet extends HttpServlet {
 					}
 
 					if (result == XMLValidator.RESULT_OK) {
+						log.info("xml schema validated, put xml to ejb...");
 						ResultData resultData = xcapIfc.put(userId, nodeSelector, xmlBuilder.toString());
 						if(resultData.getstatus() == ResultData.STATUS_404){
 							resp.sendError(HttpServletResponse.SC_NOT_FOUND);
