@@ -2,6 +2,7 @@ package http.singcontacts;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.Format;
 import java.text.MessageFormat;
@@ -83,6 +84,24 @@ public abstract class TestBase {
         HttpPut httpPut = new HttpPut(url);
         InputStreamEntity reqEntity = new InputStreamEntity(
                 new FileInputStream(file), -1);
+        reqEntity.setContentType("text/xml");
+        reqEntity.setChunked(true);
+        
+        httpPut.setEntity(reqEntity);
+        
+        HttpClient httpclient = new DefaultHttpClient();
+        HttpParams params = httpclient.getParams();
+        params.setIntParameter(HttpConnectionParams.SO_TIMEOUT,3000); //超时设置
+        params.setIntParameter(HttpConnectionParams.CONNECTION_TIMEOUT, 3000);//连接超时
+        System.out.println("executing request " + httpPut.getRequestLine());
+        response(httpclient, httpPut); 
+	}
+	
+	public static void putReqClient(String url, InputStream in) throws Exception {
+
+        HttpPut httpPut = new HttpPut(url);
+        InputStreamEntity reqEntity = new InputStreamEntity(
+                in, -1);
         reqEntity.setContentType("text/xml");
         reqEntity.setChunked(true);
         
