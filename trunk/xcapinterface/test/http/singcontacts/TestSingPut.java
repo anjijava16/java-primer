@@ -1,5 +1,6 @@
 package http.singcontacts;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -97,7 +98,39 @@ public class TestSingPut extends TestBase{
 		}
 		
 	}
+			
+	@Test
+	public void putDispName(){
+		String byIndex = LEFT_SQUARE_BRACKET.concat("1").concat(RIGHT_SQUARE_BRACKET);
+		String reqUrl = url.concat("/~~/contacts/contact" + byIndex + "/dispName");
+		try {
+			putReqClient(reqUrl, dispNameFile);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * put title node
+	 * 2nd selector : index,
+	 * 3rd selector : tag name.
+	 */
+	@Test
+	public void putTitle_i_t(){
+		String contactIndex = "1";
+		String byIndex = LEFT_SQUARE_BRACKET.concat(contactIndex).concat(RIGHT_SQUARE_BRACKET);
+		String reqUrl = url.concat("/~~/contacts/contact" + byIndex + "/title");
 		
+		String xml = "<title>大元帅（generallissimo）</title>";
+		xml = "<title></title>";  //set conatct field is null
+		try {
+			putReqClient(reqUrl, new ByteArrayInputStream(xml.getBytes()));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+//---------------------------------------------------------------------------------	
 	/**
 	 * put name node.
 	 * lst selector
@@ -118,7 +151,7 @@ public class TestSingPut extends TestBase{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
+	}	
 	
 	/**
 	 * put name node.
@@ -180,18 +213,7 @@ public class TestSingPut extends TestBase{
 		}
 		
 	}
-
-	@Test
-	public void putDispName(){
-		String byIndex = LEFT_SQUARE_BRACKET.concat("1").concat(RIGHT_SQUARE_BRACKET);
-		String reqUrl = url.concat("/~~/contacts/contact" + byIndex + "/dispName");
-		try {
-			putReqClient(reqUrl, dispNameFile);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
+		
 	@Test
 	public void putFN(){
 		String byIndex = LEFT_SQUARE_BRACKET.concat("1").concat(RIGHT_SQUARE_BRACKET);
@@ -253,6 +275,28 @@ public class TestSingPut extends TestBase{
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * put tel node to null.
+	 */
+	@Test
+	public void putTelByIndex(){
+		int index = 1;
+		String reqUrl = url.concat(constructSecondLayerSelectorByIndex(index)).concat("/tel");
+		String xml = null;
+		xml = "<tel><item></item></tel>";  //set tel field is null
+		xml = "<tel><item type=\"first\">8888888</item></tel>";
+		xml = "<tel><item>8888888</item></tel>";
+		try {
+			putReqClient(reqUrl, new ByteArrayInputStream(xml.getBytes()));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+//-------------------------------------------------------------
+
+	
 	
 	@Ignore
 	@Test

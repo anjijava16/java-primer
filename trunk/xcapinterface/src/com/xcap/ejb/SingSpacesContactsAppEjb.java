@@ -375,7 +375,11 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 		    		String fieldValue = null;
 		    		if(SingConstant.isThirdLayerLeafNode(topTagName)){
 						Node node1 = nodelist.item(0);
-						fieldValue = node1.getNodeValue();
+						if(node1 != null){
+							fieldValue = node1.getNodeValue();							
+						}else{
+							fieldValue = null;
+						}
 		    		}else if(SingConstant.isIncludeItemNode(topTagName)){
 		    			fieldValue = xmlItemNodeToString(nodelist);
 		    		}else if(NODE_NAME.equals(topTagName)){
@@ -474,7 +478,11 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 			    		}
 			    		
 			    		if(! flag){
-			    			fieldValue = fieldValue.concat("|").concat(typeVal).concat("|");
+			    			if(fieldValue.endsWith("|")){
+			    				fieldValue = fieldValue.concat(typeVal).concat("|");
+			    			}else{
+			    				fieldValue = fieldValue.concat("|").concat(typeVal).concat("|");			    				
+			    			}
 			    		}
 			    	}else{
 			    		return new ResultData(ResultData.STATUS_404, "");
@@ -922,12 +930,16 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 				}
 				
 				String tempType = (type  != null) ? type .getNodeValue() : "";
-				String nodeVal = item.getNodeValue();
-				String tempVal = tempType.concat(":").concat(nodeVal);
-				if(nodeValue == null){
-					nodeValue = tempVal.concat("|");
-				}else{
-					nodeValue = nodeValue.concat(tempVal).concat("|");
+				String nodeVal = null;
+				if(item != null && item.getNodeValue() != null){
+					nodeVal = item.getNodeValue();
+
+					String tempVal = tempType.concat(":").concat(nodeVal);
+					if(nodeValue == null){
+						nodeValue = tempVal.concat("|");
+					}else{
+						nodeValue = nodeValue.concat(tempVal).concat("|");
+					}
 				}
 				
 				//log.info("nodeValue".concat(":").concat(nodeValue));
