@@ -24,9 +24,22 @@ public abstract class TestBase {
 	public static Logger log = Logger.getLogger(TestBase.class);
 	
 	public static String CODING = "UTF-8";
+	
+	/**
+	 * [
+	 */
 	public static String LEFT_SQUARE_BRACKET = "%5B";
+	/**
+	 * ]
+	 */
 	public static String RIGHT_SQUARE_BRACKET = "%5D";
+	/**
+	 * @
+	 */
 	public static String AT = "%40";
+	/**
+	 * "
+	 */
 	public static String DOUBLE_QUOTATION_MARKS  = "%22";
 	
 	public enum TageName{contacts,contact,list,contactName, description, createDate, method};
@@ -70,23 +83,36 @@ public abstract class TestBase {
 		
 		return firstLevelSelector;
 	}
-
+	
+	/**
+	 * 
+	 * @param uniqueAttr 2nd layer selector.
+	 * @param tageName 3rd layer selector.
+	 * @return
+	 */
 	public static String construct_A_T_Leaf(String uniqueAttr, TageName tageName){
 		String firstLevelSelector = constructSelectorByUniqueAttr(uniqueAttr);
 		String nodeSelector = firstLevelSelector.concat("/").concat(tageName.name());
 		return nodeSelector;
 	}	
 	
-	public static String construct_T_I_Leaf(TageName tageName){
-		return null;
+	/**
+	 * @param tageName: 2nd layer selector is tag name selector.
+	 * @param index: 3rd layer selector is index selector.
+	 * @return
+	 */
+	public static String construct_T_I_Leaf(TageName tageName, int index){
+		return construct_T_T_Leaf(tageName).concat(LEFT_SQUARE_BRACKET).concat(String.valueOf(index)).concat(RIGHT_SQUARE_BRACKET);
 	}	
 	
-	public static String construct_I_I_eafSelector(TageName tageName){
-		return null;
+	public static String construct_I_I_eafSelector(int index, int _3rdLayerIndex){
+		String conatctSelecotor = constructSelectorByIndex(index);
+		return conatctSelecotor.concat(LEFT_SQUARE_BRACKET).concat(String.valueOf(_3rdLayerIndex)).concat(RIGHT_SQUARE_BRACKET);
 	}	
 
-	public static String construct_A_I_eafSelector(TageName tageName){
-		return null;
+	public static String construct_A_I_eafSelector(String method,int _3rdLayerIndex){
+		String conatctSelecotor = constructSelectorByUniqueAttr(method);
+		return conatctSelecotor.concat(LEFT_SQUARE_BRACKET).concat(String.valueOf(_3rdLayerIndex)).concat(RIGHT_SQUARE_BRACKET);
 	}	
 	
 	public static File getXmlFilePath(String fileName){

@@ -181,7 +181,7 @@ public class TestSingPut extends TestBase{
 	@Test
 	public void putEmailByTagName(){
 		int index = 1;
-		String contactId = "73998";
+		String contactId = "74004";
 		
 		String url1 = url.concat(constructSecondLayerSelectorByIndex(index)).concat("/email");
 		String url2 = url.concat(constructSecondLayerSelectorByUniqueAttr(contactId)).concat("/email");
@@ -294,9 +294,40 @@ public class TestSingPut extends TestBase{
 		}
 	}
 	
-//-------------------------------------------------------------
-
 	
+	/**
+	 * put tel node to null.
+	 */
+	@Test
+	public void putEmail(){
+		int index = 1;
+		String reqUrl = url.concat(constructSecondLayerSelectorByIndex(index)).concat("/email");
+		String xml = null;
+		xml = "<email/>";  //set tel field is null
+		try {
+			putReqClient(reqUrl, new ByteArrayInputStream(xml.getBytes()));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * put tel node to null.
+	 */
+	@Test
+	public void putUrl(){
+		int index = 1;
+		String reqUrl = url.concat(constructSecondLayerSelectorByIndex(index)).concat("/url");
+		String xml = null;
+		xml = "<url><item type=\"hr\">http://hi.baidu.com/slieer/home</item><item type=\"\">http://oschina.net/slieer</item><item type=\"OT\">http://code.google.com/slieer</item></url>";  //set tel field is null
+		try {
+			putReqClient(reqUrl, new ByteArrayInputStream(xml.getBytes()));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+//-------------------------------------------------------------	
 	
 	@Ignore
 	@Test

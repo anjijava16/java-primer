@@ -37,8 +37,7 @@ public class TestGet extends TestBase{
 		String u = url.concat("/~~/contacts");
 		getReqClient(u);
 	}
-	
-	
+
 	/**
 	 * get contact by index.
 	 */
@@ -47,22 +46,15 @@ public class TestGet extends TestBase{
 		int index = 1;
 		String nodeSelector = constructSelectorByIndex(index);
 		String u = url.concat(nodeSelector);
-		System.out.println("url:" + u);
 		getReqClient(u);
-		
 	}
 	
 	/**
 	 * get contact by unique attr.
 	 */
 	@Test
-	public void getNodeByUniqueAttr(){
-/*		String nodeSelector = "/~~/contacts/contact{0}{1}method={2}8405566{2}{3}";
-		MessageFormat form = new MessageFormat(nodeSelector);
-		Object[] args = {LEFT_SQUARE_BRACKET, AT,DOUBLE_QUOTATION_MARKS, RIGHT_SQUARE_BRACKET};
-		nodeSelector = form.format(args);
-*/		
-		String method = "46546464646";
+	public void getNodeByUniqueAttr(){		
+		String method = "13510776272";
 		String nodeSelector = constructSelectorByUniqueAttr(method);
 		String u = url.concat(nodeSelector);
 		
@@ -84,7 +76,7 @@ public class TestGet extends TestBase{
 	 */
 	@Test
 	public void getLeafNodeByTagName(){
-		int i = 2;
+		int i = 1;
 		String u = null;
 		String nodeSelector = null;
 		switch (i) {
@@ -101,7 +93,7 @@ public class TestGet extends TestBase{
 			break;
 		case 2:
 			//attr/tagName
-			String uniqueAttr = "9999939999"; // method.
+			String uniqueAttr = "13510776272"; // method.
 			nodeSelector = construct_A_T_Leaf(uniqueAttr, TageName.contactName);
 			u = url.concat(nodeSelector);
 			break;
@@ -112,16 +104,22 @@ public class TestGet extends TestBase{
 
 	@Test
 	public void getLeafNodeByIndex(){
+		TageName tagName = TageName.contact;
+		int index = 1;
+		String method = "";
 		int i = 0;
 		switch (i) {
 		case 0:
-			
+			String sel = construct_T_I_Leaf(tagName,index);
+			String u = url.concat(sel);
+			getReqClient(u);
 			break;
 		case 1:
-			
+			int _3rdLayerIndex = 1;
+			u = construct_I_I_eafSelector(index,_3rdLayerIndex);
 			break;
 		case 2:
-			
+			u = construct_A_I_eafSelector(method, index);
 			break;
 		}		
 	}

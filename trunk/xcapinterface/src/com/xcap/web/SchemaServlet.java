@@ -28,20 +28,33 @@ public class SchemaServlet extends HttpServlet {
 		}
 	}
 
+	/**
+	 http://localhost:8080/xcap-root/xcap-schema/UABContacts
+	 http://localhost:8080/xcap-root/xcap-schema/SingSpacesContacts
+	 */
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		String auid = req.getParameter("");
+		String auid = req.getParameter("auid");
 		PrintWriter writer = resp.getWriter();
-
+		
+		if(auid.startsWith("/")){
+			auid = auid.substring(1);
+		}
 		String schemaName = "";
 		if (auid.equals(Constants.APP_USAGE_CONTACT)) {
 			schemaName = Constants.XML_SCHEMA_UAB_CONTACT;
 		} else if (auid.equals(Constants.APP_USAGE_SINGSPACE_CONTACT)) {
 			schemaName = Constants.XML_SCHEMA_SINGSPACES_CONTACT;
+		}else{
+			resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+			return;
 		}
-		String schemaPath = Constants.SCHEMA_DIR.concat(schemaName);
-		Scanner scanner = new Scanner(new FileReader(schemaPath));
+		String schemaPath = Constants.SCHEMA_DIR.concat("/").concat(schemaName);
+		//req.getRealPath("");
+		String realPathUrl = req.getSession().getServletContext().getRealPath(schemaPath);
+		System.out.println(realPathUrl);
+		Scanner scanner = new Scanner(new FileReader(realPathUrl));
 		while (scanner.hasNextLine()) {
 			String line = scanner.nextLine();
 			writer.print(line);

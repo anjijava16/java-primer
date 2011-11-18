@@ -32,15 +32,23 @@ import com.xcap.web.AuthFilter.Url.Field;
 public class AuthFilter implements Filter {
 	public static final Logger log = Logger.getLogger(AuthFilter.class);
 
+	private String donotFilterWord;
+	public void init(FilterConfig config) throws ServletException {
+		donotFilterWord = config.getInitParameter("donotFilterWord");
+	}
+	
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse resp = (HttpServletResponse) response;
 		
 		String url = req.getRequestURI();
-		if(url.contains("test")){
-			chain.doFilter(request, response);
-			return;
+		String[] words = donotFilterWord.split(",");
+		for(int i = 0; i < words.length; i++){
+			if(url.contains(words[i])){
+				chain.doFilter(request, response);				
+				return;
+			}
 		}
 		if(! Url.validateUrl(url)){
 			resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -98,9 +106,6 @@ public class AuthFilter implements Filter {
 		}		
 	}
 	
-	public void init(FilterConfig arg0) throws ServletException {
-	}
-
 	public void destroy() {
 	}
 
