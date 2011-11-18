@@ -1,12 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-	<xs:simpleType name="ST_item">
-		<xs:restriction base="xs:string"></xs:restriction>
-	</xs:simpleType>
-	<xs:element name="url">
+	<xs:element name="contacts">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="contact" minOccurs="1" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="contact">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="dispName" minOccurs="1" maxOccurs="1"/>
+				<xs:element ref="name" minOccurs="1" maxOccurs="1"/>
+				<xs:element ref="title" minOccurs="1" maxOccurs="1"/>
+				<xs:element ref="bday" minOccurs="1" maxOccurs="1"/>
+				<xs:element ref="adr" minOccurs="1" maxOccurs="1"/>
+				<xs:element ref="tel" minOccurs="1" maxOccurs="1"/>
+				<xs:element ref="email" minOccurs="1" maxOccurs="1"/>
+				<xs:element ref="org" minOccurs="1" maxOccurs="1"/>
+				<xs:element ref="url" minOccurs="1" maxOccurs="1"/>
+				<xs:element ref="note" minOccurs="1" maxOccurs="1"/>
+			</xs:sequence>
+			<xs:attribute name="id">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="fn">
+		<xs:simpleType>
+			<xs:restriction base="xs:string"></xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="email">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="item" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="dispName">
+		<xs:simpleType>
+			<xs:restriction base="xs:string"></xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+
+	<xs:element name="bday">
+		<xs:simpleType>
+			<xs:restriction base="xs:date"></xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="adr">
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element ref="item" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="url">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="item" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -18,14 +77,14 @@
 	<xs:element name="tel">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element ref="item" maxOccurs="unbounded"/>
+				<xs:element ref="item" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="org">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element ref="item" maxOccurs="unbounded"/>
+				<xs:element ref="item" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -60,63 +119,8 @@
 			</xs:simpleContent>
 		</xs:complexType>
 	</xs:element>
-	<xs:element name="fn">
-		<xs:simpleType>
-			<xs:restriction base="xs:string"></xs:restriction>
-		</xs:simpleType>
-	</xs:element>
-	<xs:element name="email">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="item" maxOccurs="unbounded"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="dispName">
-		<xs:simpleType>
-			<xs:restriction base="xs:string"></xs:restriction>
-		</xs:simpleType>
-	</xs:element>
-	<xs:element name="contacts">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="contact" maxOccurs="unbounded"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="contact">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="dispName"/>
-				<xs:element ref="name"/>
-				<xs:element ref="title"/>
-				<xs:element ref="bday"/>
-				<xs:element ref="adr"/>
-				<xs:element ref="tel"/>
-				<xs:element ref="email"/>
-				<xs:element ref="org"/>
-				<xs:element ref="url"/>
-				<xs:element ref="note"/>
-			</xs:sequence>
-			<xs:attribute name="id">
-				<xs:simpleType>
-					<xs:restriction base="xs:string">
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:attribute>
-			
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="bday">
-		<xs:simpleType>
-			<xs:restriction base="xs:date"></xs:restriction>
-		</xs:simpleType>
-	</xs:element>
-	<xs:element name="adr">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="item" maxOccurs="unbounded"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
+	
+	<xs:simpleType name="ST_item">
+		<xs:restriction base="xs:string"></xs:restriction>
+	</xs:simpleType>	
 </xs:schema>

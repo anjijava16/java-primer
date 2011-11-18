@@ -6,6 +6,10 @@
 	<filter>
 		<filter-name>AuthFilter</filter-name>
 		<filter-class>com.xcap.web.AuthFilter</filter-class>
+		<init-param>
+			<param-name>donotFilterWord</param-name>
+			<param-value>test,xcap-schema,xcap-caps</param-value>
+		</init-param>
 	</filter>
 	<filter>
 		<filter-name>UrlRewriteFilter</filter-name>
@@ -34,7 +38,7 @@
 
 	<servlet>
 		<servlet-name>xcapcaps</servlet-name>
-		<servlet-class>com.xcap.web.XcapCaps</servlet-class>
+		<servlet-class>com.xcap.web.XCAPCapsServlet</servlet-class>
 	</servlet>
 	
 	<servlet>
@@ -59,7 +63,7 @@
 	
  	<servlet-mapping>
 		<servlet-name>xmlSchema</servlet-name>
-		<url-pattern>/http-put-test</url-pattern>
+		<url-pattern>/xcap-schema/*</url-pattern>
 	</servlet-mapping>
 		
 </web-app>

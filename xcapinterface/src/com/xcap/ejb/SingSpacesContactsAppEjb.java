@@ -1,7 +1,6 @@
 package com.xcap.ejb;
 
 import java.io.StringReader;
-import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -88,7 +87,8 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 			log.info("get singspaces document by userId, userId=" + userId);
 			
 			StringBuilder builder = new StringBuilder();
-			builder.append("<contacts xmlns=\"SingSpacesContacts\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"contacts site/UABContacts.xsd\">");
+			builder.append("<contacts xmlns=\"contacts\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"")
+			.append(" xsi:schemaLocation=\"contacts xcap-schema/SingSpacesContacts\">");
 
 			List<SingSpacesContactEntity> list = contactsDao.getList(userIdTemp);
 			boolean re = getContacts(list, builder);
@@ -744,7 +744,7 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 		if(entity != null){
 			log.info(entity);
 			String id = entity.getContactId().toString();
-			builder.append("<".concat(NODE_CONTACT).concat(" id=\"").concat(id).concat("\">"));
+			builder.append("<".concat(NODE_CONTACT).concat(" ").concat(NODE_ATTR_ID).concat("=\"").concat(id).concat("\">"));
 
 			String name = entity.getContactN();   //Greg;Zhang;;;
 			String title = entity.getContactTitle();
@@ -926,7 +926,7 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 				NamedNodeMap attrMap = itemNode.getAttributes();
 				Node type = null;
 				if(attrMap != null){
-					type = attrMap.getNamedItem("type");									
+					type = attrMap.getNamedItem(NODE_ATTR_TYPE);									
 				}
 				
 				String tempType = (type  != null) ? type .getNodeValue() : "";

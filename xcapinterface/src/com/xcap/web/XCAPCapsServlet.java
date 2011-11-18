@@ -18,14 +18,21 @@ public class XCAPCapsServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//url query : xcap-root/xcap-caps/global/index
+		String ser = request.getServerName();
+		int port = request.getServerPort();
+		String contextPath = request.getSession().getServletContext().getContextPath();
+		String url = ser.concat(":").concat(String.valueOf(port));
+		
 		String str = "<?xml version='1.0' encoding='UTF-8'?>"
 				.concat("<xcap-caps xmlns=\"urn:ietf:params:xml:ns:xcap-caps\">")
 				.concat("<auids>")
-				.concat("  <auid>contact-lists</auid>")
+				.concat("  <auid>UABContacts</auid>")
+				.concat("  <auid>SingSpacesContacts</auid>")
 				.concat("</auids>")
 				.concat("<extensions/>")
 				.concat(" <namespaces>")
-				.concat("  <namespace>contact-lists</namespace>")
+				.concat("  <namespace>http://").concat(url).concat(contextPath).concat("/xcap-schema/UABContacts</namespace>")
+				.concat("  <namespace>http://").concat(url).concat(contextPath).concat("/xcap-schema/SingSpacesContacts</namespace>")
 				.concat(" </namespaces>")
 				.concat("</xcap-caps>");
 		

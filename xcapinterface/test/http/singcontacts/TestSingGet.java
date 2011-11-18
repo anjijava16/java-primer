@@ -21,7 +21,6 @@ public class TestSingGet extends TestBase{
 	 */
 	@Test
 	public void getDocument(){
-		log.info("url:" + url);
 		getReqClient(url);
 	}
 	
