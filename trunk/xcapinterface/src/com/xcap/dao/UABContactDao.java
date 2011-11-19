@@ -34,15 +34,14 @@ public class UABContactDao {
 	 * @return null or list(size > 0)
 	 */
 	@TransactionAttribute(value=TransactionAttributeType.NEVER)
-	public List<UABContactEntity> getList(long userId){
-		return get(userId,-1);	
+	public List<UABContactEntity> getList(String msisdn){
+		return get(msisdn,-1);	
 	}
 	
 	@TransactionAttribute(value=TransactionAttributeType.NEVER)
-	public long getListSize(long userId){
-		String sql = "select count(id) from t_contacts where user_id = :user_id";
-		Query query = em.createNativeQuery(sql);
-		query.setParameter("user_id", userId);
+	public long getListSize(String msisdn){
+		Query query = em.createNamedQuery("getListSizeByUserMsisdn");
+		query.setParameter("msisdn", msisdn);
 		BigInteger re = (BigInteger)query.getSingleResult();
 		return re.longValue();
 	}
@@ -54,11 +53,10 @@ public class UABContactDao {
 	 * @return null or a contact
 	 */
 	@TransactionAttribute(value=TransactionAttributeType.NEVER)
-	public UABContactEntity getById(long userId,long contactId){
-		StringBuilder temp = new StringBuilder("select * from t_contacts where id=:id and user_id=:userId");
-		Query query = em.createNativeQuery(temp.toString(), UABContactEntity.class);
+	public UABContactEntity getById(String msisdn,long contactId){
+		Query query = em.createNamedQuery("getByMsisdnAndId");
 		query.setParameter("id", contactId);
-		query.setParameter("userId", userId);
+		query.setParameter("msisdn", msisdn);
 		
 		@SuppressWarnings("unchecked")
 		List<UABContactEntity> list = query.getResultList();
@@ -71,17 +69,16 @@ public class UABContactDao {
 	 * @return a contact or null;
 	 */
 	@TransactionAttribute(value=TransactionAttributeType.NEVER)
-	public UABContactEntity getByIndex(long userId,int index){
-		List<UABContactEntity> list = get(userId, index);
+	public UABContactEntity getByIndex(String msisdn,int index){
+		List<UABContactEntity> list = get(msisdn, index);
 		return list != null && list.size() > 0 ? list.get(0) : null;
 	}
 	
 	@TransactionAttribute(value=TransactionAttributeType.NEVER)
-	public UABContactEntity getByContactMethod(long userId,String method){
-		StringBuilder temp = new StringBuilder("select * from t_contacts where contact_method=:method and user_id=:userId");
-		Query query = em.createNativeQuery(temp.toString(), UABContactEntity.class);
+	public UABContactEntity getByContactMethod(String msisdn,String method){
+		Query query = em.createNamedQuery("getByMethodAndMsisdn");
 		query.setParameter("method", method);
-		query.setParameter("userId", userId);
+		query.setParameter("msisdn", msisdn);
 		
 		@SuppressWarnings("unchecked")
 		List<UABContactEntity> list = query.getResultList();
@@ -97,47 +94,42 @@ public class UABContactDao {
 	 */
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(value=TransactionAttributeType.NEVER)
-	private List<UABContactEntity> get(long userId,int index){
-		String sql = null; 
-		
+	private List<UABContactEntity> get(String msisdn,int index){
+		Query query = null;
 		if(index < 0){
-			sql = "select * from t_contacts where user_id = :user_id";
+			query = em.createNamedQuery("getListByMsisdn");
+			query.setParameter("msisdn", msisdn);			
 		}else{
 			index -= 1;
 			if(index >= 0){
-				StringBuilder temp = new StringBuilder("select * from t_contacts where user_id = :user_id limit ");
-				temp.append(index)
-					.append(",1");
-				sql = temp.toString();
-				log.info(sql);
+				query = em.createNamedQuery("getByMsisdnAndIndex");
+				query.setParameter("msisdn", msisdn);
+				query.setParameter("index", index);
 			}else{
-				sql = null;
-				log.error("input index ");			
+				log.error("input index error, index =" + index);			
 			}
 		}
 		
-		if(sql != null){
-			Query query = em.createNativeQuery(sql, UABContactEntity.class);
-			query.setParameter("user_id", userId);
-			
+		if(query != null){
 			List<UABContactEntity> list = query.getResultList();
-			return list.size() > 0 ? list : null;			
+			return list.size() > 0 ? list : null;						
 		}
+		
 		return null;
 	}	
 	
 	@SuppressWarnings("unchecked")
 	public Contact saveOrUpdate(UABContactEntity contact) {
-		String ql = "from UABContactEntity c where c.userId=?1 and (c.contactMethod like concat('%',?2) or ?2 like concat('%',c.contactMethod))";
+		String ql = "from UABContactEntity c where c.msisdn=?1 and (length(?2)>7 or length(?2)=length(c.contactMethod)) and (replace(c.contactMethod,'+','') like concat('%',replace(?2,'+','')) or replace(?2,'+','') like concat('%',replace(c.contactMethod,'+','')))";
 		Query query = em.createQuery(ql);
-		query.setParameter(1, contact.getUserId());
+		query.setParameter(1, contact.getMsisdn());
 		query.setParameter(2, contact.getContactMethod());
-		log.info("userId = " + contact.getUserId() + ",method = "
-				+ contact.getContactMethod());
+		log.info("msisdn = " + contact.getMsisdn() + ",method = "
+				+ contact.getContactMethod() + ", device_id =" + contact.getDeviceID() + ", raw_id = " +contact.getRawID() );
 		List<UABContactEntity> list = query.getResultList();
 		UABContactEntity et = null;
 		Contact c = new Contact();
-		if (list.size() < 1) {
+		if (list.size() < 1 || contact.getRawID() != null) {
 			contact.setCreateDate(new Date(System.currentTimeMillis()));
 			et = em.merge(contact);
 			log.info("create contact success");
@@ -145,74 +137,66 @@ public class UABContactDao {
 			em.flush();
 			// log.info("et = " + et );
 			c.setId(et.getId());
-			c.setUserId(et.getUserId());
+			c.setMsisdn(et.getMsisdn());
 			c.setContactMethod(et.getContactMethod());
 			c.setContactName(et.getContactName());
 			c.setContactNickName(et.getDescription());
-			c.setContactType(et.getContactType());
+			c.setDeviceID(et.getDeviceID());
+			c.setRawID(et.getRawID());
 		} else {
 			UABContactEntity entity = list.get(0);
-			/*entity.setContactName(contact.getContactName());
-			entity.setContactType(contact.getContactType());*/
-			et = entity;
+			entity.setContactName(contact.getContactName());
+			entity.setDeviceID(contact.getDeviceID());
+			entity.setRawID(contact.getRawID());
+			entity.setCreateDate(new Date(System.currentTimeMillis()));
+			 
+			et = em.merge(entity);
+			em.flush();
 			c.setOp("modi");
 			c.setId(et.getId());
-			c.setUserId(et.getUserId());
+			c.setMsisdn(et.getMsisdn());
 			c.setContactMethod(contact.getContactMethod());
 			c.setContactName(contact.getContactName());
 			c.setContactNickName(contact.getDescription());
-			c.setContactType(contact.getContactType());
+			c.setDeviceID(et.getDeviceID());
+			c.setRawID(et.getRawID());
 		}
-		
+
 		return c;
 	}
 	
-	public int deleteContacts(long userId){
-		String sql = "delete from t_contacts where user_id = :userId";
-		Query query = em.createNativeQuery(sql);
-		query.setParameter("userId", userId);
+	public int deleteContacts(String msisdn){
+		Query query = em.createNamedQuery("delByMsisdn");
+		query.setParameter("msisdn", msisdn);
 		return query.executeUpdate();
 	}
-	
-	public int deleteContactByTagNameSelector(long userId){
-		String sql = "delete from t_contacts where user_id= :userId  limit 1";
-		Query query = em.createNativeQuery(sql);
-		query.setParameter("userId", userId);
-		return query.executeUpdate();
-	}
-	
+		
 	/**
 	 * @param userId
 	 * @param index >= 1
 	 * @return -1 index invalid ,or delete row mount.
 	 */
-	public int deleteContactByIndexSelector(long userId, int index){
-		
+	public int deleteContactByIndexSelector(String msisdn, int index){
 		if(index >= 1){
-			String queryString = "select id from t_contacts where user_id = :userId limit :index,1";
-			Query queryId = em.createNativeQuery(queryString);
-			queryId.setParameter("userId", userId);
-			queryId.setParameter("index", index -1);  //xcap selector index start with 1, but mysql limit index start with 0.
-			
-			@SuppressWarnings("rawtypes")
-			List list = queryId.getResultList();
+			Query query = em.createNamedQuery("getByMsisdnAndIndex");
+			query.setParameter("msisdn", msisdn);
+			query.setParameter("index", index -1);  //xcap selector index start with 1, but mysql limit index start with 0.
+			@SuppressWarnings("unchecked")
+			List<UABContactEntity> list = query.getResultList();
 			if(list.size() > 0){
-				BigInteger idTemp = (BigInteger)list.get(0);
-				
-				StringBuilder temp = new StringBuilder("delete from t_contacts where id = :id");
-				Query delQuery = em.createNativeQuery(temp.toString());
-				delQuery.setParameter("id", idTemp.longValue());
-				return delQuery.executeUpdate();
+				em.remove(list.get(0));
+				return 1;
 			}
-		}
+		}	
 		return -1;
 	}
 	
-	public int deleteContactByUniqueAttr(long userId, String method){
-		String sql = "delete from t_contacts where user_id = :userId and contact_method = :method";
-		Query query = em.createNativeQuery(sql);
-		query.setParameter("userId", userId);
+	public int deleteContactByUniqueAttr(String msisdn, String method){
+		Query query = em.createNamedQuery("delByMsisdnAndMethod");
+		query.setParameter("msisdn", msisdn);
 		query.setParameter("method", method);
 		return query.executeUpdate();
 	}
+	
+	
 }

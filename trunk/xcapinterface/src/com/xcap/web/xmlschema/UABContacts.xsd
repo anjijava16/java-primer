@@ -12,7 +12,8 @@
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element ref="contactName" maxOccurs="1"  minOccurs="1"/>
-				<xs:element ref="createDate" maxOccurs="1"  minOccurs="0"/>
+				<xs:element ref="deviceId" maxOccurs="1"  minOccurs="0"/>
+				<xs:element ref="rawId" maxOccurs="1"  minOccurs="0"/>
 			</xs:sequence>
 			<xs:attribute name="method" use="required">
 				<xs:simpleType>
@@ -29,11 +30,18 @@
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
-	<xs:element name="createDate">
+	<xs:element name="deviceId">
 		<xs:simpleType>
 			<xs:restriction base="xs:string">
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
-		
+	<xs:element name="rawId">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	
+	
 </xs:schema>
