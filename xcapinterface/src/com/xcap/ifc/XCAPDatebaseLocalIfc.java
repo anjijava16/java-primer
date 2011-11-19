@@ -15,11 +15,27 @@ public interface XCAPDatebaseLocalIfc {
 	final static String DATE_FORMAT = "yyyy-MM-dd hh:mm:ss";
 	final static DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
 	
-	public ResultData get(String userId, String nodeSelector);
+	/**
+	 * @param userInfo userId or userMsimsn
+	 * @param nodeSelector
+	 * @return
+	 */
+	public ResultData get(String userInfo, String nodeSelector);
+
+	/**
+	 * @param userInfo userId or userMsimsn
+	 * @param nodeSelector
+	 * @param xml
+	 * @return
+	 */
+	public ResultData put(String userInfo, String nodeSelector, String xml);
 	
-	public ResultData put(String userId, String nodeSelector, String xml);
-	
-	public ResultData delete(String userId, String nodeSelector);
+	/** 
+	 * @param userInfo userId or userMsimsn
+	 * @param nodeSelector
+	 * @return
+	 */
+	public ResultData delete(String userInfo, String nodeSelector);
 	
 	public class ResultData{
 		public static final int STATUS_200 = 200;

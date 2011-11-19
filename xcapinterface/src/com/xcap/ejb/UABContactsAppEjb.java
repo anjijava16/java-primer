@@ -54,6 +54,8 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 
 	final static String NODE_LEAF_CONTACT_NAME = "contactName";
 	final static String NODE_LEAF_DESC = "description";
+	final static String NODE_LEAF_DEVICE_ID = "deviceId";
+	final static String NODE_LEAF_RAW_ID = "rawId";
 	final static String NODE_LEAF_CREATE_DATE = "createDate";
 
 	final static String NODE_ATTR_METHOD = "method";
@@ -63,6 +65,11 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 			NODE_ATTR_METHOD).concat("=\"\\S+\"\\]$");
 	final static String PATTERN_CONTACTNAME_INDEX = "^contactName\\[1\\]$";
 	final static String PATTERN_CREATEDATE_INDEX = "^createDate\\[1\\]$";
+	
+	final static String PATTERN_DEVICE_ID_INDEX = "^deviceId\\[1\\]$";
+	final static String PATTERN_RAW_ID_INDEX = "^rawId\\[1\\]$";
+	final static String PATTERN_DESC_INDEX = "^rawId\\[1\\]$";
+
 
 	@PersistenceContext(unitName = "UABXCAP")
 	EntityManager em;
@@ -73,9 +80,8 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 	public void postConstruct() {
 		contactsDao = new UABContactDao(em);
 	}
-
-	public ResultData get(String userId_, String nodeSelector) {
-		long userId = Long.valueOf(userId_);
+	
+	public ResultData get(String userInfo, String nodeSelector) {
 		StringBuilder xmlBuilder = new StringBuilder(
 				"<?xml version='1.0' encoding='UTF-8'?>");
 		log.info("get, nodeSelector:" + nodeSelector);
@@ -88,7 +94,7 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 					.append("xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ")
 					.append("xsi:schemaLocation=\"contacts ")
 					.append(  "xcap-schema/UABContacts\">");
-			List<UABContactEntity> list = contactsDao.getList(userId);
+			List<UABContactEntity> list = contactsDao.getList(userInfo);
 			constructContactNode(xmlBuilder, list);
 
 			xmlBuilder.append("</".concat(NODE_CONTACTS).concat(">"));
@@ -97,16 +103,16 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 						xmlBuilder.toString());
 			}
 		} else {
-			log.info("node selector:" + nodeSelector + " userId:" + userId);
+			log.info("node selector:" + nodeSelector + " userMsisdn:" + userInfo);
 			if (nodeSelector.startsWith(NODE_CONTACTS)) {
 				// sel.indexOf(Constants.NODE_CONTACTS.concat("/"));
 				String condition[] = nodeSelector.split("/");
 
 				if (condition.length == 2) {
-					return getSecondLevelXml(userId, condition[1]);
+					return getSecondLevelXml(userInfo, condition[1]);
 				} else if (condition.length == 3) {
 					log.info("selector is three layer...");
-					ResultData data = getSecondLevelXml(userId, condition[1]);
+					ResultData data = getSecondLevelXml(userInfo, condition[1]);
 					String tagName = null; // node selector second level.
 					if ((tagName = thirdLevelUrlValidate(condition[2])) != null) {
 						log.info("proccess Contact's leaf node.");
@@ -143,10 +149,9 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 		return new ResultData(ResultData.STATUS_404, "");
 	}
 
-	public ResultData put(String userId_, String nodeSelector, String xml) {
+	public ResultData put(String userMsisdn, String nodeSelector, String xml) {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(true); // never forget this!
-		long userId = Long.valueOf(userId_);
 
 		Document doc = null;
 		Element element = null;
@@ -181,24 +186,24 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 					|| (nodeSelector != null && nodeSelector
 							.equals(NODE_CONTACTS))) {
 				// put document, replace user all contacts.
-				log.info("delete contacts by userId, put document.");
-				contactsDao.deleteContacts(Long.valueOf(userId));
-				return contactNode(doc, NODE_CONTACTS, userId);
+				log.info("delete contacts by user msisdn, put document.");
+				contactsDao.deleteContacts(userMsisdn);
+				return contactNode(doc, NODE_CONTACTS, userMsisdn);
 			}
 		} else if (NODE_CONTACT.equals(topTagName)) {// document top node is
 														// contact.
 			// add or replace one contact.
 			if (secondLevelSelector.equals(NODE_CONTACT)) { //
 				log.info("put operate by node tag name, node selector is contact.");
-				int size = (int) contactsDao.getListSize(userId);
+				int size = (int) contactsDao.getListSize(userMsisdn);
 				switch (size) {
 				case 0: // add
-					contactNode(doc, NODE_CONTACT, userId);
+					contactNode(doc, NODE_CONTACT, userMsisdn);
 					return new ResultData(ResultData.STATUS_200, "");
 
 				case 1: // merge
 					// first delete existed node, then add.
-					contactNode(doc, NODE_CONTACT, userId);
+					contactNode(doc, NODE_CONTACT, userMsisdn);
 					return new ResultData(ResultData.STATUS_200, "");
 				default:
 					// error
@@ -214,7 +219,7 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 				Matcher match = p.matcher(nodeSelector);
 				if (match.find()) {
 					int index = Integer.valueOf(match.group(0));
-					int size = (int) contactsDao.getListSize(userId);
+					int size = (int) contactsDao.getListSize(userMsisdn);
 					if (index > 0 && index <= size + 1) { // index valid
 						log.info("index valid, value is " + index);
 
@@ -225,7 +230,7 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 						if (index <= size) {
 							log.info("merge contact by index");
 							UABContactEntity contact = contactsDao.getByIndex(
-									userId, index);
+									userMsisdn, index);
 							if (contact != null) {
 								contact.setContactName(newContactName);
 								contact.setContactMethod(method);
@@ -238,7 +243,7 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 						} else if (index == size + 1) {
 							// add
 							UABContactEntity contact = new UABContactEntity();
-							contact.setUserId(userId);
+							contact.setMsisdn(userMsisdn);
 							contact.setContactName(newContactName);
 							contact.setContactMethod(method);
 							contactsDao.saveOrUpdate(contact);
@@ -265,10 +270,12 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 					Map<String, String> re = getContactXmlValue(element);
 					String newContactName = re.get(NODE_LEAF_CONTACT_NAME);
 					String docAttrMethod = re.get(NODE_ATTR_METHOD);
-
+					String rawId = re.get(NODE_LEAF_RAW_ID);
+					String deviceId = re.get(NODE_LEAF_DEVICE_ID);
+					String desc = re.get(NODE_LEAF_DESC);
 					if (method.equals(docAttrMethod)) {
 						UABContactEntity en = contactsDao.getByContactMethod(
-								userId, method);
+								userMsisdn, method);
 						if (en != null) {
 							// merge.
 							log.info("merge contact by unique attr.");
@@ -277,12 +284,15 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 							return new ResultData(ResultData.STATUS_200, "");
 						} else {
 							// add.
-							log.info("add contact by unique attr. userId "
-									+ userId);
+							log.info("add contact by unique attr. user msisdn "
+									+ userMsisdn);
 							UABContactEntity newEntity = new UABContactEntity();
-							newEntity.setUserId(userId);
+							newEntity.setMsisdn(userMsisdn);
 							newEntity.setContactName(newContactName);
 							newEntity.setContactMethod(method);
+							newEntity.setRawID(rawId != null ? Long.valueOf(rawId) : null);
+							newEntity.setDeviceID(deviceId != null ? Long.valueOf(deviceId) : null);
+							newEntity.setDescription(desc);
 							contactsDao.saveOrUpdate(newEntity);
 							return new ResultData(ResultData.STATUS_200, "");
 						}
@@ -302,10 +312,10 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 				if (topTagName.equals(thirdLevelTagName)) {
 					UABContactEntity entity = null;
 					if (secondLevelSelector.equals(NODE_CONTACT)) {
-						int size = (int) contactsDao.getListSize(userId);
+						int size = (int) contactsDao.getListSize(userMsisdn);
 						if (size == 1) {
 							List<UABContactEntity> tempList = contactsDao
-									.getList(userId);
+									.getList(userMsisdn);
 							if (tempList != null && tempList.size() > 0) {
 								entity = tempList.get(0);
 							}
@@ -316,7 +326,7 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 						Matcher match = p.matcher(nodeSelector);
 						if (match.find()) {
 							int index = Integer.valueOf(match.group(0));
-							entity = contactsDao.getByIndex(userId, index);
+							entity = contactsDao.getByIndex(userMsisdn, index);
 						}
 					} else if (secondLevelSelector
 							.matches(PATTERN_CONTACT_UNIQUE_ATTR)) {
@@ -327,7 +337,7 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 								&& beginIndex < endIndex) {
 							String method = nodeSelector.substring(
 									beginIndex + 2, endIndex);
-							entity = contactsDao.getByContactMethod(userId,
+							entity = contactsDao.getByContactMethod(userMsisdn,
 									method);
 						}
 					}
@@ -355,14 +365,13 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 		return new ResultData(ResultData.STATUS_404, "");
 	}
 
-	public ResultData delete(String userId_, String nodeSelector) {
+	public ResultData delete(String userMsisdn, String nodeSelector) {
 		log.info("delete operator, nodeSelector :" + nodeSelector);
 		// delete all
 		// delete a contact
-		long userId = Long.valueOf(userId_);
 		if (nodeSelector == null || nodeSelector.equals(NODE_CONTACTS)) {
-			log.info("delete all by userId " + userId);
-			contactsDao.deleteContacts(Long.valueOf(userId));
+			log.info("delete all by userMsisdn " + userMsisdn);
+			contactsDao.deleteContacts(userMsisdn);
 			return new ResultData(ResultData.STATUS_200, "");
 		} else {
 			String[] selectors = nodeSelector.split("/");
@@ -370,9 +379,10 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 				String secondLevelSelector = selectors[1];
 				if (secondLevelSelector.equals(NODE_CONTACT)) { // by tagName
 																// selector.
-					long size = contactsDao.getListSize(userId);
+					long size = contactsDao.getListSize(userMsisdn);
 					if (size == 1) {
-						int affectRows = contactsDao.deleteContacts(userId);
+						//only one record.
+						int affectRows = contactsDao.deleteContacts(userMsisdn);
 						return new ResultData(ResultData.STATUS_200, "");
 					} if(size == 0){
 						return new ResultData(ResultData.STATUS_404, "");
@@ -388,7 +398,7 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 					if (match.find()) {
 						int index = Integer.valueOf(match.group(0));
 						int affectRows = contactsDao
-								.deleteContactByIndexSelector(userId, index);
+								.deleteContactByIndexSelector(userMsisdn, index);
 						if (affectRows != -1) {
 							return new ResultData(ResultData.STATUS_200, "");
 						}
@@ -409,7 +419,7 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 						String method = nodeSelector.substring(beginIndex + 2,
 								endIndex);
 						int affectRows = contactsDao.deleteContactByUniqueAttr(
-								userId, method); // return delete row count.
+								userMsisdn, method); // return delete row count.
 						return new ResultData(ResultData.STATUS_200, "");
 					} else {
 						return new ResultData(ResultData.STATUS_409,
@@ -447,7 +457,7 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 	/**
 	 * put contact nodes.
 	 */
-	private ResultData contactNode(Document doc, String tagName, long userId) {
+	private ResultData contactNode(Document doc, String tagName, String userInfo) {
 		NodeList nodes = null;
 
 		if (thirdLevelUrlValidate(tagName) == null) {
@@ -491,11 +501,17 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 								contact.setContactName(value);
 							} else if (name.equals(NODE_LEAF_CREATE_DATE)) {
 								// contact.setCreateDate(value);
+							}else if(name.equals(NODE_LEAF_DESC)){
+								contact.setDescription(value);
+							}else if(name.equals(NODE_LEAF_DEVICE_ID)){
+								contact.setDeviceID(value == null ? null : Long.valueOf(value));
+							}else if(name.equals(NODE_LEAF_RAW_ID)){
+								contact.setRawID(value == null ? null : Long.valueOf(value));
 							}
 						}
 					}
 					contact.setContactMethod(method);
-					contact.setUserId(userId);
+					contact.setMsisdn(userInfo);
 					log.info("saveOrUpdate--->" + contact.toString());
 					contactsDao.saveOrUpdate(contact);
 				} else {
@@ -554,7 +570,7 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 	}
 
 	/**
-	 * method or method[1] contactName or contactName[1] userId or userId[1]
+	 * 3rd selector validator and get 3rd layer tag name from selector.
 	 * createDate createDate[1]
 	 * 
 	 * @param condition2
@@ -562,11 +578,24 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 	 */
 	private String thirdLevelUrlValidate(String condition2) {
 		if (condition2.equals(NODE_LEAF_CONTACT_NAME)
-				|| condition2.equals(NODE_LEAF_CREATE_DATE)) {
+				|| condition2.equals(NODE_LEAF_DEVICE_ID)
+				|| condition2.equals(NODE_LEAF_RAW_ID)
+				|| condition2.equals(NODE_LEAF_DESC)
+				|| condition2.equals(NODE_LEAF_CREATE_DATE)
+				) {
 			return condition2;
 		} else if (condition2.matches(PATTERN_CONTACTNAME_INDEX)
-				|| condition2.matches(PATTERN_CREATEDATE_INDEX)) {
-			Pattern pattern = Pattern.compile("contactName|createDate");
+				|| condition2.matches(PATTERN_DEVICE_ID_INDEX)
+				|| condition2.matches(PATTERN_RAW_ID_INDEX)
+				|| condition2.matches(PATTERN_CREATEDATE_INDEX)
+				|| condition2.matches(PATTERN_DESC_INDEX)) {
+			
+			String patternStr = NODE_LEAF_CONTACT_NAME.concat("|")
+				.concat(NODE_LEAF_DEVICE_ID)
+				.concat(NODE_LEAF_RAW_ID)
+				.concat(NODE_LEAF_DESC)
+				.concat(NODE_LEAF_CREATE_DATE);
+			Pattern pattern = Pattern.compile(patternStr);
 			Matcher match = pattern.matcher(condition2);
 			if (match.find()) {
 				return match.group(0);
@@ -599,15 +628,15 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 	 * contacts/list[@id="close-friends"]/contact[@method="1"]/contactName<br/>
 	 * contacts/list[@id="close-friends"]/contact[@method="1"]/contactName[1]<br/>
 	 * 
-	 * @param userId
+	 * @param user msisdn
 	 * @param condition
 	 * @return
 	 */
-	private ResultData getSecondLevelXml(long userId, String condition1) {
+	private ResultData getSecondLevelXml(String userInfo, String condition1) {
 		log.info("getSecondLevelXml, condition1:" + condition1);
 		if (condition1.startsWith(UABContactsAppEjb.NODE_CONTACT)) {
 			if (condition1.equals(UABContactsAppEjb.NODE_CONTACT)) {
-				long size = contactsDao.getListSize(userId);
+				long size = contactsDao.getListSize(userInfo);
 				if (size == 0) {
 					log.info("was not found in the document.");
 					return new ResultData(ResultData.STATUS_404, "");
@@ -615,7 +644,7 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 					StringBuilder contactXml = new StringBuilder();
 
 					constructContactNode(contactXml,
-							contactsDao.getList(userId));
+							contactsDao.getList(userInfo));
 					return new ResultData(ResultData.STATUS_200,
 							contactXml.toString());
 				} else {
@@ -631,7 +660,7 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 				if (match.find()) {
 					int indexTemp = Integer.valueOf(match.group(0));
 					log.info("index:" + indexTemp);
-					UABContactEntity entity = contactsDao.getByIndex(userId,
+					UABContactEntity entity = contactsDao.getByIndex(userInfo,
 							indexTemp);
 
 					return getStatusAndXml(entity);
@@ -647,7 +676,7 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 					String method = condition1.substring(beginIndex + 2,
 							endIndex);
 					UABContactEntity entity = contactsDao.getByContactMethod(
-							userId, method);
+							userInfo, method);
 					return getStatusAndXml(entity);
 				}
 			} else {
@@ -688,15 +717,20 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 		if (en != null && method != null) {
 			String contactName = en.getContactName();
 			String createDate = dateFormat.format(en.getCreateDate());
+			Long rawId = en.getRawID();
+			Long deviceId = en.getDeviceID();
+
 			// String id = en.getId().toString();
 
 			xmlBuilder
 					.append("<contact method=\"".concat(method).concat("\">"))
 					.append("<contactName>".concat(
-							contactName != null ? contactName : "").concat(
-							"</contactName>"))
-					.append("<createDate>".concat(createDate).concat(
-							"</createDate>")).append("</contact>");
+							contactName != null ? contactName : "").concat("</contactName>"))
+					.append("<rawId>".concat(
+							rawId != null ? rawId.toString() : "").concat("</rawId>"))
+					.append("<deeviceId>".concat(
+							deviceId != null ? deviceId.toString() : "").concat("</deeviceId>"))
+					.append("<createDate>".concat(createDate).concat("</createDate>")).append("</contact>");
 		}
 	}
 

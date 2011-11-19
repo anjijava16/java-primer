@@ -76,7 +76,7 @@ public class TestGet extends TestBase{
 	 */
 	@Test
 	public void getLeafNodeByTagName(){
-		int i = 1;
+		int i = 2;
 		String u = null;
 		String nodeSelector = null;
 		switch (i) {

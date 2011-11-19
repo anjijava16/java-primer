@@ -3,14 +3,24 @@
 	xsi:schemaLocation="contacts contacts.xsd">
 	<contact method="13510776272">
 		<contactName>Gykooooox</contactName>
+		<deviceId>111</deviceId>
+		<rawId>1233</rawId>
+
 	</contact>
 	<contact method="84236457">
 		<contactName>翟小斌</contactName>
+		<deviceId>112</deviceId>
+		<rawId>2233</rawId>
+
 	</contact>
 	<contact method="46546464646">
 		<contactName>yuankang</contactName>
+		<deviceId>116</deviceId>
+		<rawId>3233</rawId>
 	</contact>
 	<contact method="156445564641">
 		<contactName>yuanka</contactName>
+		<deviceId>114</deviceId>
+		<rawId>4233</rawId>
 	</contact>
 </contacts>

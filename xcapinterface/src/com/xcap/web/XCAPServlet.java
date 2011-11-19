@@ -52,19 +52,23 @@ public class XCAPServlet extends HttpServlet {
 		String auid = (String) req.getAttribute("auid");
 		String nodeSelector = (String) req.getAttribute("queryString");
 		String method = (String) req.getAttribute("method");
+		String msisdn = (String)req.getAttribute("msisdn");
 
-		log.info("(method,userId, auid,nodeSelector) = " + method + ","
-				+ userId + "," + auid + "," + nodeSelector);
+		log.info("(method,userId,msisdn,auid,nodeSelector) = " + method + ","
+				+ userId + ","  + msisdn + "," + auid + "," + nodeSelector);
 
 		String jndi = null;
+		String userInfo = null;
 		if (auid == null) {
 			resp.sendError(HttpServletResponse.SC_NOT_FOUND, "auid is null");
 			throw new IllegalStateException("auid is null");
 		}
 		if (auid.equals(Constants.APP_USAGE_CONTACT)) {
 			jndi = XCAPDatebaseLocalIfc.UAB_CONTACTS_LOCAL_JNDI;
+			userInfo = msisdn;
 		} else if(auid.equals(Constants.APP_USAGE_SINGSPACE_CONTACT)){
 			jndi = XCAPDatebaseLocalIfc.SING_SPACE_CONTACTS_LOCAL_JNDI;
+			userInfo = userId;
 		}else{
 			throw new IllegalStateException("other auid not implement...");
 			// other app usage.
@@ -80,7 +84,7 @@ public class XCAPServlet extends HttpServlet {
 				resp.setContentType("text/xml");
 				// call ifc
 				if (auid.equals(Constants.APP_USAGE_CONTACT) || auid.equals(Constants.APP_USAGE_SINGSPACE_CONTACT)) {
-					ResultData data = xcapIfc.get(userId, nodeSelector);
+					ResultData data = xcapIfc.get(userInfo, nodeSelector);
 					String result = data.getXml();
 					if (data.getstatus() != HttpServletResponse.SC_OK) {
 						log.info("------error status code is " + data.getstatus());
@@ -98,13 +102,7 @@ public class XCAPServlet extends HttpServlet {
 							"auid is not implement");
 				}
 				break;
-			case PUT:
-/*				BufferedReader re1 =req.getReader();
-				String str = null;
-				while((str = re1.readLine()) != null){
-					log.info(str);
-				}
-*/				
+			case PUT:				
 				Scanner scanner = new Scanner(req.getReader());
 				StringBuilder xmlBuilder = new StringBuilder();
 				while (scanner.hasNextLine()) {
@@ -141,7 +139,7 @@ public class XCAPServlet extends HttpServlet {
 
 					if (result == XMLValidator.RESULT_OK) {
 						log.info("xml schema validated, put xml to ejb...");
-						ResultData resultData = xcapIfc.put(userId, nodeSelector, xmlBuilder.toString());
+						ResultData resultData = xcapIfc.put(userInfo, nodeSelector, xmlBuilder.toString());
 						if(resultData.getstatus() == ResultData.STATUS_404){
 							resp.sendError(HttpServletResponse.SC_NOT_FOUND);
 						}else if(resultData.getstatus() == ResultData.STATUS_409){
@@ -169,7 +167,7 @@ public class XCAPServlet extends HttpServlet {
 
 				break;
 			case DELETE:
-				ResultData re = xcapIfc.delete(userId, nodeSelector);
+				ResultData re = xcapIfc.delete(userInfo, nodeSelector);
 				if(ResultData.STATUS_200 == re.getstatus()){
 					resp.setStatus(ResultData.STATUS_200);
 				}else if(ResultData.STATUS_409 == re.getstatus()){

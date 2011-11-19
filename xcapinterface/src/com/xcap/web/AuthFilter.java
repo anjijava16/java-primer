@@ -90,6 +90,7 @@ public class AuthFilter implements Filter {
 				return;
 			}
 			
+			req.setAttribute("msisdn", msisdnParam);
 			req.setAttribute("auid", auid);
 			req.setAttribute("queryString", queryString);
 			req.setAttribute("uid", uid);
