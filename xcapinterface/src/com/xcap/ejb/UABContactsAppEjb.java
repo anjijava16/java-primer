@@ -1,6 +1,7 @@
 package com.xcap.ejb;
 
 import java.io.StringReader;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -226,27 +227,29 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 						Map<String, String> re = getContactXmlValue(element);
 						String newContactName = re.get(NODE_LEAF_CONTACT_NAME);
 						String method = re.get(NODE_ATTR_METHOD);
-
+						String rawId = re.get(NODE_LEAF_RAW_ID);
+						String deviceId = re.get(NODE_LEAF_DEVICE_ID);
+						String description = re.get(NODE_LEAF_DESC);
+						
+						UABContactEntity contact = null;
 						if (index <= size) {
 							log.info("merge contact by index");
-							UABContactEntity contact = contactsDao.getByIndex(
+							contact = contactsDao.getByIndex(
 									userMsisdn, index);
-							if (contact != null) {
-								contact.setContactName(newContactName);
-								contact.setContactMethod(method);
-								contactsDao.saveOrUpdate(contact);
-								log.info("merge contact by index." + contact);
-								return new ResultData(ResultData.STATUS_200, "");
-							} else {
-								log.info("merge contact by index. 404");
-							}
 						} else if (index == size + 1) {
 							// add
-							UABContactEntity contact = new UABContactEntity();
+							contact = new UABContactEntity();
+						}
+						
+						if (contact != null) {
 							contact.setMsisdn(userMsisdn);
 							contact.setContactName(newContactName);
 							contact.setContactMethod(method);
+							contact.setRawID(rawId != null ? Long.valueOf(rawId) : null);
+							contact.setDeviceID(deviceId != null ? Long.valueOf(deviceId) : null);
+							contact.setDescription(description);
 							contactsDao.saveOrUpdate(contact);
+							log.info("merge contact by index." + contact);
 							return new ResultData(ResultData.STATUS_200, "");
 						}
 					} else {
@@ -276,26 +279,23 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 					if (method.equals(docAttrMethod)) {
 						UABContactEntity en = contactsDao.getByContactMethod(
 								userMsisdn, method);
-						if (en != null) {
+						if (en == null) {
+							// add.
+							log.info("add contact by unique attr. user msisdn " + userMsisdn);
+							en = new UABContactEntity();
+						} else {
 							// merge.
 							log.info("merge contact by unique attr.");
-							en.setContactName(newContactName);
-							contactsDao.saveOrUpdate(en);
-							return new ResultData(ResultData.STATUS_200, "");
-						} else {
-							// add.
-							log.info("add contact by unique attr. user msisdn "
-									+ userMsisdn);
-							UABContactEntity newEntity = new UABContactEntity();
-							newEntity.setMsisdn(userMsisdn);
-							newEntity.setContactName(newContactName);
-							newEntity.setContactMethod(method);
-							newEntity.setRawID(rawId != null ? Long.valueOf(rawId) : null);
-							newEntity.setDeviceID(deviceId != null ? Long.valueOf(deviceId) : null);
-							newEntity.setDescription(desc);
-							contactsDao.saveOrUpdate(newEntity);
-							return new ResultData(ResultData.STATUS_200, "");
 						}
+						
+						en.setMsisdn(userMsisdn);
+						en.setContactName(newContactName);
+						en.setContactMethod(docAttrMethod);
+						en.setRawID(rawId != null ? Long.valueOf(rawId) : null);
+						en.setDeviceID(deviceId != null ? Long.valueOf(deviceId) : null);
+						en.setDescription(desc);
+						contactsDao.saveOrUpdate(en);
+						return new ResultData(ResultData.STATUS_200, "");
 					} else {
 						// 404 error
 					}
@@ -342,17 +342,21 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 						}
 					}
 
-					log.info("modify contact attribue,contact is:" + entity);
+					log.info("modify contact attribue,contact entity is:" + entity);
 					// replace a contact attribute.
 					NodeList tempNodeList = doc
-							.getElementsByTagName(NODE_LEAF_CONTACT_NAME);
+							.getElementsByTagName(thirdLevelTagName);
 					Node leafNode = tempNodeList.item(0);
 					if (entity != null && leafNode != null
 							&& leafNode.getFirstChild() != null) {
-						log.info("----####");
-						String contactName = leafNode.getFirstChild()
-								.getNodeValue();
-						entity.setContactName(contactName);
+						String nodeValue = leafNode.getFirstChild().getNodeValue();
+						log.info("thirdLevelTagName, nodeValue:" + thirdLevelTagName + "," + nodeValue);
+						String fieldName = xmlMappingEntityField(thirdLevelTagName);
+						try {
+							BeanUtils.setProperty(entity, fieldName, nodeValue);
+						} catch (Exception e) {
+							e.printStackTrace();
+						} 
 						contactsDao.saveOrUpdate(entity);
 						return new ResultData(ResultData.STATUS_200, "");
 					}
@@ -435,22 +439,28 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 
 	private static Map<String, String> getContactXmlValue(Element element) {
 		String method = element.getAttribute(NODE_ATTR_METHOD);
-		NodeList nodeList = element.getChildNodes();
+		Map<String, String> re = new HashMap<String, String>();
+		re.put(NODE_ATTR_METHOD, method);
 
-		String newContactName = null;
+		NodeList nodeList = element.getChildNodes();
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			Node node = nodeList.item(i);
-			if (!node.getNodeName().equals("#text")) {
+			String nodeName = node.getNodeName();
+			if (!nodeName.equals("#text")) {
 				NodeList nodeList2 = node.getChildNodes();
-				if (NODE_LEAF_CONTACT_NAME.equals(node.getNodeName())) {
-					newContactName = nodeList2.getLength() > 0 ? nodeList2
-							.item(0).getNodeValue() : null;
+				String nodeVal = nodeList2.getLength() > 0 ? nodeList2
+						.item(0).getNodeValue() : null;
+				if (NODE_LEAF_CONTACT_NAME.equals(nodeName)) {					
+					re.put(NODE_LEAF_CONTACT_NAME, nodeVal );
+				}else if(NODE_LEAF_DESC.equals(nodeName)){
+					re.put(NODE_LEAF_DESC, nodeVal);
+				}else if(NODE_LEAF_DEVICE_ID.equals(nodeName)){
+					re.put(NODE_LEAF_DEVICE_ID, nodeVal);
+				}else if(NODE_LEAF_RAW_ID.equals(nodeName)){
+					re.put(NODE_LEAF_RAW_ID, nodeVal);
 				}
 			}
 		}
-		Map<String, String> re = new HashMap<String, String>();
-		re.put(NODE_ATTR_METHOD, method);
-		re.put(NODE_LEAF_CONTACT_NAME, newContactName);
 		return re;
 	}
 
@@ -605,29 +615,6 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 	}
 
 	/**
-	 * //by tagName ,<br/>
-	 * //by unique unique attr,<br/>
-	 * //by index,<br/>
-	 * 
-	 * 0 contacts/contact<br/>
-	 * contacts/contact[1]<br/>
-	 * contacts/contact[@method="1"]<br/>
-	 * 
-	 * 1、 contacts/list<br/>
-	 * contacts/list[1]<br/>
-	 * contacts/list[@id="close-friends"]<br/>
-	 * ----------------------------------only proccess
-	 * 0,1------------------------------------------<br>
-	 * 2、 contacts/list[@id="close-friends"]/contact<br/>
-	 * contacts/list[@id="close-friends"]/contact[1]<br/>
-	 * contacts/list[@id="close-friends"]/contact[@id="1"]<br/>
-	 * 
-	 * ...... 1,2 组合,其余六种情况<br/>
-	 * 
-	 * 4、 method/contactName/userId/createDate 例如<br/>
-	 * contacts/list[@id="close-friends"]/contact[@method="1"]/contactName<br/>
-	 * contacts/list[@id="close-friends"]/contact[@method="1"]/contactName[1]<br/>
-	 * 
 	 * @param user msisdn
 	 * @param condition
 	 * @return
@@ -733,7 +720,20 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 					.append("<createDate>".concat(createDate).concat("</createDate>")).append("</contact>");
 		}
 	}
-
+	
+	/**
+	 * @param nodeTagName
+	 * @return
+	 */
+	public static String xmlMappingEntityField(String nodeTagName){
+		if(nodeTagName.equals(NODE_LEAF_RAW_ID)){
+			return "rawID";
+		}else if(nodeTagName.equals(NODE_LEAF_DEVICE_ID)){
+			return "deviceID";
+		}
+		return nodeTagName;
+	}
+	
 	public static Contact toBean(UABContactEntity entity) {
 		Contact dest = new Contact();
 		return (Contact) beanConversion(dest, entity);
