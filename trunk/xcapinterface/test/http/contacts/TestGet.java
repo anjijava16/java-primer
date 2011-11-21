@@ -54,11 +54,10 @@ public class TestGet extends TestBase{
 	 */
 	@Test
 	public void getNodeByUniqueAttr(){		
-		String method = "13510776272";
+		String method = "12593";
 		String nodeSelector = constructSelectorByUniqueAttr(method);
 		String u = url.concat(nodeSelector);
 		
-		System.out.println("url:" + u);
 		getReqClient(u);		
 	}
 	
@@ -75,55 +74,88 @@ public class TestGet extends TestBase{
 	 * get conatctName.
 	 */
 	@Test
-	public void getLeafNodeByTagName(){
-		int i = 2;
-		String u = null;
+	public void getConatctNameBy_3rdSelectorIsTagName(){
+		int index = 1;
+		String uniqueAttr = "12593"; // method.
+		
+		TagName tagName = TagName.contactName;
+
+		getLeafNodeByTagName(tagName, index, uniqueAttr, 0);
+		getLeafNodeByTagName(tagName, index, uniqueAttr, 1);
+		getLeafNodeByTagName(tagName, index, uniqueAttr, 2);
+	}
+	
+	/**
+	 * get conatctName.
+	 */
+	@Test
+	public void getRawIdBy_3rdSelectorIsTagName(){
+		int index = 1;
+		String uniqueAttr = "12593"; // method.
+		
+		TagName tagName = TagName.rawId;
+
+		getLeafNodeByTagName(tagName, index, uniqueAttr, 0);
+		getLeafNodeByTagName(tagName, index, uniqueAttr, 1);
+		getLeafNodeByTagName(tagName, index, uniqueAttr, 2);
+	}
+	
+	@Test
+	public void getConatctNameBy_3rdSelectorIsIndex(){
+		int _2ndIndex = 3;
+		String method = "12593";
+		
+		TagName tagName = TagName.contactName;
+		int _3rdLayerIndex = 1;
+		
+		getLeafNodeByIndex(tagName, _2ndIndex, method, _3rdLayerIndex, 0);
+		getLeafNodeByIndex(tagName, _2ndIndex, method, _3rdLayerIndex, 1);
+		getLeafNodeByIndex(tagName, _2ndIndex, method, _3rdLayerIndex, 2);
+	}
+	
+	
+	private void getLeafNodeByTagName(TagName tagName, int index, String uniqueAttr, int i){		
 		String nodeSelector = null;
+		String u = null;
 		switch (i) {
 		case 0:
 			//tag name/tagName
-			nodeSelector = construct_T_T_Leaf(TageName.contactName);
+			nodeSelector = construct_T_T_Selector(tagName);
 			u = url.concat(nodeSelector);
 			break;
 		case 1:
 			//index/tagName
-			int index = 1;
-			nodeSelector = construct_I_T_Leaf(index, TageName.contactName);
+			nodeSelector = construct_I_T_Selector(index, tagName);
 			u = url.concat(nodeSelector);
 			break;
 		case 2:
 			//attr/tagName
-			String uniqueAttr = "13510776272"; // method.
-			nodeSelector = construct_A_T_Leaf(uniqueAttr, TageName.contactName);
+			nodeSelector = construct_A_T_Selector(uniqueAttr, tagName);
 			u = url.concat(nodeSelector);
 			break;
 		}
-		log.info(u);
 		getReqClient(u);
 	}
 
-	@Test
-	public void getLeafNodeByIndex(){
-		TageName tagName = TageName.contact;
-		int index = 1;
-		String method = "";
-		int i = 0;
+	public void getLeafNodeByIndex(TagName tagName, int _2ndIndex, String method, int _3rdLayerIndex, int i){		
+		String u = null;
 		switch (i) {
 		case 0:
-			String sel = construct_T_I_Leaf(tagName,index);
-			String u = url.concat(sel);
-			getReqClient(u);
+			String sel = construct_T_I_Selector(tagName, _3rdLayerIndex);
+			u = url.concat(sel);
 			break;
 		case 1:
-			int _3rdLayerIndex = 1;
-			u = construct_I_I_eafSelector(index,_3rdLayerIndex);
+			sel = construct_I_I_Selector(_2ndIndex, tagName, _3rdLayerIndex);
+			u = url.concat(sel);
 			break;
 		case 2:
-			u = construct_A_I_eafSelector(method, index);
+			sel = construct_A_I_Selector(method, tagName, _3rdLayerIndex);
+			u = url.concat(sel);
 			break;
-		}		
+		}
+		getReqClient(u);
 	}
-	
+		
 	
 	@Ignore("tested")
 	@Test

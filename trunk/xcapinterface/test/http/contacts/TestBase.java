@@ -1,7 +1,9 @@
 package http.contacts;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.Scanner;
 
@@ -19,6 +21,7 @@ import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.log4j.Logger;
+import org.jaxen.function.ConcatFunction;
 
 public abstract class TestBase {
 	public static Logger log = Logger.getLogger(TestBase.class);
@@ -42,7 +45,7 @@ public abstract class TestBase {
 	 */
 	public static String DOUBLE_QUOTATION_MARKS  = "%22";
 	
-	public enum TageName{contacts,contact,list,contactName, description, createDate, method};
+	public enum TagName{contacts,contact,list,contactName, description, createDate, method, rawId, deviceId};
 		
 	public static String constructUrl(String phoneNo, String token) {
 		String baseUrl = "http://localhost:8080/xcap-root/UABContacts/{0}/{1}/index";
@@ -72,12 +75,12 @@ public abstract class TestBase {
 		return nodeSelector;
 	}
 	
-	public static String construct_T_T_Leaf(TageName tageName){
+	public static String construct_T_T_Selector(TagName tageName){
 		String firstLevelSelector = constructSelectorByTagName();
 		return firstLevelSelector.concat("/").concat(tageName.name());
 	}
 	
-	public static String construct_I_T_Leaf(int index ,TageName tageName){
+	public static String construct_I_T_Selector(int index ,TagName tageName){
 		String firstLevelSelector = constructSelectorByIndex(index);
 		firstLevelSelector = firstLevelSelector.concat("/").concat(tageName.name());
 		
@@ -90,7 +93,7 @@ public abstract class TestBase {
 	 * @param tageName 3rd layer selector.
 	 * @return
 	 */
-	public static String construct_A_T_Leaf(String uniqueAttr, TageName tageName){
+	public static String construct_A_T_Selector(String uniqueAttr, TagName tageName){
 		String firstLevelSelector = constructSelectorByUniqueAttr(uniqueAttr);
 		String nodeSelector = firstLevelSelector.concat("/").concat(tageName.name());
 		return nodeSelector;
@@ -101,18 +104,18 @@ public abstract class TestBase {
 	 * @param index: 3rd layer selector is index selector.
 	 * @return
 	 */
-	public static String construct_T_I_Leaf(TageName tageName, int index){
-		return construct_T_T_Leaf(tageName).concat(LEFT_SQUARE_BRACKET).concat(String.valueOf(index)).concat(RIGHT_SQUARE_BRACKET);
+	public static String construct_T_I_Selector(TagName tageName, int index){
+		return construct_T_T_Selector(tageName).concat(LEFT_SQUARE_BRACKET).concat(String.valueOf(index)).concat(RIGHT_SQUARE_BRACKET);
 	}	
 	
-	public static String construct_I_I_eafSelector(int index, int _3rdLayerIndex){
+	public static String construct_I_I_Selector(int index, TagName _3rdLayerTagName, int _3rdLayerIndex){
 		String conatctSelecotor = constructSelectorByIndex(index);
-		return conatctSelecotor.concat(LEFT_SQUARE_BRACKET).concat(String.valueOf(_3rdLayerIndex)).concat(RIGHT_SQUARE_BRACKET);
+		return conatctSelecotor.concat("/").concat(_3rdLayerTagName.name()).concat(LEFT_SQUARE_BRACKET).concat(String.valueOf(_3rdLayerIndex)).concat(RIGHT_SQUARE_BRACKET);
 	}	
 
-	public static String construct_A_I_eafSelector(String method,int _3rdLayerIndex){
+	public static String construct_A_I_Selector(String method, TagName _3rdLayerTagName, int _3rdLayerIndex){
 		String conatctSelecotor = constructSelectorByUniqueAttr(method);
-		return conatctSelecotor.concat(LEFT_SQUARE_BRACKET).concat(String.valueOf(_3rdLayerIndex)).concat(RIGHT_SQUARE_BRACKET);
+		return conatctSelecotor.concat("/").concat(_3rdLayerTagName.name()).concat(LEFT_SQUARE_BRACKET).concat(String.valueOf(_3rdLayerIndex)).concat(RIGHT_SQUARE_BRACKET);
 	}	
 	
 	public static File getXmlFilePath(String fileName){
@@ -128,10 +131,13 @@ public abstract class TestBase {
 	}
 	
 	public static void putReqClient(String url, File file) throws Exception {
+		putReqClient(url, new FileInputStream(file));
+	}
+	
+	public static void putReqClient(String url, InputStream in) throws Exception {
 
         HttpPut httpPut = new HttpPut(url);
-        InputStreamEntity reqEntity = new InputStreamEntity(
-                new FileInputStream(file), -1);
+        InputStreamEntity reqEntity = new InputStreamEntity(in, -1);
         reqEntity.setContentType("text/xml");
         reqEntity.setChunked(true);
         
@@ -144,6 +150,7 @@ public abstract class TestBase {
         System.out.println("executing request " + httpPut.getRequestLine());
         response(httpclient, httpPut); 
 	}
+	
 	
 	public static void deleteReqClient(String url) throws Exception {
 		ThreadSafeClientConnManager cm = new ThreadSafeClientConnManager();
@@ -182,5 +189,9 @@ public abstract class TestBase {
         }finally{
         	httpclient.getConnectionManager().shutdown();
         }
-	}	
+	}
+	
+	public static InputStream getInputSteam(String str){
+		return new ByteArrayInputStream(str.getBytes());
+	}
 }
