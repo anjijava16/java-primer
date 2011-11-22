@@ -2,6 +2,7 @@ package http.singcontacts;
 
 import org.apache.log4j.Logger;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestSingGet extends TestBase{
@@ -48,7 +49,7 @@ public class TestSingGet extends TestBase{
 	 */
 	@Test
 	public void getContactNodebyIndex(){
-		String sel = constructSecondLayerSelectorByIndex(10);
+		String sel = constructSecondLayerSelectorByIndex(1);
 		String u = url.concat(sel);
 		getReqClient(u);		
 	}
@@ -126,16 +127,27 @@ public class TestSingGet extends TestBase{
 	 */
 	@Test
 	public void getNameFn(){
-		String byIndex = LEFT_SQUARE_BRACKET.concat("1").concat(RIGHT_SQUARE_BRACKET);
-		String fnByIndex = LEFT_SQUARE_BRACKET.concat("1").concat(RIGHT_SQUARE_BRACKET);
-		
+		String byIndex = LEFT_SQUARE_BRACKET.concat("1").concat(RIGHT_SQUARE_BRACKET);		
 		String reqUrl = url.concat("/~~/contacts/contact" + byIndex + "/name/fn");
-		//String reqUrl = url.concat("/~~/contacts/contact" + byIndex + "/name/fn").concat(fnByIndex);
 		try {
 			getReqClient(reqUrl);
 		} catch (Exception e) {
 			e.printStackTrace();
-		}		
+		}
+	}
+	
+	@Test 
+	public void getNameFnByIndex(){
+		String contactByIndex = LEFT_SQUARE_BRACKET.concat("1").concat(RIGHT_SQUARE_BRACKET);
+		String fnByIndex = LEFT_SQUARE_BRACKET.concat("1").concat(RIGHT_SQUARE_BRACKET);
+		String reqUrl = url.concat("/~~/contacts/contact" + contactByIndex + "/name/fn").concat(fnByIndex);
+
+		try {
+			getReqClient(reqUrl);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 	
 	/**
@@ -147,6 +159,7 @@ public class TestSingGet extends TestBase{
 	 * @param adr
 	 * @return
 	 */
+	@Ignore
 	@Test
 	public void splitByVerticalLineAndColon() {
 		//String adr = "CELL:+8613910193672|:+861085205599|WORK:+861085205588|WORK:+861085205205|";

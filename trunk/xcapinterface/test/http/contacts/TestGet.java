@@ -137,7 +137,7 @@ public class TestGet extends TestBase{
 		getReqClient(u);
 	}
 
-	public void getLeafNodeByIndex(TagName tagName, int _2ndIndex, String method, int _3rdLayerIndex, int i){		
+	private void getLeafNodeByIndex(TagName tagName, int _2ndIndex, String method, int _3rdLayerIndex, int i){		
 		String u = null;
 		switch (i) {
 		case 0:
