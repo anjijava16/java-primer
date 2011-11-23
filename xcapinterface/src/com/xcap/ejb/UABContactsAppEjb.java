@@ -1,7 +1,6 @@
 package com.xcap.ejb;
 
 import java.io.StringReader;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +10,8 @@ import java.util.regex.Pattern;
 import javax.annotation.PostConstruct;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.xml.parsers.DocumentBuilder;
@@ -73,7 +74,7 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 
 
 	@PersistenceContext(unitName = "UABXCAP")
-	EntityManager em;
+	private EntityManager em;
 
 	private static UABContactDao contactsDao;
 
@@ -82,6 +83,8 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 		contactsDao = new UABContactDao(em);
 	}
 	
+	@Override
+	@TransactionAttribute(value=TransactionAttributeType.NEVER)	
 	public ResultData get(String userInfo, String nodeSelector) {
 		StringBuilder xmlBuilder = new StringBuilder(
 				"<?xml version='1.0' encoding='UTF-8'?>");

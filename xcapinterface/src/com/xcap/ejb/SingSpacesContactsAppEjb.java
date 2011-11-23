@@ -13,6 +13,8 @@ import java.util.regex.Pattern;
 import javax.annotation.PostConstruct;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.xml.parsers.DocumentBuilder;
@@ -70,7 +72,7 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 	final static String NODE_ATTR_TYPE = "type";
 
 	@PersistenceContext(unitName="SingSpacesXCAP")
-	EntityManager em;	
+	private EntityManager em;	
 
 	private static SingSpacesContactsDao contactsDao;
 	
@@ -81,6 +83,7 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 	
 	
 	@Override
+	@TransactionAttribute(value=TransactionAttributeType.NEVER)	
 	public ResultData get(String userId, String nodeSelector) {
 		long userIdTemp = Long.valueOf(userId);
 		if(SingConstant.isDocSelector(nodeSelector)){
@@ -356,7 +359,7 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 		    			if(attr != -1){
 		    				SingSpacesContactEntity en = contactsDao.getByUniqueAttr(userId, attr);
 		    				if(en != null){
-		    					em.remove(en);
+		    					contactsDao.remove(en);
 		    				}		    				
 		    			}
 		    			List<SingSpacesContactEntity> list = xmlToEntitys(doc);
@@ -389,7 +392,7 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 	    			String fieldName = SingConstant.titleFieldMapping.get(topTagName);
 	    			try {
 	    				BeanUtils.setProperty(selectorRecord, fieldName, fieldValue);
-	    				em.merge(selectorRecord);
+	    				contactsDao.merge(selectorRecord);
 	    				return new ResultData(ResultData.STATUS_200, "");
 	    			} catch (Exception e) {
 	    				e.printStackTrace();
@@ -490,7 +493,7 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 			    	log.info("update contact.fieldName,fieldValue:" + fieldName + " " +fieldValue);
 			    	try {
 						BeanUtils.setProperty(selectorRecord, fieldName, fieldValue);
-						em.merge(selectorRecord);
+						contactsDao.merge(selectorRecord);
 						return new ResultData(ResultData.STATUS_200, "");
 					} catch (Exception e) {
 						e.printStackTrace();

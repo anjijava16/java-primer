@@ -30,7 +30,6 @@ public class SingSpacesContactsDao {
 		this.em = em; 
 	}
 	
-	@TransactionAttribute(value=TransactionAttributeType.NEVER)
 	public SingSpacesContactEntity getById(long userId,long id){
 		Query query = em.createNamedQuery("getByUserIdAndIdAndStatus");
 		query.setParameter("userId", userId);
@@ -48,7 +47,6 @@ public class SingSpacesContactsDao {
 	 * @param index >=1
 	 * @return
 	 */
-	@TransactionAttribute(value=TransactionAttributeType.NEVER)
 	public SingSpacesContactEntity getByIndex(long userId, int index){
 		log.info("get contact by userId,index ,status. userId,index,status:" + userId + "," + index + "," + STATUS);
 		if(index >= 1){
@@ -65,12 +63,10 @@ public class SingSpacesContactsDao {
 		return null;
 	}
 	
-	@TransactionAttribute(value=TransactionAttributeType.NEVER)
 	public SingSpacesContactEntity getByUniqueAttr(long userId, long uniqueAttr){
 		return getById(userId, uniqueAttr);
 	}
 	
-	@TransactionAttribute(value=TransactionAttributeType.NEVER)
 	public List<SingSpacesContactEntity> getList(long userId){
 		Query query = em.createNamedQuery("listByUserIdAndStatus");
 		query.setParameter("userId", userId);
@@ -81,7 +77,6 @@ public class SingSpacesContactsDao {
 		return list.size() > 0 ? list : null;
 	}
 	
-	@TransactionAttribute(value=TransactionAttributeType.NEVER)
 	public long getListSize(long userId){
 		String sql = "listSizeByUserIdAndStatus";
 		Query query = em.createNamedQuery(sql);
@@ -97,6 +92,14 @@ public class SingSpacesContactsDao {
 		en.setContactStatus(STATUS);
 		em.persist(en);
 		log.info("persist singspaces contact, id=" + en.getContactId());
+	}
+	
+	public void merge(SingSpacesContactEntity en){
+		em.merge(en);
+	}
+	
+	public void remove(SingSpacesContactEntity en){
+		em.remove(en);
 	}
 	
 	public void save(long userId, List<SingSpacesContactEntity> list){
