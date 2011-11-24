@@ -1,2 +1,0 @@
-jboss Quartz计划任务
-http://blog.csdn.net/spamatrix/article/details/4984495

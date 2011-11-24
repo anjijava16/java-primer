@@ -1,5 +1,0 @@
-Ejb项目包含目录如下：
-/src/main/java
-/src/main/resources
-/src/test/java
-/build.xml

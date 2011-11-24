@@ -1,7 +1,0 @@
-SOAP API (javax.xml.soap)
-  SAAJ1.1规范和JAXM1.1，
-  
-JAXM1.1只包含基于消息传递的API
-完整的JAXM API存在于javax.xml.soap和javax.xml.messaging二个包
-
-JAX-WS 2.0——Java API for XML-based Web services。
