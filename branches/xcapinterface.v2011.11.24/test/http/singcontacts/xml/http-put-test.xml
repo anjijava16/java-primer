@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<contacts xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<contact>
+		<dispName>Yang Test</dispName>
+		<name>
+			<fn>Xun</fn>
+			<ln>Frank</ln>
+		</name>
+		<title>engineer</title>
+		<bday>2008-12-15</bday>
+		<adr>
+			<item type="WORK">xixiangbuxingjie;;;;;;</item>
+			<item type="HOME">kefalu;;;shenzheng;guangdong;1345641;china</item>
+		</adr>
+		<tel>
+			<item type="">12453456346</item>
+			<item type="CELL">13691417240</item>
+			<item type="HOME">01068747151</item>
+			<item type="WORK">01068747151</item>
+			<item type="FAX;HOME">9141724</item>
+			<item type="FAX;WORK">3424424</item>
+		</tel>
+		<email>
+			<item type="">xie@gmail.com</item>
+			<item type="PREF">hong@hotmail.com</item>
+			<item type="HOME">ong@hotmail.com</item>
+			<item type="WORK">xie@gmail.com</item>
+		</email>
+		<org>
+			<item>borqs shenzhen</item>
+		</org>
+		<url>
+			<item>http://www.google.com.hk/</item>
+		</url>
+		<note>ss</note>
+		<!-- 
+		 <lastModify>2011-10-20 12:58:22</lastModify>
+		 -->
+	</contact>
+	<contact>
+		<dispName>slie</dispName>
+		<name>
+			<fn>yu</fn>
+			<ln>slieer</ln>
+		</name>
+		<title>engineer</title>
+		<bday>2008-12-20</bday>
+		<adr>
+			<item type="WORK">xixiangbuxingjie;;;;;;</item>
+			<item type="HOME">kefalu;;;shenzheng;guangdong;1345641;china</item>
+		</adr>
+		<tel>
+			<item type="">12453456346</item>
+			<item type="CELL">13691417240</item>
+			<item type="HOME">01068747151</item>
+			<item type="WORK">01068747151</item>
+			<item type="FAX;HOME">9141724</item>
+			<item type="FAX;WORK">3424424</item>
+		</tel>
+		<email>
+			<item type="">xie@gmail.com</item>
+			<item type="">hong@hotmail.com</item>
+			<item type="HOME">ong@hotmail.com</item>
+			<item type="WORK">xie@gmail.com</item>
+		</email>
+		<org>
+			<item>borqs shenzhen</item>
+			<item>huangjiayin yangxian</item>
+		</org>
+		<url>
+			<item>http://www.google.com.hk/</item>
+			<item>http://www.google.com.hk/</item>
+		</url>
+		<note/><!-- 222222222-----<note/><!-- 222222222-----<note/><!-- 222222222-----
+		<note/><!-- 

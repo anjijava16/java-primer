@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<urlrewrite>
+	<rule>
+		<from>^/UABContacts(/*)|^/SingSpacesContacts(/*)</from>
+		<to>/xcap?query=$1</to>
+	</rule>
+	
+	<rule>
+		<from>^/xcap-schema(/*)</from>
+		<to>/xcap-schema?auid=$1</to>
+	</rule>
+	
+	<rule>
+		<from>^/test(/*)</from>
+		<to>/test.jsp?token=$1</to>
+	</rule>	
+</urlrewrite>  
