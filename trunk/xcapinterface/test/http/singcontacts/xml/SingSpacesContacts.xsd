@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--vcard format standard
+ http://tools.ietf.org/id/draft-perreault-vcarddav-vcardxml-00.txt -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 	<xs:element name="contacts">
 		<xs:complexType>

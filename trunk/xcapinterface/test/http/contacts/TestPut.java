@@ -2,8 +2,17 @@ package http.contacts;
 
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.ConvertUtils;
+import org.apache.commons.beanutils.Converter;
+import org.junit.Assert;
 import org.junit.Test;
+
+import com.xcap.dao.entity.UABContactEntity;
 
 
 public class TestPut extends TestBase{
@@ -143,11 +152,12 @@ public class TestPut extends TestBase{
 	@Test
 	public void putDeviceIdByAttr(){		
 		//six case.
-		String method = "12593";
+		String method = "84236457";
 		String nodeSelector = construct_A_T_Selector(method, TagName.deviceId);
 		String u = url.concat(nodeSelector);
 				
-		String str = "<deviceId>111</deviceId>"; 
+		String str = "<deviceId>999</deviceId>";
+		str = "<deviceId></deviceId>";
 		try {
 			putReqClient(u, getInputSteam(str));
 		
@@ -176,6 +186,56 @@ public class TestPut extends TestBase{
 		
 		} catch (Exception e) {
 		e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testBeanUtil(){
+		UABContactEntity en = new UABContactEntity();
+		en.setDeviceID(10L);
+		en.setCreateDate(new Date());
+		try {
+			ConvertUtils.register(new LongConvert(), Long.class);   
+			ConvertUtils.register(new DateConvert(), Date.class);  
+			
+			BeanUtils.setProperty(en, "deviceID", null);
+			//BeanUtils.setProperty(en, "createDate", null); // not need implement Convert.
+			BeanUtils.setProperty(en, "createDate", "2011-5-15");  //need implement Convert.
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		Assert.assertEquals(en.getDeviceID(), null);
+		Assert.assertEquals(en.getCreateDate(), null);
+	}
+	
+	/**
+	 * call --->ConvertUtils.register(new DateConvert(), java.util.Date.class);
+	 * @author slieer
+	 * Create Date2011-11-23
+	 * version 1.0
+	 */
+	public class DateConvert implements Converter{
+
+		public Object convert(Class arg0, Object arg1) {
+			String p = (String)arg1;
+			if(p== null || p.trim().length()==0){
+				return null;
+			}
+			try{
+				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+				return df.parse(p.trim());
+			}
+			catch(Exception e){
+				return null;
+			}
+		}
+	}
+	
+	public class LongConvert implements Converter{
+
+		public Object convert(Class arg0, Object arg1) {
+			String p = (String)arg1;
+			return (p != null && p.trim().length() != 0) ?  Long.valueOf(p) : null;
 		}
 	}
 	
