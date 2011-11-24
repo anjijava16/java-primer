@@ -53,7 +53,7 @@ public class TestSingPut extends TestBase{
 	}
 	
 	/**
-	 * put contact by uniqueAttr.
+	 * put contact node by uniqueAttr selector.
 	 */
 	@Test
 	public void putContactByAttrSelector(){
@@ -72,7 +72,7 @@ public class TestSingPut extends TestBase{
 	}
 	
 	/**
-	 * put contact by index.
+	 * put contact node by index selector.
 	 */
 	@Test
 	public void putContactByIndexSelector(){
@@ -86,7 +86,7 @@ public class TestSingPut extends TestBase{
 	}
 	
 	/**
-	 * put contact by tag name.
+	 * put contact node by tag name selector.
 	 */
 	@Test
 	public void putContactByTagNameSelector(){
@@ -98,7 +98,12 @@ public class TestSingPut extends TestBase{
 		}
 		
 	}
-			
+	
+	/**
+	 * put dispName node
+	 * 2nd layer selector : index selector. 
+	 * 3rd layer selector : tag name.
+	 */
 	@Test
 	public void putDispName(){
 		String byIndex = LEFT_SQUARE_BRACKET.concat("1").concat(RIGHT_SQUARE_BRACKET);
@@ -133,8 +138,7 @@ public class TestSingPut extends TestBase{
 //---------------------------------------------------------------------------------	
 	/**
 	 * put name node.
-	 * lst selector
-	 * 2nd selector: tag name/uniqueAttr/index
+	 * 2nd selector: uniqueAttr/index
 	 * 3rd selector: tag name
 	 */
 	@Test
@@ -155,6 +159,9 @@ public class TestSingPut extends TestBase{
 	
 	/**
 	 * put name node.
+	 * 2nd selector : uniqueAttr/index
+	 * 3rd : index
+	 * 
 	 */
 	@Test
 	public void putNameByTagIndex(){
@@ -163,20 +170,21 @@ public class TestSingPut extends TestBase{
 		String byIndex = LEFT_SQUARE_BRACKET.concat("1").concat(RIGHT_SQUARE_BRACKET);
 		
 		String url1 = url.concat(constructSecondLayerSelectorByIndex(index))
-			.concat("/name").concat(byIndex);
+			.concat("/name").concat(byIndex);   //by index
 		String url2 = url.concat(constructSecondLayerSelectorByUniqueAttr(contactId))
-			.concat("/name").concat(byIndex);		
+			.concat("/name").concat(byIndex);   //by attr
 		try {
 			putReqClient(url1, nameFile);
 			putReqClient(url2, nameFile);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
 	/**
 	 * put email node.
+	 * 2nd selector : uniqueAttr/index
+	 * 3rd : tag name
 	 */
 	@Test
 	public void putEmailByTagName(){
@@ -195,6 +203,8 @@ public class TestSingPut extends TestBase{
 	
 	/**
 	 * put email node.
+	 * 2nd selector : uniqueAttr/index
+	 * 3rd : index
 	 */
 	@Test
 	public void putEmailByIndex(){
@@ -211,8 +221,24 @@ public class TestSingPut extends TestBase{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 	}
+	
+	/**
+	 * put url node
+	 */
+	@Test
+	public void putUrl(){
+		int index = 1;
+		String reqUrl = url.concat(constructSecondLayerSelectorByIndex(index)).concat("/url");
+		String xml = null;
+		xml = "<url><item type=\"hr\">http://hi.baidu.com/slieer/home</item><item type=\"\">http://oschina.net/slieer</item><item type=\"OT\">http://code.google.com/slieer</item></url>";  //set tel field is null
+		try {
+			putReqClient(reqUrl, new ByteArrayInputStream(xml.getBytes()));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 		
 	@Test
 	public void putFN(){
@@ -283,12 +309,13 @@ public class TestSingPut extends TestBase{
 	public void putTelByIndex(){
 		int index = 1;
 		String reqUrl = url.concat(constructSecondLayerSelectorByIndex(index)).concat("/tel");
-		String xml = null;
-		xml = "<tel><item></item></tel>";  //set tel field is null
-		xml = "<tel><item type=\"first\">8888888</item></tel>";
-		xml = "<tel><item>8888888</item></tel>";
+		
+		String xml0 = "<tel></tel>";  //set tel field is null
+		String xml1 = "<tel><item></item></tel>";  //set tel field is null
+		String xml2 = "<tel><item type=\"first\">8888888</item></tel>";
+		String xml3 = "<tel><item>8888888</item></tel>";
 		try {
-			putReqClient(reqUrl, new ByteArrayInputStream(xml.getBytes()));
+			putReqClient(reqUrl, new ByteArrayInputStream(xml1.getBytes()));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -310,24 +337,28 @@ public class TestSingPut extends TestBase{
 			e.printStackTrace();
 		}
 	}
-	
+		
 	/**
-	 * put tel node to null.
+	 * put item node to null
 	 */
-	@Test
-	public void putUrl(){
+	public void putTelItem(){
 		int index = 1;
-		String reqUrl = url.concat(constructSecondLayerSelectorByIndex(index)).concat("/url");
-		String xml = null;
-		xml = "<url><item type=\"hr\">http://hi.baidu.com/slieer/home</item><item type=\"\">http://oschina.net/slieer</item><item type=\"OT\">http://code.google.com/slieer</item></url>";  //set tel field is null
+		String reqUrl = url.concat(constructSecondLayerSelectorByIndex(index)).concat("/tel");
+		
+		String xml1 = "<item></item>";  //set tel field is null
+		String xml2 = "<tel><item type=\"first\">8888888</item></tel>";
+		String xml3 = "<tel><item>8888888</item></tel>";
 		try {
-			putReqClient(reqUrl, new ByteArrayInputStream(xml.getBytes()));
+			putReqClient(reqUrl, new ByteArrayInputStream(xml1.getBytes()));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 	}
 	
-//-------------------------------------------------------------	
+	/**----------------------------------------------------------------------------------
+	 *   other test,no matter with xcap test.
+	 */
 	
 	@Ignore
 	@Test
@@ -353,8 +384,7 @@ public class TestSingPut extends TestBase{
 		String value = n.getNodeValue();
 		System.out.println("type,value:" + type + " " + value);
 	}
-	
-	
+		
 	@Ignore
 	@Test
 	public void testContactPut(){

@@ -20,7 +20,7 @@ public interface XCAPDatebaseLocalIfc {
 	 * @param nodeSelector
 	 * @return
 	 */
-	public ResultData get(String userInfo, String nodeSelector);
+	public ResultData get(String userInfo, String nodeSelector) throws Exception;
 
 	/**
 	 * @param userInfo userId or userMsimsn
@@ -28,14 +28,14 @@ public interface XCAPDatebaseLocalIfc {
 	 * @param xml
 	 * @return
 	 */
-	public ResultData put(String userInfo, String nodeSelector, String xml);
+	public ResultData put(String userInfo, String nodeSelector, String xml) throws Exception;
 	
 	/** 
 	 * @param userInfo userId or userMsimsn
 	 * @param nodeSelector
 	 * @return
 	 */
-	public ResultData delete(String userInfo, String nodeSelector);
+	public ResultData delete(String userInfo, String nodeSelector) throws Exception;
 	
 	public class ResultData{
 		public static final int STATUS_200 = 200;
@@ -45,16 +45,16 @@ public interface XCAPDatebaseLocalIfc {
 		private int status;
 		private String xml;
 		
-		public ResultData(int status, String xml) {
+		public ResultData(int status, String xml){
 			this.status = status;
 			this.xml = xml;
 		}
 
-		public int getstatus() {
+		public int getstatus(){
 			return status;
 		}
 
-		public String getXml() {
+		public String getXml(){
 			return xml;
 		}	
 	}
