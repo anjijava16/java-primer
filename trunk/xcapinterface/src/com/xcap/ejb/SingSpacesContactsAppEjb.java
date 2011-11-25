@@ -29,10 +29,8 @@ import org.xml.sax.InputSource;
 
 import com.borqs.mspaces.contact.ifc.Contact;
 import com.borqs.mspaces.contact.ifc.ContactIfc;
-import com.borqs.mspaces.contact.ifc.ContactPhoto;
 import com.borqs.mspaces.contact.ifc.spectype.AddressInVCard;
 import com.borqs.mspaces.contact.ifc.spectype.EmailInVCard;
-import com.borqs.mspaces.contact.ifc.spectype.LabelInVCard;
 import com.borqs.mspaces.contact.ifc.spectype.NameInVCard;
 import com.borqs.mspaces.contact.ifc.spectype.TelInVCard;
 import com.borqs.mspaces.contact.ifc.spectype.UrlInVCard;
@@ -76,6 +74,9 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 	final static String NODE_ATTR_ID = "id"; 
 	final static String NODE_ATTR_TYPE = "type";
 	
+	@EJB
+	private ContactIfc contactIfc;	
+	
 	@Override
 	@TransactionAttribute(value=TransactionAttributeType.NEVER)	
 	public ResultData get(String userId, String nodeSelector) throws Exception{
@@ -101,7 +102,7 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 				log.info("get contact, secondSelector:" + secondSelector);
 				if(nodePartArr.length == 2 && nodePartArr[1].contains(NODE_CONTACT)){  //second layer selector.
 					log.info("second layer selector proccess .....");
-					Contact contact = getEntity(secondSelector, userIdTemp);
+					Contact contact = getContact(secondSelector, userIdTemp);
 					if(contact != null){
 						StringBuilder builder = new StringBuilder();
 						if(getContact(contact, builder)){
@@ -111,7 +112,7 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 				}else if(nodePartArr.length == 3){ //third layer selector.
 					
 					String thridSelector =  nodePartArr[2];
-					Contact contact = getEntity(secondSelector, userIdTemp);
+					Contact contact = getContact(secondSelector, userIdTemp);
 					if(thridSelector.matches(SingConstant.PATTERN_THIRD_LAYER_SELECTOR_BY_INDEX)){
 						//enable thridSelector as node tag name. 
 						int end = thridSelector.indexOf("[");
@@ -167,7 +168,7 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 					}
 					
 					if(SingConstant.isThirdLayerNotLeafNode(thridSelector) || thridSelector.equals(NODE_NAME)){
-						Contact contact = getEntity(secondSelector, userIdTemp);
+						Contact contact = getContact(secondSelector, userIdTemp);
 						
 						String contactFieldName = SingConstant.titleFieldMapping.get(thridSelector);
 						if(contactFieldName != null && contact != null){
@@ -711,7 +712,7 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 		}
 	}
 	
-	private Contact getEntity(String secondSelector,long userIdTemp) throws Exception{
+	private Contact getContact(String secondSelector,long userIdTemp) throws Exception{
 		if (secondSelector.equals(NODE_CONTACT)) {
 			// by tag name
 			long count = getListSize(userIdTemp);
@@ -1024,10 +1025,7 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 		}
 		return selectorRecord;
 	}
-	
-	@EJB
-	private ContactIfc contactIfc;
-	
+		
 	public Contact getById(long userId,long id) throws Exception{
 		Contact contact = contactIfc.getContact(id);
 		return contact.getUid().equals(String.valueOf(userId)) ? contact : null;

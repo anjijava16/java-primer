@@ -15,16 +15,21 @@ import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.conn.ClientConnectionManager;
+import org.apache.http.conn.scheme.PlainSocketFactory;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.log4j.Logger;
-import org.jaxen.function.ConcatFunction;
 
 public abstract class TestBase {
 	public static Logger log = Logger.getLogger(TestBase.class);
+	static String HOST = "10.24.1.244";
+	static String PORT = "80";
 	
 	public static String CODING = "UTF-8";
 	
@@ -48,9 +53,9 @@ public abstract class TestBase {
 	public enum TagName{contacts,contact,list,contactName, description, createDate, method, rawId, deviceId};
 		
 	public static String constructUrl(String phoneNo, String token) {
-		String baseUrl = "http://localhost:8080/xcap-root/UABContacts/{0}/{1}/index";
+		String baseUrl = "http://{0}:{1}/xcap-root/UABContacts/{2}/{3}/index";
 		MessageFormat form = new MessageFormat(baseUrl);
-		Object[] args = { phoneNo, token };
+		Object[] args = {HOST, PORT, phoneNo, token };
 		return form.format(args);
 	}
 	
@@ -126,8 +131,14 @@ public abstract class TestBase {
 		HttpGet httppost = new HttpGet(url);
 		System.out.println("executing request " + httppost.getRequestLine());
 		
-		HttpClient httpclient = new DefaultHttpClient();
-		response(httpclient, httppost); 	
+		Scheme scheme = new Scheme("http", 80, PlainSocketFactory.getSocketFactory());
+		SchemeRegistry schemeRegistry = new SchemeRegistry();
+		schemeRegistry.register(scheme);
+
+		ClientConnectionManager cm = new ThreadSafeClientConnManager(schemeRegistry);
+		HttpClient httpClient = new DefaultHttpClient(cm);
+		
+		response(httpClient, httppost); 	
 	}
 	
 	public static void putReqClient(String url, File file) throws Exception {

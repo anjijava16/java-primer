@@ -16,7 +16,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.xcap.dao.entity.SingSpacesContactEntity;
+import com.borqs.mspaces.contact.ifc.Contact;
 
 public class TestSingPut extends TestBase{
 	final static String phoneNo = "8613480783139"; 
@@ -452,12 +452,12 @@ public class TestSingPut extends TestBase{
 			//System.out.println("topTagName:" + topTagName);
 			NodeList nodes = element.getElementsByTagName("contact");
 			
-			List<SingSpacesContactEntity> list = new ArrayList<SingSpacesContactEntity>();
+			List<Contact> list = new ArrayList<Contact>();
 			for (int i = 0; i < nodes.getLength(); i++) {
 				Node node = nodes.item(i);
 				NodeList children = node.getChildNodes();
 				
-				SingSpacesContactEntity entity = new SingSpacesContactEntity();
+				Contact entity = new Contact();
 				list.add(entity);
 				
 				for(int j = 0; j < children.getLength(); j++){

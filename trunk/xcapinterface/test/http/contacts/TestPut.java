@@ -2,7 +2,6 @@ package http.contacts;
 
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -12,7 +11,7 @@ import org.apache.commons.beanutils.Converter;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.xcap.dao.entity.UABContactEntity;
+import com.borqs.contact.ifc.Contact;
 
 
 public class TestPut extends TestBase{
@@ -191,9 +190,9 @@ public class TestPut extends TestBase{
 	
 	@Test
 	public void testBeanUtil(){
-		UABContactEntity en = new UABContactEntity();
+		Contact en = new Contact();
 		en.setDeviceID(10L);
-		en.setCreateDate(new Date());
+		//en.setCreateDate(new Date());
 		try {
 			ConvertUtils.register(new LongConvert(), Long.class);   
 			ConvertUtils.register(new DateConvert(), Date.class);  
@@ -205,7 +204,7 @@ public class TestPut extends TestBase{
 			e.printStackTrace();
 		}
 		Assert.assertEquals(en.getDeviceID(), null);
-		Assert.assertEquals(en.getCreateDate(), null);
+		//Assert.assertEquals(en.getCreateDate(), null);
 	}
 	
 	/**

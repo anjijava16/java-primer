@@ -3,8 +3,6 @@ package http.singcontacts;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.text.DecimalFormat;
-import java.text.Format;
 import java.text.MessageFormat;
 import java.util.Scanner;
 
@@ -23,10 +21,10 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.log4j.Logger;
 
-import com.sun.xml.internal.ws.message.StringHeader;
-
 public abstract class TestBase {
 	public static Logger log = Logger.getLogger(TestBase.class);
+	static String HOST = "10.24.1.244";
+	static String PORT = "80";
 	
 	public static String XML_TEXT_TAGNAME = "#text";
 	public static String CODING = "UTF-8";
@@ -44,9 +42,9 @@ public abstract class TestBase {
 	public enum TagNameFourthLayer{fn,ln,item}
 		
 	public static String constructUrl(String phoneNo, String token) {
-		String baseUrl = "http://localhost:8080/xcap-root/SingSpacesContacts/{0}/{1}/index";
+		String baseUrl = "http://{0}:{1}/xcap-root/SingSpacesContacts/{2}/{3}/index";
 		MessageFormat form = new MessageFormat(baseUrl);
-		Object[] args = { phoneNo, token };
+		Object[] args = {HOST, PORT, phoneNo, token };
 		return form.format(args);
 	}
 	
