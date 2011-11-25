@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.ejb.EJB;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -68,11 +69,12 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 	final static String PATTERN_RAW_ID_INDEX = "^rawId\\[1\\]$";
 	final static String PATTERN_DESC_INDEX = "^rawId\\[1\\]$";
 	
+	@EJB
 	private ContactExchangeIfc contactExchangeIfc;	
 	
 	@Override
 	@TransactionAttribute(value=TransactionAttributeType.NEVER)	
-	public ResultData get(String userInfo, String nodeSelector) {
+	public ResultData get(String userInfo, String nodeSelector) throws Exception {
 		StringBuilder xmlBuilder = new StringBuilder(
 				"<?xml version='1.0' encoding='UTF-8'?>");
 		log.info("get, nodeSelector:" + nodeSelector);
@@ -140,7 +142,7 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 		return new ResultData(ResultData.STATUS_404, "");
 	}
 
-	public ResultData put(String userMsisdn, String nodeSelector, String xml) {
+	public ResultData put(String userMsisdn, String nodeSelector, String xml) throws Exception {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(true); // never forget this!
 
@@ -186,7 +188,7 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 			// add or replace one contact.
 			if (secondLevelSelector.equals(NODE_CONTACT)) { //
 				log.info("put operate by node tag name, node selector is contact.");
-				int size = (int) queryContactListByMsisdnSize(userMsisdn);
+				int size = (int) queryContactListSizeByMsisdn(userMsisdn);
 				switch (size) {
 				case 0: // add
 					contactNode(doc, NODE_CONTACT, userMsisdn);
@@ -210,7 +212,7 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 				Matcher match = p.matcher(nodeSelector);
 				if (match.find()) {
 					int index = Integer.valueOf(match.group(0));
-					int size = (int) queryContactListByMsisdnSize(userMsisdn);
+					int size = (int) queryContactListSizeByMsisdn(userMsisdn);
 					if (index > 0 && index <= size + 1) { // index valid
 						log.info("index valid, value is " + index);
 
@@ -297,7 +299,7 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 				if (topTagName.equals(thirdLevelTagName)) {
 					Contact entity = null;
 					if (secondLevelSelector.equals(NODE_CONTACT)) {
-						int size = (int) queryContactListByMsisdnSize(userMsisdn);
+						int size = (int) queryContactListSizeByMsisdn(userMsisdn);
 						if (size == 1) {
 							List<Contact> tempList = queryContactListByMsisdn(userMsisdn);
 							if (tempList != null && tempList.size() > 0) {
@@ -370,7 +372,7 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 				String secondLevelSelector = selectors[1];
 				if (secondLevelSelector.equals(NODE_CONTACT)) { // by tagName
 																// selector.
-					long size = queryContactListByMsisdnSize(userMsisdn);
+					long size = queryContactListSizeByMsisdn(userMsisdn);
 					if (size == 1) {
 						//only one record.
 						int affectRows = deleteContacts(userMsisdn);
@@ -594,11 +596,11 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 	 * @param condition
 	 * @return
 	 */
-	private ResultData getSecondLevelXml(String userInfo, String condition1) {
+	private ResultData getSecondLevelXml(String userInfo, String condition1) throws Exception {
 		log.info("getSecondLevelXml, condition1:" + condition1);
 		if (condition1.startsWith(UABContactsAppEjb.NODE_CONTACT)) {
 			if (condition1.equals(UABContactsAppEjb.NODE_CONTACT)) {
-				long size = queryContactListByMsisdnSize(userInfo);
+				long size = queryContactListSizeByMsisdn(userInfo);
 				if (size == 0) {
 					log.info("was not found in the document.");
 					return new ResultData(ResultData.STATUS_404, "");
@@ -718,13 +720,7 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 		contactExchangeIfc.createContact(contact);
 	}
 		
-	public List<Contact> queryContactListByMsisdn(String msisdn){
-		//from UABContactEntity u where u.id=:id and u.msisdn=:msisdn
-		return null;
-	}
-
 	/**
-	 * 
 	 * @param userId
 	 * @param contactId
 	 * @return null or a contact
@@ -733,10 +729,14 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 		Contact contact = contactExchangeIfc.getContactById(contactId);
 		return contact != null && contact.getMsisdn().equals(msisdn) ? contact : null; 	
 	}
+
+	public List<Contact> queryContactListByMsisdn(String msisdn) throws Exception{
+		return contactExchangeIfc.getContactListByMsisdn(msisdn);
+	}
+
 	
-	public long queryContactListByMsisdnSize(String msisdn){
-		//select count(id) size from t_contacts where msisdn = :msisdn
-		return 0;
+	public long queryContactListSizeByMsisdn(String msisdn){
+		return contactExchangeIfc.getContactListSizeByMsisdn(msisdn);
 	}
 
 	/**
@@ -744,20 +744,19 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 	 * @param index
 	 *            > 1, other is invalidate
 	 * @return a contact or null;
+	 * @throws Exception 
 	 */
-	public Contact getByIndex(String msisdn, int begin, int end) {
-		//select * from t_contacts where msisdn = :msisdn limit :index,1
-		return null;
+	public Contact getByIndex(String msisdn, int begin, int end) throws Exception {
+		List<Contact> list = contactExchangeIfc.getContactListByBeginSize(msisdn, begin, 1);
+		return list.size() > 0 ? list.get(0) : null;
 	}
 
-	public Contact getByContactMethod(String msisdn,String method){
-		//from UABContactEntity where contactMethod=:method and msisdn=:msisdn
-		return null;
+	public Contact getByContactMethod(String msisdn,String method) throws Exception{
+		return contactExchangeIfc.getContactByMsisdnMethod(msisdn, method);
 	}	
 	
 	public int deleteContacts(String msisdn) {
-		//delete from UABContactEntity where msisdn = :msisdn
-		return 0;
+		return contactExchangeIfc.deleteContactsByMsisdn(msisdn);
 	}
 
 	/**
@@ -767,13 +766,11 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 	 * @return -1 index invalid ,or delete row mount.
 	 */
 	public int deleteContactByIndexSelector(String msisdn, int index) {
-		//select * from t_contacts where msisdn = :msisdn limit :index,1
-		return 0;
+		return contactExchangeIfc.deleteContactListByBeginSize(msisdn, index, 1);
 	}
 
 	public int deleteContactByUniqueAttr(String msisdn, String method) {
-		//delete from UABContactEntity where msisdn = :msisdn and contactMethod = :method
-		return 0;
+		return contactExchangeIfc.deleteContactByMsisdnMethod(msisdn, method);
 	}
 	
 }

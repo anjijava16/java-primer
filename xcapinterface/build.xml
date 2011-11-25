@@ -46,7 +46,7 @@
         
         <!-- create ejb jars -->
         <jar destfile="${dist}/${xcap_ejb.jar}">
-            <fileset dir="${build}" includes = "**/dao/**,**/ejb/**"/>
+            <fileset dir="${build}" includes = "**/ejb/**"/>
             <metainf dir="${src}/META-INF" includes="**"/>
         </jar>
         

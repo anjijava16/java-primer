@@ -26,7 +26,7 @@ public class TestGet extends TestBase{
 	 */
 	@Test
 	public void getDocument(){
-		getReqClient(url);
+		getReqClient("http://baidu.com");
 	}
 
 	/**

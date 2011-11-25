@@ -27,23 +27,35 @@ public class XCAPServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		executeRequest(req, resp);
+		try {
+			executeRequest(req, resp);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	protected void doPut(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		executeRequest(req, resp);
+		try {
+			executeRequest(req, resp);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	protected void doDelete(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		executeRequest(req, resp);
+		try {
+			executeRequest(req, resp);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void executeRequest(HttpServletRequest req,
-			HttpServletResponse resp) throws IOException {
+			HttpServletResponse resp) throws Exception {
 		// String queryString = req.getQueryString();
 		// String url = req.getRequestURI();
 		// log.info("url, queryString-->" + url + " " + queryString);

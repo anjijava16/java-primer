@@ -11,10 +11,5 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.eclipse.jst.server.generic.runtimeTarget/JBoss v4.2"/>
-	<classpathentry kind="lib" path="src/WEB-INF/lib/borqs_util.jar"/>
-	<classpathentry kind="lib" path="src/WEB-INF/lib/mservices_ifc.jar" sourcepath="/SingSpaces/src"/>
-	<classpathentry kind="lib" path="src/WEB-INF/lib/hive_ifc.jar" sourcepath="/uab/src"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/SingSpaces"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/uab"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
