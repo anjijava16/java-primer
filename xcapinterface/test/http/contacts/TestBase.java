@@ -124,20 +124,21 @@ public abstract class TestBase {
 	}	
 	
 	public static File getXmlFilePath(String fileName){
-		return new File("test/http/contacts/".concat(fileName));
+		return new File("http/contacts/".concat(fileName));
 	}
 	
 	public static void getReqClient(String url) {
 		HttpGet httppost = new HttpGet(url);
 		System.out.println("executing request " + httppost.getRequestLine());
 		
-		Scheme scheme = new Scheme("http", 80, PlainSocketFactory.getSocketFactory());
+		Scheme scheme = new Scheme("http",80, PlainSocketFactory.getSocketFactory());
 		SchemeRegistry schemeRegistry = new SchemeRegistry();
 		schemeRegistry.register(scheme);
 
 		ClientConnectionManager cm = new ThreadSafeClientConnManager(schemeRegistry);
 		HttpClient httpClient = new DefaultHttpClient(cm);
-		
+
+		//HttpClient httpClient = new DefaultHttpClient();
 		response(httpClient, httppost); 	
 	}
 	
@@ -164,9 +165,10 @@ public abstract class TestBase {
 	
 	
 	public static void deleteReqClient(String url) throws Exception {
-		ThreadSafeClientConnManager cm = new ThreadSafeClientConnManager();
-	    cm.setMaxTotal(100);		
-		HttpClient httpclient = new DefaultHttpClient(cm);
+		//ThreadSafeClientConnManager cm = new ThreadSafeClientConnManager();
+	    //cm.setMaxTotal(100);		
+		//HttpClient httpclient = new DefaultHttpClient(cm);
+		HttpClient httpclient = new DefaultHttpClient();
  		HttpDelete httpDelete = new HttpDelete(url);
  		
 		//httpclient.execute(httpDelete);
@@ -206,3 +208,4 @@ public abstract class TestBase {
 		return new ByteArrayInputStream(str.getBytes());
 	}
 }
+
