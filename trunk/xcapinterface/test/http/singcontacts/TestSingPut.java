@@ -2,8 +2,6 @@ package http.singcontacts;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -12,11 +10,9 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
-import com.borqs.mspaces.contact.ifc.Contact;
+//import com.borqs.mspaces.contact.ifc.Contact;
 
 public class TestSingPut extends TestBase{
 	final static String phoneNo = "8613480783139"; 
@@ -432,7 +428,7 @@ public class TestSingPut extends TestBase{
 		}
 	}
 	
-	@Ignore
+/*	@Ignore
 	@Test
 	public void testContactsXmlParser(){
 		File xmlFile = getXmlFilePath("example-new-contacts.xml");
@@ -509,4 +505,4 @@ public class TestSingPut extends TestBase{
 			e.printStackTrace();
 		}
 	}
-}
+*/}

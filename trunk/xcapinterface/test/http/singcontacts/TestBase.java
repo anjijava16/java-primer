@@ -114,9 +114,10 @@ public abstract class TestBase {
 	}
 	
 	public static void deleteReqClient(String url) throws Exception {
-		ThreadSafeClientConnManager cm = new ThreadSafeClientConnManager();
-	    cm.setMaxTotal(100);		
-		HttpClient httpclient = new DefaultHttpClient(cm);
+//		ThreadSafeClientConnManager cm = new ThreadSafeClientConnManager();
+//	    cm.setMaxTotal(100);		
+//		HttpClient httpclient = new DefaultHttpClient(cm);
+		HttpClient httpclient = new DefaultHttpClient();
  		HttpDelete httpDelete = new HttpDelete(url);
  		
 		//httpclient.execute(httpDelete);

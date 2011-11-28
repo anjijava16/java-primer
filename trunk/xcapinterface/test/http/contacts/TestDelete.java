@@ -29,7 +29,7 @@ public class TestDelete extends TestBase {
 
 	@Test
 	public void deleteContactByUniqueAttr() {
-		String method = "12593";
+		String method = "46546464646";
 		url = url.concat(constructSelectorByUniqueAttr(method));
 		try {
 			deleteReqClient(url);

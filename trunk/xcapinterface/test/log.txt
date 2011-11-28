@@ -1,0 +1,42 @@
+2011-11-28 14:12:33,899 [main] [org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager] [DEBUG] - Get connection: HttpRoute[{}->http://10.24.1.244:80], timeout = 0
+2011-11-28 14:12:33,902 [main] [org.apache.http.impl.conn.tsccm.ConnPoolByRoute] [DEBUG] - [HttpRoute[{}->http://10.24.1.244:80]] total kept alive: 0, total issued: 0, total allocated: 0 out of 20
+2011-11-28 14:12:33,902 [main] [org.apache.http.impl.conn.tsccm.ConnPoolByRoute] [DEBUG] - No free connections [HttpRoute[{}->http://10.24.1.244:80]][null]
+2011-11-28 14:12:33,902 [main] [org.apache.http.impl.conn.tsccm.ConnPoolByRoute] [DEBUG] - Available capacity: 2 out of 2 [HttpRoute[{}->http://10.24.1.244:80]][null]
+2011-11-28 14:12:33,902 [main] [org.apache.http.impl.conn.tsccm.ConnPoolByRoute] [DEBUG] - Creating new connection [HttpRoute[{}->http://10.24.1.244:80]]
+2011-11-28 14:12:33,912 [main] [org.apache.http.impl.conn.DefaultClientConnectionOperator] [DEBUG] - Connecting to 10.24.1.244:80
+2011-11-28 14:12:33,930 [main] [org.apache.http.client.protocol.RequestAddCookies] [DEBUG] - CookieSpec selected: best-match
+2011-11-28 14:12:33,940 [main] [org.apache.http.client.protocol.RequestAuthCache] [DEBUG] - Auth cache not set in the context
+2011-11-28 14:12:33,940 [main] [org.apache.http.impl.client.DefaultHttpClient] [DEBUG] - Attempt 1 to execute request
+2011-11-28 14:12:33,940 [main] [org.apache.http.impl.conn.DefaultClientConnection] [DEBUG] - Sending request: GET /xcap-root/UABContacts/8613480783139/DDcs3x7JwQQwqvOT751dhxPUTartlMV70DRk28fiJjRSwAeSqwV0bw**/index HTTP/1.1
+2011-11-28 14:12:33,941 [main] [org.apache.http.wire] [DEBUG] - >> "GET /xcap-root/UABContacts/8613480783139/DDcs3x7JwQQwqvOT751dhxPUTartlMV70DRk28fiJjRSwAeSqwV0bw**/index HTTP/1.1[\r][\n]"
+2011-11-28 14:12:33,943 [main] [org.apache.http.wire] [DEBUG] - >> "Host: 10.24.1.244:80[\r][\n]"
+2011-11-28 14:12:33,943 [main] [org.apache.http.wire] [DEBUG] - >> "Connection: Keep-Alive[\r][\n]"
+2011-11-28 14:12:33,943 [main] [org.apache.http.wire] [DEBUG] - >> "User-Agent: Apache-HttpClient/4.1.2 (java 1.5)[\r][\n]"
+2011-11-28 14:12:33,943 [main] [org.apache.http.wire] [DEBUG] - >> "[\r][\n]"
+2011-11-28 14:12:33,943 [main] [org.apache.http.headers] [DEBUG] - >> GET /xcap-root/UABContacts/8613480783139/DDcs3x7JwQQwqvOT751dhxPUTartlMV70DRk28fiJjRSwAeSqwV0bw**/index HTTP/1.1
+2011-11-28 14:12:33,943 [main] [org.apache.http.headers] [DEBUG] - >> Host: 10.24.1.244:80
+2011-11-28 14:12:33,944 [main] [org.apache.http.headers] [DEBUG] - >> Connection: Keep-Alive
+2011-11-28 14:12:33,944 [main] [org.apache.http.headers] [DEBUG] - >> User-Agent: Apache-HttpClient/4.1.2 (java 1.5)
+2011-11-28 14:12:33,970 [main] [org.apache.http.wire] [DEBUG] - << "HTTP/1.1 200 OK[\r][\n]"
+2011-11-28 14:12:33,974 [main] [org.apache.http.wire] [DEBUG] - << "Server: Apache-Coyote/1.1[\r][\n]"
+2011-11-28 14:12:33,974 [main] [org.apache.http.wire] [DEBUG] - << "X-Powered-By: Borqs[\r][\n]"
+2011-11-28 14:12:33,974 [main] [org.apache.http.wire] [DEBUG] - << "Content-Type: text/xml;charset=utf-8[\r][\n]"
+2011-11-28 14:12:33,974 [main] [org.apache.http.wire] [DEBUG] - << "Content-Length: 655[\r][\n]"
+2011-11-28 14:12:33,974 [main] [org.apache.http.wire] [DEBUG] - << "Date: Mon, 28 Nov 2011 06:12:05 GMT[\r][\n]"
+2011-11-28 14:12:33,974 [main] [org.apache.http.wire] [DEBUG] - << "[\r][\n]"
+2011-11-28 14:12:33,994 [main] [org.apache.http.impl.conn.DefaultClientConnection] [DEBUG] - Receiving response: HTTP/1.1 200 OK
+2011-11-28 14:12:33,994 [main] [org.apache.http.headers] [DEBUG] - << HTTP/1.1 200 OK
+2011-11-28 14:12:33,994 [main] [org.apache.http.headers] [DEBUG] - << Server: Apache-Coyote/1.1
+2011-11-28 14:12:33,994 [main] [org.apache.http.headers] [DEBUG] - << X-Powered-By: Borqs
+2011-11-28 14:12:33,994 [main] [org.apache.http.headers] [DEBUG] - << Content-Type: text/xml;charset=utf-8
+2011-11-28 14:12:33,994 [main] [org.apache.http.headers] [DEBUG] - << Content-Length: 655
+2011-11-28 14:12:33,994 [main] [org.apache.http.headers] [DEBUG] - << Date: Mon, 28 Nov 2011 06:12:05 GMT
+2011-11-28 14:12:33,998 [main] [org.apache.http.impl.client.DefaultHttpClient] [DEBUG] - Connection can be kept alive indefinitely
+2011-11-28 14:12:34,003 [main] [org.apache.http.wire] [DEBUG] - << "<?xml version='1.0' encoding='UTF-8'?><contacts xmlns="contacts" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="contacts xcap-schema/UABContacts"><contact method="46546464646"><contactName>yuankang</contactName><rawId>3233</rawId><deeviceId>116</deeviceId></contact><contact method="156445564641"><contactName>yuanka</contactName><rawId>0</rawId><deeviceId>0</deeviceId></contact><contact method="84236457"><contactName>[0xe7][0xbf][0x9f][0xe5][0xb0][0x8f][0xe6][0x96][0x8c]</contactName><rawId>2233</rawId><deeviceId>0</deeviceId></contact><contact method="13510776272"><contactName>Gykooooox</contactName><rawId>1233</rawId><deeviceId>111</deeviceId></contact></contacts>"
+2011-11-28 14:12:34,006 [main] [org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager] [DEBUG] - Released connection is reusable.
+2011-11-28 14:12:34,006 [main] [org.apache.http.impl.conn.tsccm.ConnPoolByRoute] [DEBUG] - Releasing connection [HttpRoute[{}->http://10.24.1.244:80]][null]
+2011-11-28 14:12:34,006 [main] [org.apache.http.impl.conn.tsccm.ConnPoolByRoute] [DEBUG] - Pooling connection [HttpRoute[{}->http://10.24.1.244:80]][null]; keep alive indefinitely
+2011-11-28 14:12:34,006 [main] [org.apache.http.impl.conn.tsccm.ConnPoolByRoute] [DEBUG] - Notifying no-one, there are no waiting threads
+2011-11-28 14:12:34,007 [main] [org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager] [DEBUG] - Shutting down
+2011-11-28 14:12:34,007 [main] [org.apache.http.impl.conn.tsccm.ConnPoolByRoute] [DEBUG] - Closing connection [HttpRoute[{}->http://10.24.1.244:80]][null]
+2011-11-28 14:12:34,008 [main] [org.apache.http.impl.conn.DefaultClientConnection] [DEBUG] - Connection closed

@@ -19,14 +19,21 @@ public class TestGet extends TestBase{
 
 	@Before 
 	public void runBeforeTest(){
-	} 
+	}
+	
+	@Ignore
+	@Test
+	public void httpTest() {
+		getReqClient("http://baidu.com");
+	}
 	
 	/**
 	 * get contact list by userId.
 	 */
 	@Test
 	public void getDocument(){
-		getReqClient("http://baidu.com");
+		//getReqClient("http://baidu.com");
+		getReqClient(url);
 	}
 
 	/**
@@ -43,7 +50,10 @@ public class TestGet extends TestBase{
 	 */
 	@Test
 	public void getNodeByIndex(){
-		int index = 1;
+		int index = 0;
+		index = 1;
+		index = 2;
+		index = 3;
 		String nodeSelector = constructSelectorByIndex(index);
 		String u = url.concat(nodeSelector);
 		getReqClient(u);
@@ -54,7 +64,7 @@ public class TestGet extends TestBase{
 	 */
 	@Test
 	public void getNodeByUniqueAttr(){		
-		String method = "12593";
+		String method = "46546464646";
 		String nodeSelector = constructSelectorByUniqueAttr(method);
 		String u = url.concat(nodeSelector);
 		
@@ -76,7 +86,7 @@ public class TestGet extends TestBase{
 	@Test
 	public void getConatctNameBy_3rdSelectorIsTagName(){
 		int index = 1;
-		String uniqueAttr = "12593"; // method.
+		String uniqueAttr = "84236457"; // method.
 		
 		TagName tagName = TagName.contactName;
 
@@ -91,7 +101,7 @@ public class TestGet extends TestBase{
 	@Test
 	public void getRawIdBy_3rdSelectorIsTagName(){
 		int index = 1;
-		String uniqueAttr = "12593"; // method.
+		String uniqueAttr = "156445564641"; // method.
 		
 		TagName tagName = TagName.rawId;
 
@@ -113,7 +123,16 @@ public class TestGet extends TestBase{
 		getLeafNodeByIndex(tagName, _2ndIndex, method, _3rdLayerIndex, 2);
 	}
 	
-	
+	/**
+	 * 
+	 * @param tagName
+	 * @param index
+	 * @param uniqueAttr
+	 * @param i value:
+	 *  <li>i=0 tag name/tagName selector, 
+	 *  <li>i=1 index/tagName selector.
+	 *  <li>i=2 attr/tagName
+	 */
 	private void getLeafNodeByTagName(TagName tagName, int index, String uniqueAttr, int i){		
 		String nodeSelector = null;
 		String u = null;
@@ -188,7 +207,4 @@ public class TestGet extends TestBase{
 		}		
 	}
 	
-	public static void main(String[] args) {
-		log.info("--------------");
-	}
 }

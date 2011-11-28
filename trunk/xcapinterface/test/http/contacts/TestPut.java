@@ -3,15 +3,11 @@ package http.contacts;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.Converter;
-import org.junit.Assert;
 import org.junit.Test;
 
-import com.borqs.contact.ifc.Contact;
+//import com.borqs.contact.ifc.Contact;
 
 
 public class TestPut extends TestBase{
@@ -27,6 +23,7 @@ public class TestPut extends TestBase{
 	public void putDocument(){
 		try {
 			File file = getXmlFilePath("xml/example-new-contacts.xml");
+			System.out.println("file path:" + file.getCanonicalPath());
 			putReqClient(url,file);
 			
 		} catch (Exception e) {
@@ -39,7 +36,9 @@ public class TestPut extends TestBase{
 	 */
 	@Test
 	public void putContactNodeByIndex(){
-		int index = 1; // example
+		int index = 0; // illegal
+		index = 1;     //merge  (index >= 1 && index <= size)
+		index = 5;      //add ,(db record size is 4)
 		String nodeSelector = constructSelectorByIndex(index);
 		String u = url.concat(nodeSelector);
 		try {
@@ -87,7 +86,7 @@ public class TestPut extends TestBase{
 		 "	<contact method=\"12593\">" + 
 		 "		<contactName>super star</contactName>" + 
 		 "      <deviceId>1235422</deviceId>" + 
-		 "      <rawId>154558772</rawId>" + 
+		 "      <rawId>154558888</rawId>" + 
 		 "	</contact>";
 
 		try {
@@ -111,7 +110,7 @@ public class TestPut extends TestBase{
 		String nodeSelector = construct_A_T_Selector(method, TagName.contactName);
 		String u = url.concat(nodeSelector);
 				
-		String str = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><contactName>c plus plus</contactName>"; 
+		String str = "<contactName>c plus plus</contactName>"; 
 		try {
 			putReqClient(u, getInputSteam(str));
 		
@@ -129,7 +128,7 @@ public class TestPut extends TestBase{
 	@Test
 	public void putRawIdByAttr(){		
 		//six case.
-		String method = "12593";
+		String method = "9999939999";
 		String nodeSelector = construct_A_T_Selector(method, TagName.rawId);
 		String u = url.concat(nodeSelector);
 				
@@ -151,12 +150,12 @@ public class TestPut extends TestBase{
 	@Test
 	public void putDeviceIdByAttr(){		
 		//six case.
-		String method = "84236457";
+		String method = "9999939999";
 		String nodeSelector = construct_A_T_Selector(method, TagName.deviceId);
 		String u = url.concat(nodeSelector);
 				
 		String str = "<deviceId>999</deviceId>";
-		str = "<deviceId></deviceId>";
+		//str = "<deviceId></deviceId>";
 		try {
 			putReqClient(u, getInputSteam(str));
 		
@@ -174,12 +173,12 @@ public class TestPut extends TestBase{
 	@Test
 	public void putContactNameByIndex(){		
 		//six case.
-		String method = "12593";
+		String method = "13510776272";
 		int index = 1;
 		String nodeSelector = construct_A_T_Selector(method, TagName.contactName).concat(LEFT_SQUARE_BRACKET) + index + RIGHT_SQUARE_BRACKET;
 		String u = url.concat(nodeSelector);
 				
-		String str = "<contactName>c++</contactName>"; 
+		String str = "<contactName>c</contactName>"; 
 		try {
 			putReqClient(u, getInputSteam(str));
 		
@@ -188,7 +187,7 @@ public class TestPut extends TestBase{
 		}
 	}
 	
-	@Test
+/*	@Test
 	public void testBeanUtil(){
 		Contact en = new Contact();
 		en.setDeviceID(10L);
@@ -206,7 +205,7 @@ public class TestPut extends TestBase{
 		Assert.assertEquals(en.getDeviceID(), null);
 		//Assert.assertEquals(en.getCreateDate(), null);
 	}
-	
+*/	
 	/**
 	 * call --->ConvertUtils.register(new DateConvert(), java.util.Date.class);
 	 * @author slieer
