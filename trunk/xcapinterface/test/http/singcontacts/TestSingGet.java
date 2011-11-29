@@ -59,7 +59,7 @@ public class TestSingGet extends TestBase{
 	 */
 	@Test
 	public void getContactNodebyUniqueAttr(){
-		long contactId = 23479;
+		long contactId = 137;
 		String sel = constructSecondLayerSelectorByUniqueAttr(String.valueOf(contactId));
 		String u = url.concat(sel);
 		getReqClient(u);
