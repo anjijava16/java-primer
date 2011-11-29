@@ -66,7 +66,7 @@ public abstract class TestBase {
 	}
 	
 	public static File getXmlFilePath(String fileName){
-		return new File("test/http/singcontacts/xml/".concat(fileName));
+		return new File("http/singcontacts/xml/".concat(fileName));
 	}
 	
 	public static void getReqClient(String url) {
