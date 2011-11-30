@@ -1,7 +1,9 @@
 package simple.foundation;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +17,6 @@ public class StringTest {
 	static String encode = "utf-8";
 
 	public static void main(String[] args) {
-		String str = "证书启用成功abc!";
 		// String str = "aaaa";
 		try {
 			// char[] arr = str.toCharArray();
@@ -26,6 +27,17 @@ public class StringTest {
 
 		UrlParser.test();
 
+	}
+	
+	@Test
+	public void encode(){
+		String str = "证书启用成功abc!";
+		try {
+			String st = URLEncoder.encode(str, "utf-8");
+			System.out.println(st);
+		} catch (UnsupportedEncodingException e1) {
+			e1.printStackTrace();
+		}		
 	}
 	
 	/**

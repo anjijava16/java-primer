@@ -3,8 +3,20 @@ package com.beans;
 public class PersonBean {
 	private int id;
 	private String name;
-
 	private int age;
+	
+	
+	public PersonBean() {
+		super();
+	}
+
+	public PersonBean(int id, String name, int age) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.age = age;
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -29,7 +41,9 @@ public class PersonBean {
 		this.age = age;
 	}
 
-	public String toString(){
-		return id + name;
+	@Override
+	public String toString() {
+		return "PersonBean [id=" + id + ", name=" + name + ", age=" + age + "]";
 	}
+	
 }
