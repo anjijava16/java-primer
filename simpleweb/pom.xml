@@ -88,6 +88,13 @@
 		<type>jar</type>
 		<scope>compile</scope>
 	</dependency>
+	<dependency>
+		<groupId>dom4j</groupId>
+		<artifactId>dom4j</artifactId>
+		<version>1.6.1</version>
+		<type>jar</type>
+		<scope>compile</scope>
+	</dependency>
   </dependencies>
 
   <build>

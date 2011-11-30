@@ -31,6 +31,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
+import org.junit.Test;
 
 /***
  * http://hc.apache.org/httpcomponents-client-ga/tutorial/html/fundamentals.html
@@ -43,18 +44,6 @@ public class HttpclientTutorial {
 	// google china main page.
 	static String URL = "http://www.google.com.hk/webhp?hl=zh-CN&sourceid=cnhp";
 	//static String URL = "http://www.baidu.com/home";
-
-	public static void main(String[] args) {
-		try {
-			//simpleGetRequest();
-			//simpleUriGetRequest();
-			//simpleSetParamGetRequest();
-			
-			responseHandlers();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 	
 	/**
 	 *<li>初级的client</li> 
@@ -116,7 +105,8 @@ public class HttpclientTutorial {
 		return result.toString();
 	}
 		
-	static void simpleGetRequest() throws Exception {
+	@Test
+	public void simpleGetRequest() throws Exception {
 		HttpGet httpget = new HttpGet(URL);
 		client(httpget);
 	}

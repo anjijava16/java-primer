@@ -23,8 +23,10 @@ public class PersonEntity {
 		this.age = age;
 	}
 
+	@Override
 	public String toString() {
-		return name + age;
+		return "PersonEntity [id=" + id + ", name=" + name + ", age=" + age
+				+ "]";
 	}
 
 	public int getId() {
