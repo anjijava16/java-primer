@@ -1,6 +1,5 @@
 package http.singcontacts;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -11,6 +10,7 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.xml.sax.InputSource;
 
 //import com.borqs.mspaces.contact.ifc.Contact;
 
@@ -23,15 +23,7 @@ public class TestSingPut extends TestBase{
 	File contactsFile = getXmlFilePath("example-new-contacts.xml");
 	File contactFile = getXmlFilePath("example-new-contact.xml");
 	File contactFile_1 = getXmlFilePath("example-new-contact-2nd.xml");
-	
-	File nameFile = getXmlFilePath("example-new-name.xml");
-	File dispNameFile = getXmlFilePath("example-new-dispName.xml");
-	
-	File telFile = getXmlFilePath("example-new-tel.xml");
-	File telItemFile = getXmlFilePath("example-new-tel-item.xml");
-	
-	File emailFile = getXmlFilePath("example-new-email.xml");
-	File nameFnFile = getXmlFilePath("example-new-name-fn.xml");
+
 	/**
 	 * put contacts
 	 */
@@ -53,7 +45,7 @@ public class TestSingPut extends TestBase{
 	 */
 	@Test
 	public void putContactByAttrSelector(){
-		String contactId = "1"; //add
+		String contactId = "147"; //add
 		//String contactId = "";
 		String u = url.concat(constructSecondLayerSelectorByUniqueAttr(contactId));
 		if(contactFile.exists()){
@@ -104,8 +96,10 @@ public class TestSingPut extends TestBase{
 	public void putDispName(){
 		String byIndex = LEFT_SQUARE_BRACKET.concat("1").concat(RIGHT_SQUARE_BRACKET);
 		String reqUrl = url.concat("/~~/contacts/contact" + byIndex + "/dispName");
+		
+		String xml = "<dispName>xxx</dispName>";
 		try {
-			putReqClient(reqUrl, dispNameFile);
+			putReqClient(reqUrl, xml);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -125,7 +119,7 @@ public class TestSingPut extends TestBase{
 		String xml = "<title>大元帅（generallissimo）</title>";
 		xml = "<title></title>";  //set conatct field is null
 		try {
-			putReqClient(reqUrl, new ByteArrayInputStream(xml.getBytes()));
+			putReqClient(reqUrl, xml);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -143,10 +137,14 @@ public class TestSingPut extends TestBase{
 		String contactId = "73995";
 		String url1 = url.concat(constructSecondLayerSelectorByIndex(index)).concat("/name");
 		String url2 = url.concat(constructSecondLayerSelectorByUniqueAttr(contactId)).concat("/name");
-
+		
+		String xml = "<name>" 
+						   + "	<fn>da</fn>"
+						   + "	<ln>hai</ln>"
+						   + "</name>";
 		try {
-			putReqClient(url1, nameFile);
-			putReqClient(url2, nameFile);
+			putReqClient(url1, xml);
+			putReqClient(url2, xml);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -169,9 +167,14 @@ public class TestSingPut extends TestBase{
 			.concat("/name").concat(byIndex);   //by index
 		String url2 = url.concat(constructSecondLayerSelectorByUniqueAttr(contactId))
 			.concat("/name").concat(byIndex);   //by attr
+
+		String xml = "<name>" 
+			   + "	<fn>da</fn>"
+			   + "	<ln>hai</ln>"
+			   + "</name>";
 		try {
-			putReqClient(url1, nameFile);
-			putReqClient(url2, nameFile);
+			putReqClient(url1, xml);
+			putReqClient(url2, xml);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -189,9 +192,16 @@ public class TestSingPut extends TestBase{
 		
 		String url1 = url.concat(constructSecondLayerSelectorByIndex(index)).concat("/email");
 		String url2 = url.concat(constructSecondLayerSelectorByUniqueAttr(contactId)).concat("/email");
+		
+		String email =  "<email>			                      " +
+						"	<item type=\"\">ax@g.com</item>       " +
+						"	<item type=\"PREF\">by@h.com</item>   " +
+						"	<item type=\"HOME\">cz@mail.com</item>" +
+						"	<item type=\"WORK\">da@l.com</item>   " +
+						"</email>                                 ";
 		try {
-			putReqClient(url1, emailFile);
-			putReqClient(url2, emailFile);
+			putReqClient(url1, email);
+			putReqClient(url2, email);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -211,9 +221,17 @@ public class TestSingPut extends TestBase{
 
 		String url1 = url.concat(constructSecondLayerSelectorByIndex(index)).concat("/email").concat(byIndex);
 		String url2 = url.concat(constructSecondLayerSelectorByUniqueAttr(contactId)).concat("/email").concat(byIndex);
+
+		String email =  "<email>			                      " +
+						"	<item type=\"\">ax@g.com</item>       " +
+						"	<item type=\"PREF\">by@h.com</item>   " +
+						"	<item type=\"HOME\">cz@mail.com</item>" +
+						"	<item type=\"WORK\">da@l.com</item>   " +
+						"</email>                                 ";
+		
 		try {
-			putReqClient(url1, emailFile);
-			putReqClient(url2, emailFile);
+			putReqClient(url1, email);
+			putReqClient(url2, email);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -227,9 +245,13 @@ public class TestSingPut extends TestBase{
 		int index = 1;
 		String reqUrl = url.concat(constructSecondLayerSelectorByIndex(index)).concat("/url");
 		String xml = null;
-		xml = "<url><item type=\"hr\">http://hi.baidu.com/slieer/home</item><item type=\"\">http://oschina.net/slieer</item><item type=\"OT\">http://code.google.com/slieer</item></url>";  //set tel field is null
+		xml = "<url>" +
+				"<item type=\"hr\">http://hi.baidu.com/slieer/home</item>" +
+				"<item type=\"\">http://oschina.net/slieer</item>" +
+				"<item type=\"OT\">http://code.google.com/slieer</item>" +
+				"</url>";  //set tel field is null
 		try {
-			putReqClient(reqUrl, new ByteArrayInputStream(xml.getBytes()));
+			putReqClient(reqUrl, xml);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -240,8 +262,10 @@ public class TestSingPut extends TestBase{
 	public void putFN(){
 		String byIndex = LEFT_SQUARE_BRACKET.concat("1").concat(RIGHT_SQUARE_BRACKET);
 		String reqUrl = url.concat("/~~/contacts/contact" + byIndex + "/name/fn");
+
+		String nameCentent = "<fn>da</fn>";
 		try {
-			putReqClient(reqUrl, nameFnFile);
+			putReqClient(reqUrl, nameCentent);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -256,8 +280,9 @@ public class TestSingPut extends TestBase{
 		String contactId = "74003";
 		String url2 = url.concat(constructSecondLayerSelectorByUniqueAttr(contactId)).concat("/tel/item");
 		
+		String telItem = "<item type=\"home\">0916-8452-426</item>";
 		try {
-			putReqClient(url2, telItemFile);
+			putReqClient(url2, telItem);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -273,8 +298,9 @@ public class TestSingPut extends TestBase{
 		String byIndex = LEFT_SQUARE_BRACKET.concat(itemIndex).concat(RIGHT_SQUARE_BRACKET);
 		String url2 = url.concat(constructSecondLayerSelectorByUniqueAttr(contactId)).concat("/tel/item").concat(byIndex);
 		
+		String xml = "<item type=\"home\">0916-8452</item>";
 		try {
-			putReqClient(url2, telItemFile);
+			putReqClient(url2, xml);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}		
@@ -291,8 +317,9 @@ public class TestSingPut extends TestBase{
 				.concat("/tel/item")
 				.concat(LEFT_SQUARE_BRACKET + AT + "type=" + DOUBLE_QUOTATION_MARKS +  "work" + DOUBLE_QUOTATION_MARKS + RIGHT_SQUARE_BRACKET);
 
+		String xml = "<item type=\"home\">0916-8452-576</item>";		
 		try {
-			putReqClient(url2, telItemFile);
+			putReqClient(url2, xml);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -311,7 +338,7 @@ public class TestSingPut extends TestBase{
 		String xml2 = "<tel><item type=\"first\">8888888</item></tel>";
 		String xml3 = "<tel><item>8888888</item></tel>";
 		try {
-			putReqClient(reqUrl, new ByteArrayInputStream(xml1.getBytes()));
+			putReqClient(reqUrl, xml0);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -328,7 +355,7 @@ public class TestSingPut extends TestBase{
 		String xml = null;
 		xml = "<email/>";  //set tel field is null
 		try {
-			putReqClient(reqUrl, new ByteArrayInputStream(xml.getBytes()));
+			putReqClient(reqUrl, xml);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -345,7 +372,7 @@ public class TestSingPut extends TestBase{
 		String xml2 = "<tel><item type=\"first\">8888888</item></tel>";
 		String xml3 = "<tel><item>8888888</item></tel>";
 		try {
-			putReqClient(reqUrl, new ByteArrayInputStream(xml1.getBytes()));
+			putReqClient(reqUrl, xml1);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -367,7 +394,8 @@ public class TestSingPut extends TestBase{
 	    String topTagName = null;
 		try {
 			DocumentBuilder builder = factory.newDocumentBuilder();
-			//doc = builder.parse(contactsFile);	
+			
+			InputSource telItemFile = new InputSource("<item type=\"first\">8888888</item>"); 
 			doc = builder.parse(telItemFile);
 			
 			element = doc.getDocumentElement();
@@ -392,7 +420,7 @@ public class TestSingPut extends TestBase{
 	    String topTagName = null;
 		try {
 			DocumentBuilder builder = factory.newDocumentBuilder();
-			//doc = builder.parse(contactsFile);	
+			InputSource nameFnFile = new InputSource("<fn>da</fn>"); 
 			doc = builder.parse(nameFnFile);
 			
 			element = doc.getDocumentElement();
@@ -427,82 +455,4 @@ public class TestSingPut extends TestBase{
 			e.printStackTrace();
 		}
 	}
-	
-/*	@Ignore
-	@Test
-	public void testContactsXmlParser(){
-		File xmlFile = getXmlFilePath("example-new-contacts.xml");
-		
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-	    factory.setNamespaceAware(true);
-	    
-	    Document doc = null;
-	    Element element = null;
-	    String topTagName = null;
-		try {
-			DocumentBuilder builder = factory.newDocumentBuilder();
-			doc = builder.parse(xmlFile);	
-			element = doc.getDocumentElement();
-			topTagName = element.getTagName();		
-
-			//System.out.println("topTagName:" + topTagName);
-			NodeList nodes = element.getElementsByTagName("contact");
-			
-			List<Contact> list = new ArrayList<Contact>();
-			for (int i = 0; i < nodes.getLength(); i++) {
-				Node node = nodes.item(i);
-				NodeList children = node.getChildNodes();
-				
-				Contact entity = new Contact();
-				list.add(entity);
-				
-				for(int j = 0; j < children.getLength(); j++){
-					Node ch = children.item(j);
-					String nodeName = ch.getNodeName();
-					
-					if(! nodeName.equals(XML_TEXT_TAGNAME)){
-						//System.out.println("--" + ch);
-						
-						Node node1 = null;
-						String nodeValue = null;
-						if(ch.getChildNodes().getLength() == 1){
-							node1 = ch.getChildNodes().item(0);
-							nodeValue = node1.getNodeValue();
-							
-						}else if(ch.getChildNodes().getLength() > 1){
-							NodeList chs = ch.getChildNodes();
-							node1 = ch;//.item(1);
-							//NodeList itemList = chs.item(1).getChildNodes();
-							
-							StringBuilder multiValue = new StringBuilder();
-							for(int k = 0; k < chs.getLength(); k++){
-								Node itemNode = chs.item(k);
-								if(! itemNode.getNodeName().equals("#text")){
-									String value = itemNode.getNodeValue();
-									String type = "";
-									NamedNodeMap attrsNode = itemNode.getAttributes();
-									if(attrsNode != null){
-										Node attr = attrsNode.getNamedItem("type");
-										if(attr != null)
-											type = attr.getNodeValue();
-									}
-									System.out.println("type:" + type + " value:" + value);
-									//multiValue.append(type.concat(":").concat(value).concat(";"));
-									
-									//nodeValue = multiValue.toString();
-								}
-							}
-						}
-						if(node1 != null){
-							System.out.println(nodeName + ":" + node1.getNodeName() + ":" + nodeValue);							
-						}else{
-							System.out.println(nodeName + ": is null");
-						}
-					}
-				}
-			}
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-*/}
+}
