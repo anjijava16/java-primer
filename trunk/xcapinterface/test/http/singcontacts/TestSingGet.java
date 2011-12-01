@@ -142,6 +142,27 @@ public class TestSingGet extends TestBase{
 	}
 
 	/**
+	 * get email item node.
+	 * 2nd layer  index selector
+	 * 3rd layer tag name selector
+	 * 4th layer unique attr
+	 */	
+	@Test
+	public void getEmailItemBy_i_t_a(){
+		String byIndex = LEFT_SQUARE_BRACKET.concat("1").concat(RIGHT_SQUARE_BRACKET);
+		String attr = "";
+		attr = "WORK";
+		String byItemAttr = "/item".concat(LEFT_SQUARE_BRACKET).concat(AT).concat("type=").concat(DOUBLE_QUOTATION_MARKS).concat(attr).concat(DOUBLE_QUOTATION_MARKS).concat(RIGHT_SQUARE_BRACKET);
+		String reqUrl = url.concat("/~~/contacts/contact" + byIndex + "/email").concat(byItemAttr);
+		///reqUrl = url.concat("/~~/contacts/contact" + byIndex + "/email");
+		try {
+			getReqClient(reqUrl);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
 	 * get name/fn
 	 */
 	@Test
@@ -213,12 +234,13 @@ public class TestSingGet extends TestBase{
 	 */	
 	@Test
 	public void getOrgItemBy_i_t_a(){
-		String byIndex = LEFT_SQUARE_BRACKET.concat("1").concat(RIGHT_SQUARE_BRACKET);
+		String byIndex = LEFT_SQUARE_BRACKET.concat("2").concat(RIGHT_SQUARE_BRACKET);
 		
 		//item[@type="a"]
 		String attr = "";
 		String byItemAttr = "/item".concat(LEFT_SQUARE_BRACKET).concat(AT).concat("type=").concat(DOUBLE_QUOTATION_MARKS).concat(DOUBLE_QUOTATION_MARKS).concat(attr).concat(RIGHT_SQUARE_BRACKET);
 		String reqUrl = url.concat("/~~/contacts/contact" + byIndex + "/org").concat(byItemAttr);
+		//reqUrl = url.concat("/~~/contacts/contact" + byIndex + "/org");
 		try {
 			getReqClient(reqUrl);
 		} catch (Exception e) {
@@ -266,7 +288,5 @@ public class TestSingGet extends TestBase{
 			
 			System.out.println(vcardInfo);
 		}
-	}
-	
-	
+	}	
 }

@@ -1,5 +1,6 @@
 package http.singcontacts;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -16,7 +17,6 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.log4j.Logger;
@@ -95,9 +95,14 @@ public abstract class TestBase {
         response(httpclient, httpPut); 
 	}
 	
-	public static void putReqClient(String url, InputStream in) throws Exception {
-
+	/**
+	 * @param url
+	 * @param in  xml content
+	 * @throws Exception
+	 */
+	public static void putReqClient(String url, String xml) throws Exception {
         HttpPut httpPut = new HttpPut(url);
+		InputStream in = new ByteArrayInputStream(xml.getBytes());		
         InputStreamEntity reqEntity = new InputStreamEntity(
                 in, -1);
         reqEntity.setContentType("text/xml");
