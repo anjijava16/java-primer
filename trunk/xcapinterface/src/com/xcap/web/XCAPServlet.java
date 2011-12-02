@@ -99,11 +99,11 @@ public class XCAPServlet extends HttpServlet {
 					ResultData data = xcapIfc.get(userInfo, nodeSelector);
 					String result = data.getXml();
 					if (data.getstatus() != HttpServletResponse.SC_OK) {
-						log.info("------error status code is " + data.getstatus());
+						//log.info("------error status code is " + data.getstatus());
 						resp.setStatus(data.getstatus());
 						resp.sendError(data.getstatus(), data.getXml());
 					} else {
-						log.info("------result xml :" + result);
+						//log.info("------result xml :" + result);
 						PrintWriter writer = resp.getWriter();
 						writer.print(result);
 						writer.close();

@@ -45,8 +45,8 @@ public class TestSingPut extends TestBase{
 	 */
 	@Test
 	public void putContactByAttrSelector(){
-		String contactId = "147"; //add
-		//String contactId = "";
+		//String contactId = "156"; //update
+		String contactId = "1"; //add
 		String u = url.concat(constructSecondLayerSelectorByUniqueAttr(contactId));
 		if(contactFile.exists()){
 			try {
@@ -64,7 +64,7 @@ public class TestSingPut extends TestBase{
 	 */
 	@Test
 	public void putContactByIndexSelector(){
-		int index = 2;
+		int index = 1;
 		String u = url.concat(constructSecondLayerSelectorByIndex(index));
 		try {
 			putReqClient(u, contactFile_1);
@@ -78,9 +78,9 @@ public class TestSingPut extends TestBase{
 	 */
 	@Test
 	public void putContactByTagNameSelector(){
-		String u = url.concat("/~~/conatcts/contact");
+		String u = url.concat("/~~/contacts/contact");
 		try {
-			putReqClient(u, contactFile);
+			putReqClient(u, contactFile_1);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -117,7 +117,7 @@ public class TestSingPut extends TestBase{
 		String reqUrl = url.concat("/~~/contacts/contact" + byIndex + "/title");
 		
 		String xml = "<title>大元帅（generallissimo）</title>";
-		xml = "<title></title>";  //set conatct field is null
+		//xml = "<title></title>";  //set conatct field is null
 		try {
 			putReqClient(reqUrl, xml);
 		} catch (Exception e) {
@@ -125,31 +125,50 @@ public class TestSingPut extends TestBase{
 		}
 		
 	}
-//---------------------------------------------------------------------------------	
+//return test---------------------------------------------------------------------------------	
 	/**
 	 * put name node.
-	 * 2nd selector: uniqueAttr/index
+	 * 2nd selector: uniqueAttr
 	 * 3rd selector: tag name
 	 */
 	@Test
-	public void putNameNameByTagName(){
-		int index = 1;
-		String contactId = "73995";
-		String url1 = url.concat(constructSecondLayerSelectorByIndex(index)).concat("/name");
+	public void putNameBy_a_t(){
+		String contactId = "164";
 		String url2 = url.concat(constructSecondLayerSelectorByUniqueAttr(contactId)).concat("/name");
 		
 		String xml = "<name>" 
-						   + "	<fn>da</fn>"
-						   + "	<ln>hai</ln>"
+						   + "	<fn>yu</fn>"
+						   + "	<ln>slieer</ln>"
 						   + "</name>";
 		try {
-			putReqClient(url1, xml);
 			putReqClient(url2, xml);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}	
+	
+	/**
+	 * put name node.
+	 * 2nd selector: index
+	 * 3rd selector: tag name
+	 */
+	@Test
+	public void putNameBy_i_t(){
+		int index = 1;
+		String xml = "<name>" 
+			   + "	<fn>翟</fn>"
+			   + "	<ln>小斌</ln>"
+			   + "</name>";
+		
+		String url1 = url.concat(constructSecondLayerSelectorByIndex(index)).concat("/name");
+		try {
+			putReqClient(url1, xml);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
 	
 	/**
 	 * put name node.
@@ -158,26 +177,42 @@ public class TestSingPut extends TestBase{
 	 * 
 	 */
 	@Test
-	public void putNameByTagIndex(){
-		int index = 1;
-		String contactId = "73998";
+	public void putNameBy_a_i(){
+		String contactId = "148";
 		String byIndex = LEFT_SQUARE_BRACKET.concat("1").concat(RIGHT_SQUARE_BRACKET);
-		
-		String url1 = url.concat(constructSecondLayerSelectorByIndex(index))
-			.concat("/name").concat(byIndex);   //by index
+
 		String url2 = url.concat(constructSecondLayerSelectorByUniqueAttr(contactId))
 			.concat("/name").concat(byIndex);   //by attr
 
 		String xml = "<name>" 
-			   + "	<fn>da</fn>"
-			   + "	<ln>hai</ln>"
+			   + "	<fn>bill</fn>"
+			   + "	<ln>gates</ln>"
 			   + "</name>";
 		try {
-			putReqClient(url1, xml);
 			putReqClient(url2, xml);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Test
+	public void putNameBy_i_i(){
+		int index = 2;
+		String nameByIndex = LEFT_SQUARE_BRACKET.concat("1").concat(RIGHT_SQUARE_BRACKET);
+		String url1 = url.concat(constructSecondLayerSelectorByIndex(index))
+			.concat("/name").concat(nameByIndex);   //by index
+		
+		String xml = "<name>" 
+			   + "	<fn>Li+</fn>"
+			   + "	<ln>Kaifu+</ln>"
+			   + "</name>";
+		
+		try {
+			putReqClient(url1, xml);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	/**
@@ -188,7 +223,7 @@ public class TestSingPut extends TestBase{
 	@Test
 	public void putEmailByTagName(){
 		int index = 1;
-		String contactId = "74004";
+		String contactId = "151";
 		
 		String url1 = url.concat(constructSecondLayerSelectorByIndex(index)).concat("/email");
 		String url2 = url.concat(constructSecondLayerSelectorByUniqueAttr(contactId)).concat("/email");
@@ -215,7 +250,7 @@ public class TestSingPut extends TestBase{
 	@Test
 	public void putEmailByIndex(){
 		int index = 1;
-		String contactId = "73998";
+		String contactId = "151";
 				
 		String byIndex = LEFT_SQUARE_BRACKET.concat("1").concat(RIGHT_SQUARE_BRACKET);
 
@@ -223,10 +258,10 @@ public class TestSingPut extends TestBase{
 		String url2 = url.concat(constructSecondLayerSelectorByUniqueAttr(contactId)).concat("/email").concat(byIndex);
 
 		String email =  "<email>			                      " +
-						"	<item type=\"\">ax@g.com</item>       " +
-						"	<item type=\"PREF\">by@h.com</item>   " +
-						"	<item type=\"HOME\">cz@mail.com</item>" +
-						"	<item type=\"WORK\">da@l.com</item>   " +
+						"	<item type=\"\">ax@hotmail.com</item>       " +
+						"	<item type=\"PREF\">by@hotmail.com</item>   " +
+						"	<item type=\"HOME\">cz@hotmail.com</item>" +
+						"	<item type=\"WORK\">da@hotmail.com</item>   " +
 						"</email>                                 ";
 		
 		try {
@@ -246,9 +281,9 @@ public class TestSingPut extends TestBase{
 		String reqUrl = url.concat(constructSecondLayerSelectorByIndex(index)).concat("/url");
 		String xml = null;
 		xml = "<url>" +
-				"<item type=\"hr\">http://hi.baidu.com/slieer/home</item>" +
-				"<item type=\"\">http://oschina.net/slieer</item>" +
-				"<item type=\"OT\">http://code.google.com/slieer</item>" +
+				"<item type=\"hr1\">https://github.com</item>" +
+				"<item type=\"yamaxun1\">http://z.cn</item>" +
+				"<item type=\"OT1\">http://t.cn</item>" +
 				"</url>";  //set tel field is null
 		try {
 			putReqClient(reqUrl, xml);
@@ -260,10 +295,10 @@ public class TestSingPut extends TestBase{
 		
 	@Test
 	public void putFN(){
-		String byIndex = LEFT_SQUARE_BRACKET.concat("1").concat(RIGHT_SQUARE_BRACKET);
+		String byIndex = LEFT_SQUARE_BRACKET.concat("2").concat(RIGHT_SQUARE_BRACKET);
 		String reqUrl = url.concat("/~~/contacts/contact" + byIndex + "/name/fn");
 
-		String nameCentent = "<fn>da</fn>";
+		String nameCentent = "<fn>DA</fn>";
 		try {
 			putReqClient(reqUrl, nameCentent);
 		} catch (Exception e) {
@@ -277,10 +312,10 @@ public class TestSingPut extends TestBase{
 	 */
 	@Test
 	public void putItemByTagName(){
-		String contactId = "74003";
+		String contactId = "164";
 		String url2 = url.concat(constructSecondLayerSelectorByUniqueAttr(contactId)).concat("/tel/item");
 		
-		String telItem = "<item type=\"home\">0916-8452-426</item>";
+		String telItem = "<item type=\"home\">0916-8452-888</item>";
 		try {
 			putReqClient(url2, telItem);
 		} catch (Exception e) {
@@ -288,12 +323,13 @@ public class TestSingPut extends TestBase{
 		}
 	}
 	
+	//--not test----------------------------------------------------------------------------------
 	/**
 	 * put tel item 
 	 */
 	@Test
 	public void putItemByIndex(){
-		String contactId = "74003";
+		String contactId = "165";
 		String itemIndex = "2";
 		String byIndex = LEFT_SQUARE_BRACKET.concat(itemIndex).concat(RIGHT_SQUARE_BRACKET);
 		String url2 = url.concat(constructSecondLayerSelectorByUniqueAttr(contactId)).concat("/tel/item").concat(byIndex);
@@ -330,7 +366,7 @@ public class TestSingPut extends TestBase{
 	 */
 	@Test
 	public void putTelByIndex(){
-		int index = 1;
+		int index = 3;
 		String reqUrl = url.concat(constructSecondLayerSelectorByIndex(index)).concat("/tel");
 		
 		String xml0 = "<tel></tel>";  //set tel field is null

@@ -270,12 +270,14 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 			contactIfc.saveList(userId,conatcts);
 			return new ResultData(ResultData.STATUS_200, "");
 		}else{
+			log.info("put node, nodeSelector:" + nodeSelector);
 			String secondLayerSelector = null; 
 			String thirdLayerSeletor = null;
 			String fourthLayerSelector = null;
 			String selectorArr[] = nodeSelector.split("/");
 			if(nodeSelector != null){
 				if(selectorArr.length > 0 && !selectorArr[0].equals(NODE_CONTACTS)){
+					log.info("selector error.");
 					return new ResultData(ResultData.STATUS_404, "");
 				}
 				if(selectorArr.length == 2){
@@ -298,16 +300,22 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 		    		//by tag name
 		    		if(secondLayerSelector.equals(NODE_CONTACT)){
 		    			long size = contactIfc.getCountForNormal(userId);
+		    			log.info("get contact by tag name selector. contact size is " + size);
 		    			switch ((int)size) {
 						case 0:
 							List<Contact> conatcts = xmlToEntitys(doc);
 							contactIfc.saveList(userId,conatcts);
 							return new ResultData(ResultData.STATUS_200, "");
 						case 1:
-							//delete first record by userId
-							deleteContactByIndexSelector(userId, 1);
-							conatcts = xmlToEntitys(doc);
-							contactIfc.saveList(userId,conatcts);
+							List<Contact> list = xmlToEntitys(doc);
+			    			if(list.size() > 0){
+			    				Contact oldContact = getByIndex(userId, 1);
+			    				Contact contact = list.get(0);
+			    				contact.setContactId(oldContact.getContactId());
+			    				contactIfc.updateContact(userId, contact);
+			    				return new ResultData(ResultData.STATUS_200, "");				    				
+			    			}
+							
 							return new ResultData(ResultData.STATUS_200, "");
 						}
 		    		}else if(secondLayerSelector.matches(SingConstant.PATTERN_CONTACT_INDEX)){
@@ -315,13 +323,21 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 		    			int index = SingConstant.getIndex(secondLayerSelector);
 		    			if(index >= 1){
 		    				long size = contactIfc.getCountForNormal(userId);
+		    				log.info("contactIfc.getCountForNormal by userId: " + size);
 		    				if(index <= size){
 		    					//update
-		    					deleteContactByIndexSelector(userId, index);
+		    					log.info("update contact by contact index selector, index :" + index);
 				    			List<Contact> list = xmlToEntitys(doc);
-				    			contactIfc.saveList(userId, list);
-				    			return new ResultData(ResultData.STATUS_200, "");
+				    			Contact oldContact = getByIndex(userId, index);
+				    			if(list.size() > 0 && oldContact != null){
+				    				log.info("update contact by index......");
+				    				Contact contact = list.get(0);
+				    				contact.setContactId(oldContact.getContactId());
+				    				contactIfc.updateContact(userId, contact);
+				    				return new ResultData(ResultData.STATUS_200, "");				    				
+				    			}
 		    				}else if(index == size +1){
+		    					log.info("add contact by contact index selector, index :" + index);
 		    					//add
 				    			List<Contact> list = xmlToEntitys(doc);
 				    			contactIfc.saveList(userId, list);
@@ -334,14 +350,21 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 		    			log.info("put contact by unique attribute...");
 		    			long attr = SingConstant.getUniqueAttrValue(secondLayerSelector);
 		    			if(attr != -1){
-		    				Contact en = getById(userId, attr);
-		    				if(en != null){
-		    					contactIfc.removeList(userId, String.valueOf(en.getContactId()));
-		    				}		    				
+		    				List<Contact> list = xmlToEntitys(doc);
+		    				Contact oldContact = getById(userId, attr);
+		    				if(oldContact != null){
+		    					//update
+				    			if(list.size() > 0){
+				    				Contact contact = list.get(0);
+				    				contact.setContactId(oldContact.getContactId());
+				    				contactIfc.updateContact(userId, contact);
+				    				return new ResultData(ResultData.STATUS_200, "");				    				
+				    			}
+		    				}else{
+		    					contactIfc.saveList(userId, list);
+		    				}
+		    				return new ResultData(ResultData.STATUS_200, "");
 		    			}
-		    			List<Contact> list = xmlToEntitys(doc);
-		    			contactIfc.saveList(userId, list);
-		    			return new ResultData(ResultData.STATUS_200, "");
 		    		}
 		    		
 		    	}
@@ -349,12 +372,13 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 		    }else if(topTagName.equals(SingConstant.getNodeNameByThirdSelector(thirdLayerSeletor))){
 		    	Contact selectorRecord = secondLayerSelectorResult(
 						userId, secondLayerSelector);
-	    		
+	    		log.info("contact:" + selectorRecord);
 		    	if(selectorRecord != null){
 		    		NodeList nodelist = element.getChildNodes();
 		    		Object fieldValue = null;
 		    		//Object fieldValueObj = null;
 		    		if(SingConstant.isThirdLayerLeafNode(topTagName)){
+		    			log.info("put by tag name, third layer leaf node.");
 						Node node1 = nodelist.item(0);
 						if(node1 != null){
 							fieldValue = node1.getNodeValue();							
@@ -413,7 +437,7 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 						NameInVCard nameVCard = (NameInVCard)fieldValueObj;
 						nameVCard.setGivenName(valueFromXml);			    		
 			    	}else if(fourthLayerSelector.equals(NODE_ITEM)){
-			    		log.info("put item node by tag name...");
+			    		log.info("put item node by tag name...fieldValueObj:" + fieldValueObj);
 			    		int itemSize = 0;
 			    		if(fieldValueObj != null){
 			    			if(tagName.equals(NODE_ORG)){
@@ -426,8 +450,12 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 			    		}
 			    		//put item node by tag name.
 			    		if(itemSize <= 1){
-			    			NodeList list = element.getChildNodes();
-			    			fieldValueObj = xmlItemNodeToVcardObj(tagName, list);		    						    			
+			    			NodeList list = doc.getChildNodes();
+			    			//log.info("" + element + ","+ list.getLength()); 
+			    			fieldValueObj = xmlItemNodeToVcardObj(tagName, list);
+			    			log.info("put item node by tag name, fieldValueObj value:" + fieldValueObj);
+			    		}else{
+				    		return new ResultData(ResultData.STATUS_404, "");			    			
 			    		}
 			    	}else if(fourthLayerSelector.matches(SingConstant.PATTERN_FOURTH_ITEM_SELECTOR_INDEX)){			    		
 			    		log.info("put item node by index...");
@@ -574,7 +602,7 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 				}else if(selParts[1].matches(SingConstant.PATTERN_CONTACT_INDEX)){
 					int index = SingConstant.getIndex(selParts[1]);
 					log.info("delete contact by index ,index is " + index);
-					effectRows = deleteContactByIndexSelector(userId, index);
+					deleteContactByIndexSelector(userId, index);
 				}else if(selParts[1].matches(SingConstant.PATTERN_CONTACT_UNIQUE_ATTR)){
 					long contactId = SingConstant.getUniqueAttrValue(selParts[1]);
 					log.info("delete contact by uniqueAttr, (contactId, userId)-> " + contactId + "," + userId);
@@ -864,7 +892,7 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 	 * @return
 	 */
 	private static String[][] splitByVerticalLineAndColon(List objList) {
-		log.info("splitByVerticalLineAndColon:" + objList);
+		//log.info("splitByVerticalLineAndColon:" + objList);
 		if(objList != null){
 				String[][] vcardInfo = new String[objList.size()][];
 				for(int i = 0; i < objList.size(); i++){
@@ -955,7 +983,7 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 	private static List<Contact> xmlToEntitys(Document conatcts){
 		List<Contact> list = new ArrayList<Contact>();
 		NodeList nodes = conatcts.getElementsByTagName(NODE_CONTACT);
-		log.info("xml contact size is " + nodes.getLength());
+		log.info("xml document contact node amount is " + nodes.getLength());
 		for (int i = 0; i < nodes.getLength(); i++) {
 			Node node = nodes.item(i);
 			NodeList children = node.getChildNodes();
@@ -1017,6 +1045,7 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 		for(int k = 0; k < childList.getLength(); k++){
 			
 			Node itemNode = childList.item(k);
+			//log.info("itemNode.getNodeName():" + itemNode.getNodeName());
 			if(! itemNode.getNodeName().equals("#text")){
 				Node item = itemNode.getChildNodes().item(0);
 				NamedNodeMap attrMap = itemNode.getAttributes();
@@ -1024,11 +1053,12 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 				if(attrMap != null){
 					type = attrMap.getNamedItem(NODE_ATTR_TYPE);									
 				}
-				
+				//log.info("type:" + type);
 				String tempType = (type  != null) ? type .getNodeValue() : "";
 				String nodeVal = null;
 				if(item != null && item.getNodeValue() != null){
-					nodeVal = item.getNodeValue();					
+					nodeVal = item.getNodeValue();
+					log.info("type,nodeValue:" + type + "," + nodeVal);
 					Object obj = null;
 					if(itemParentTag.equals(NODE_ADR)){
 						obj = AddressInVCard.parse(tempType.concat(":").concat(nodeVal));
@@ -1171,13 +1201,18 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 	
 	/**
 	 * @param userId
-	 * @param index begin 0.
+	 * @param index begin 1.
 	 * @return
 	 * @throws Exception
 	 */
 	private Contact getByIndex(long userId, int index) throws Exception{
-		List<Contact> list = contactIfc.getContactBySize(userId, index, 1);
-		return (list != null && list.size() > 0) ? list.get(0) : null;
+		if(index > 0){
+			List<Contact> list = contactIfc.getContactBySize(userId, index - 1, 1);
+			if(list != null && list.size() > 0){
+				return list.get(0);					
+			}
+		}
+		return null;
 	}
 			
 	/**
@@ -1204,14 +1239,15 @@ public class SingSpacesContactsAppEjb implements XCAPDatebaseLocalIfc{
 
 	/**
 	 * @param userId
-	 * @param index
+	 * @param index begin 1.
 	 * @return sql effect row
 	 * @throws Exception
 	 */
-	private int deleteContactByIndexSelector(long userId, int index) throws Exception{
+	private void deleteContactByIndexSelector(long userId, int index) throws Exception{
 		Contact c = getByIndex(userId, index);
-		contactIfc.removeList(userId, String.valueOf(c.getContactId()));
-		return 1;
+		if(c != null){
+			contactIfc.removeList(userId, String.valueOf(c.getContactId()));			
+		}
 	}
 	
 }
