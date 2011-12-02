@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog>
+	<book sku="123_xaa">
+		<title>King Lear</title>
+		<author>William Shakespeare</author>
+		<price>6.95</price>
+		<category>classics</category>
+	</book>
+	<book sku="988_yty">
+		<title>Hamlet</title>
+		<author>William Shakespeare</author>
+		<price>5.95</price>
+		<category>classics</category>
+	</book>
+	<book sku="434_asd">
+		<title>1984</title>
+		<author>George Orwell</author>
+		<price>12.95</price>
+		<category>classics</category>
+	</book>
+	<book sku="876_pep">
+		<title>Java Generics and Collections</title>
+		<authors>
+			<author>Maurice Naftalin</author>
+			<author>Phillip Wadler</author>
+		</authors>
+		<price>34.99</price>
+		<category>programming</category>
+	</book>
+</catalog>
