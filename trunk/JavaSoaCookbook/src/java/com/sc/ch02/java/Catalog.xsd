@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:complexType name="Book">
+	<xsd:sequence>
+		<xsd:element name="isbn" type="ISBN" />
+		<xsd:element name="author" type="Author" />
+		<xsd:element name="title" type="xsd:string" />
+		<xsd:element name="category" type="Category" />
+	</xsd:sequence>
+</xsd:complexType>

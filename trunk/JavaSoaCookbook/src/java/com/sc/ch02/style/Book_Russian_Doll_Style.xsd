@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://ns.soacookbook.com/russiandoll" xmlns:tns="http://ns.soacookbook.com/russiandoll"
+	elementFormDefault="unqualified">
+	<xsd:annotation>
+		<xsd:documentation>
+			Book schema as Russian Doll design.(嵌套方式，只有一个全局元素)
+    </xsd:documentation>
+	</xsd:annotation>
+	<xsd:element name="book">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="title" type="xsd:string" />
+				<xsd:element name="price" type="xsd:decimal" />
+				<xsd:element name="category" type="xsd:NCName" />
+				<xsd:choice>
+					<xsd:element name="author" type="xsd:string" />
+					<xsd:element name="authors">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="author" type="xsd:string"
+									maxOccurs="unbounded" />
+							</xsd:sequence>
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:choice>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>
