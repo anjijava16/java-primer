@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://ns.soacookbook.com/venetianblind" xmlns:tns="http://ns.soacookbook.com/venetianblind"
+	elementFormDefault="unqualified" attributeFormDefault="unqualified">
+	<xsd:annotation>
+		<xsd:documentation>
+			Book schema as Venetian Blind design.(只有一个元素，所有元素以类型方式出现。)
+  </xsd:documentation>
+	</xsd:annotation>
+
+	<!-- Single global root element exposed -->
+	<xsd:element name="book" type="tns:BookType" />
+
+	<!-- The root is given a type that is defined here, using all externally 
+		defined elements. -->
+	<xsd:complexType name="BookType">
+		<xsd:sequence>
+			<xsd:element name="title" type="tns:TitleType" />
+			<xsd:element name="author" type="tns:AuthorType" />
+			<xsd:element name="category" type="tns:CategoryType" />
+			<xsd:element name="price" type="tns:PriceType" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!-- Each type used by the global root is defined below, and are potentially 
+		available for reuse depending on the value of the 'elementFormDefault' switch 
+		(use 'qualified' to expose, 'unqualified' to hide) -->
+	<xsd:simpleType name="TitleType">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="AuthorType">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="CategoryType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="LITERATURE" />
+			<xsd:enumeration value="PHILOSOPHY" />
+			<xsd:enumeration value="PROGRAMMING" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="PriceType">
+		<xsd:restriction base="xsd:float" />
+	</xsd:simpleType>
+
+</xsd:schema>
