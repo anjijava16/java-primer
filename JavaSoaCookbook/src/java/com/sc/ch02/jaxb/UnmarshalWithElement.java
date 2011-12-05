@@ -1,56 +1,76 @@
 package com.sc.ch02.jaxb;
 
+import static java.lang.System.out;
 
 import java.io.StringReader;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
 
+import org.junit.Before;
+import org.junit.Test;
+
+import com.sc.ch02.jaxb.Book.Category;
+
 /**
  * Using JAXBElement to Unmarshal an XML String
-
- * @author slieer
- * Create Date2011-12-3
- * version 1.0
+ * 
+ * @author slieer Create Date2011-12-3 version 1.0
  */
 public class UnmarshalWithElement {
-    
-  public static void main(String...arg) {
-    try {
+	 Book book = null;
+	 String bookXml = null;
+	
+	@Before
+	public void initTest(){
+		book = new Book();
+		Author a = new Author();
+		a.setFirstName("Jacques");
+		a.setLastName("Derrida");
+		book.setAuthor(a);
+		book.setPrice(34.95);
+		book.setTitle("Of Grammatology");
+		book.setCategory(Category.PHILOSOPHY);
+		
+		bookXml = "<book>" +
+					"<author><firstName>Jacques</firstName><lastName>Derrida</lastName></author>" +
+					"<category>PHILOSOPHY</category>" +
+					"<price>34.95</price>" +
+					"<title>Of Grammatology</title>" +
+				 "</book>";
+	}
+	
+	
+	@Test
+	public void unmarchal() throws Exception {
+		JAXBContext ctx = JAXBContext.newInstance(Book.class);
+		Unmarshaller um = ctx.createUnmarshaller();
 
-        //Create context
-        JAXBContext ctx = JAXBContext.newInstance(Book.class);
-        
-        //Create marshaller
-        Unmarshaller um = ctx.createUnmarshaller();
+		StringReader sr = new StringReader(bookXml);
 
-        //Read in the XML from anywhere
-        //In this case it is a complete XML book as string.
-        StringReader sr = new StringReader(getBookXml());
-        
-        //Get XML from object
-        JAXBElement<Book> b = um.unmarshal(
-                new StreamSource(sr), Book.class);
-        
-        //Start working with object
-        Book book = b.getValue();
-        
-        System.console().printf("Title: %s", book.getTitle());
+		JAXBElement<Book> b = um.unmarshal(new StreamSource(sr), Book.class);
 
-    } catch (JAXBException ex) {
-        ex.printStackTrace();
-    } catch (Exception ex) {
-        ex.printStackTrace();
-    }
-  }
-  
-  private static String getBookXml(){
-      return "<" + Book.PACKAGE_PATH + ">" +
-              "<title>On Friendship</title>" +
-              "<price>39.95</price>" + 
-              "</" + Book.PACKAGE_PATH + ">";
-  }
+		Book book = b.getValue();
+		System.out.println(book);
+		//System.console().printf("Title: %s", book.getTitle());
+	}
+	
+	@Test
+	public void unmarchalList(){
+		
+	}
+	
+	@Test
+	public void marchal() throws Exception {
+		Class[] c = { Book.class };
+		JAXBContext ctx = JAXBContext.newInstance(c);
+		Marshaller m = ctx.createMarshaller();
+
+		m.marshal(book, out);
+		//m.marshal(book, new FileOutputStream(new File("aBook.xml")));
+		out.println("\nAll done.");
+	}
 }

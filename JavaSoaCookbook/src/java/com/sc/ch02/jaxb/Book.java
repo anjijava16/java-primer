@@ -49,4 +49,12 @@ public class Book implements Serializable{
 	public void setCategory(Category category) {
 		this.category = category;
 	}
+
+	@Override
+	public String toString() {
+		return "Book [title=" + title + ", price=" + price + ", author="
+				+ author + ", category=" + category + "]";
+	}
+	
+	
 }
