@@ -2,12 +2,18 @@ package com.beans;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ComplexBean {
 	private String id;
+	
+	private Integer integer;
+	private Date date;
+	private Long longVal;
+	
 	private int[] array;
 	private List<String> list = new ArrayList<String>();
 	private Map<String,String> map = new HashMap<String,String>();
@@ -72,12 +78,36 @@ public class ComplexBean {
 		this.personList = personList;
 	}
 
+	public Integer getInteger() {
+		return integer;
+	}
+
+	public void setInteger(Integer integer) {
+		this.integer = integer;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}	
+	
+	public Long getLongVal() {
+		return longVal;
+	}
+
+	public void setLongVal(Long longVal) {
+		this.longVal = longVal;
+	}
+
 	@Override
 	public String toString() {
-		return "ComplexBean [id=" + id + ", array=" + Arrays.toString(array)
-				+ ", list=" + list + ", map=" + map + ", nested=" + nested
-				+ ", personList=" + personList + ", myBean=" + myBean + "]";
+		return "ComplexBean [id=" + id + ", integer=" + integer + ", date="
+				+ date + ", longVal=" + longVal + ", array="
+				+ Arrays.toString(array) + ", list=" + list + ", map=" + map
+				+ ", nested=" + nested + ", personList=" + personList
+				+ ", myBean=" + myBean + "]";
 	}
-	
-	
 }

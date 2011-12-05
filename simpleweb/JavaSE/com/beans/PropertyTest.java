@@ -1,19 +1,21 @@
 package com.beans;
 
-import java.lang.reflect.InvocationTargetException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.ConvertUtils;
+import org.apache.commons.beanutils.Converter;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.junit.Test;
 
 public class PropertyTest {
-	@Test
-	public void t(){
-		ComplexBean bean = new ComplexBean();
+	private static ComplexBean bean = new ComplexBean();
+	static{
 		bean.setArray(new int[]{1,2,4,7});
 		bean.setId("zhai");
 		
@@ -33,27 +35,48 @@ public class PropertyTest {
 		bean.setMyBean(myBean);
 		
 		List<PersonBean> personList = new ArrayList<PersonBean>();
-		personList.add(new PersonBean(1, "per1", 12));
-		personList.add(new PersonBean(1, "per23", 22));
+		personList.add(new PersonBean(1, "per1", 12, null, null));
+		personList.add(new PersonBean(1, "per23", 22, null, null));
 		bean.setPersonList(personList);
-		Map<String, Object> properties = new HashMap<String, Object>();
 		
+	}
+	
+	@Test
+	public void beanUtilsGetTest(){
+		Map<String, Object> properties = new HashMap<String, Object>();
 		try {
 			properties = BeanUtils.describe(bean);
 			Object obj = properties.get("personList");
-			System.out.println(obj.getClass().getName());
-			System.out.println(obj);
+			System.out.println("className:" + obj.getClass().getName() + " value:" + obj);
 			
 			obj = properties.get("map");
-			System.out.println(obj);
+			System.out.println("map value:" + obj);
 			
-			Object object = PropertyUtils.getProperty(bean, "personList");
+			obj = properties.get("integer");
+			System.out.println("integer value:" + obj);
+						
+			Object integer = BeanUtils.getProperty(bean, "integer");
+			System.out.println(integer);
+						
+			Object date = BeanUtils.getProperty(bean, "date");
+			System.out.println(date);
 			
-			if(object instanceof List){
-				System.out.println("list");
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void propertyUtilsGetTest(){
+		Object object = null;
+		try {
+			object = PropertyUtils.getProperty(bean, "personList");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		if(object instanceof List){
+			System.out.println("list");
 		}
 	}
 	
@@ -63,7 +86,6 @@ public class PropertyTest {
 	 */
 	@Test
 	public void copy() {
-		// TODO Auto-generated method stub
 		
 		PersonBean bean = new PersonBean();
 		bean.setAge(1);
@@ -72,23 +94,37 @@ public class PropertyTest {
 		
 		PersonEntity en = new PersonEntity();
 		try {
-			/*
-			 *第一个参数  target bean
-			 *第二个参数 source bean
-			 */
+			//ConvertUtils.register(new DateConverter(), Date.class);
+			ConvertUtils.register(new LongConverter(), Long.class);
+			
+			BeanUtils.setProperty(en, "salary", null);
+			//BeanUtils.copyProperties(en,bean);
 			PropertyUtils.copyProperties(en,bean);
 			
 			System.out.println(en);
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+	
+	class DateConverter implements Converter{
+			@Override
+			public Object convert(Class arg0, Object arg1) {
+				Date curr = (Date)arg1;
+				if(arg1 == null){
+					curr = new Date();
+				}
+				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+				return format.format(curr);
+		}		
+	}
+	
+	class LongConverter implements Converter{
 
+		@Override
+		public Object convert(Class arg0, Object arg1) {
+			return arg1 == null ? 0L : arg1;
+		}
+		
+	}
 }
