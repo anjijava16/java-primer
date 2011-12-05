@@ -18,35 +18,25 @@ package com.sc.ch02.jaxb;
  * THIS SOFTWARE OR ITS DERIVATIVES.
  */
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.DocumentBuilder;
-
-import org.xml.sax.ErrorHandler;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.SAXException;
-import org.xml.sax.InputSource;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.w3c.dom.Document;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Element;
-import org.w3c.dom.Text;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.net.URL;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Text;
+import org.xml.sax.InputSource;
 
 /**
  * This shows how to create an xml document using DOM validate it against the

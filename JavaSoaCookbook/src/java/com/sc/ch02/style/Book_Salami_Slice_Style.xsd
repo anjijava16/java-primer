@@ -4,7 +4,7 @@
 	elementFormDefault="qualified">
 	<xsd:annotation>
 		<xsd:documentation>
-			Book schema as Salami Slice design.（所有的元素，都是全局元素）
+			Book schema as Salami Slice design.（所有的元素都是全局元素）
       </xsd:documentation>
 	</xsd:annotation>
 	<xsd:element name="book">

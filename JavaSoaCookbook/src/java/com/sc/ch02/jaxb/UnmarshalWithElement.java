@@ -43,7 +43,10 @@ public class UnmarshalWithElement {
 				 "</book>";
 	}
 	
-	
+	/**
+	 * xml to JavaBean.
+	 * @throws Exception
+	 */
 	@Test
 	public void unmarchal() throws Exception {
 		JAXBContext ctx = JAXBContext.newInstance(Book.class);
@@ -63,6 +66,10 @@ public class UnmarshalWithElement {
 		
 	}
 	
+	/**
+	 * javaBean to xml
+	 * @throws Exception
+	 */
 	@Test
 	public void marchal() throws Exception {
 		Class[] c = { Book.class };

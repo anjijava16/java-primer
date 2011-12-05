@@ -53,4 +53,9 @@ public class Person {
 		this.fax = fax;
 	}
 
+	@Override
+	public String toString() {
+		return "Person [firstname=" + firstname + ", lastname=" + lastname + ", phone=" + phone + ", fax=" + fax + "]";
+	}
+
 }

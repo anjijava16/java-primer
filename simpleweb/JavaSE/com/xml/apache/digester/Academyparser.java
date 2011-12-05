@@ -6,8 +6,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 
-import org.apache.commons.digester.Digester;
-import org.apache.commons.digester.xmlrules.DigesterLoader;
+import org.apache.commons.digester3.Digester;
+import org.apache.commons.digester3.binder.DigesterLoader;
+import org.apache.commons.digester3.binder.RulesModule;
 import org.junit.Test;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -31,7 +32,9 @@ public class Academyparser {
 			e.printStackTrace();
 		}
 		InputSource rulesSource = new InputSource(characterStream);
-		Digester digester = DigesterLoader.createDigester(rulesSource);
+		Digester digester = new Digester();
+		digester.setValidating(false);
+		//digester.
 		
 		//URL url= this.getClass().getClassLoader().getResource("xml.academy.xml");
 		try {
