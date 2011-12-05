@@ -7,7 +7,6 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import com.sc.ch02.jaxb.hello.GreetingListType;

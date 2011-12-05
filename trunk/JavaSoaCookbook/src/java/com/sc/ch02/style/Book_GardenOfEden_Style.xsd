@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://ns.soacookbook.com/salami" 
+	xmlns:tns="http://ns.soacookbook.com/salami"
+	elementFormDefault="qualified">
+	<xsd:annotation>
+		<xsd:documentation>
+			Book schema as Garden of Eden design.（所有的元素都是全局元素,组合元素定义为类型）
+		</xsd:documentation>
+	</xsd:annotation>
+	
+	<xsd:element name="book" type="tns:bookType"></xsd:element>
+	<xsd:element name="title" />
+	<xsd:element name="price" />
+	<xsd:element name="category" />
+	<xsd:element name="author" />
+
+	<xsd:complexType name="bookType">
+		<xsd:sequence>
+			<xsd:element ref="tns:title" />
+			<xsd:element ref="tns:author" />
+			<xsd:element ref="tns:category" />
+			<xsd:element ref="tns:price" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+</xsd:schema>

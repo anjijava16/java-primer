@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Vector;
 
-import org.apache.commons.digester.Digester;
+import org.apache.commons.digester3.Digester;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 

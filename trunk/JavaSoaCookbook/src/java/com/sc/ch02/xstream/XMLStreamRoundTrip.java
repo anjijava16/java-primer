@@ -1,10 +1,5 @@
 package com.sc.ch02.xstream;
 
-
-
-
-import java.io.Serializable;
-
 import com.sc.ch02.jaxb.Author;
 import com.sc.ch02.jaxb.Book;
 import com.sc.ch02.jaxb.Book.Category;

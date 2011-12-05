@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="ejb-1.0" default="compile" basedir=".">
+	<property name="sun.app.ant.jar" location="${glassfish.jars.dir}/sun-appserv-ant.jar" />
+	<property name="sun.ws.tools.jar" location="${glassfish.jars.dir}/webservices-tools.jar"></property>
+	<property name="sun.ws.rt.jar" location="${glassfish.jars.dir}/jaxws-rt.jar"></property>
+	<property name="xjc.task.path"
+		location="${sun.app.ant.jar}${path.separator}${sun.ws.tools.jar}${path.separator}${sun.ws.rt.jar}"></property>
+	<taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
+		<classpath path="${xjc.task.path}" />
+	</taskdef>
+
+
+	====================================
+	<target name="schema-to-java">
+		<echo message="-----Generating Java sources from Schema-----" />
+		<xjc destdir="./src/gen">
+			<schema dir="./src/xml/META-INF/wsdl" includes="**/*.schemalet, **/*.xsd" />
+		</xjc>
+	</target>
+</project>
