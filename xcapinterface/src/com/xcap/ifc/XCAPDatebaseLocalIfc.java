@@ -9,8 +9,8 @@ import java.text.SimpleDateFormat;
  *<li> version 1.0</li>
  */
 public interface XCAPDatebaseLocalIfc {
-	public static String UAB_CONTACTS_LOCAL_JNDI = "UABContactsApp/local";
-	public static String SING_SPACE_CONTACTS_LOCAL_JNDI = "SingSpacesContactsApp/local";
+	public static String UAB_CONTACTS_LOCAL_JNDI = "ContactsXCAPEjb/local";
+	public static String SING_SPACE_CONTACTS_LOCAL_JNDI = "SyncContactsXCAPEjb/local";
 
 	final static String DATE_FORMAT = "yyyy-MM-dd hh:mm:ss";
 	final static DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);

@@ -30,7 +30,7 @@ public class SchemaServlet extends HttpServlet {
 
 	/**
 	 http://localhost:8080/xcap-root/xcap-schema/UABContacts
-	 http://localhost:8080/xcap-root/xcap-schema/SingSpacesContacts
+	 http://localhost:8080/xcap-root/xcap-schema/SyncContacts
 	 */
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -44,7 +44,7 @@ public class SchemaServlet extends HttpServlet {
 		String schemaName = "";
 		if (auid.equals(Constants.APP_USAGE_CONTACT)) {
 			schemaName = Constants.XML_SCHEMA_UAB_CONTACT;
-		} else if (auid.equals(Constants.APP_USAGE_SINGSPACE_CONTACT)) {
+		} else if (auid.equals(Constants.APP_USAGE_SYNC_CONTACT)) {
 			schemaName = Constants.XML_SCHEMA_SINGSPACES_CONTACT;
 		}else{
 			resp.sendError(HttpServletResponse.SC_NOT_FOUND);

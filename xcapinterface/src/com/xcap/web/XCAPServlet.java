@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -22,8 +23,7 @@ import com.xcap.ifc.error.XCAPErrors;
 public class XCAPServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	public static final Logger log = Logger.getLogger(XCAPServlet.class);
-
-
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -78,7 +78,7 @@ public class XCAPServlet extends HttpServlet {
 		if (auid.equals(Constants.APP_USAGE_CONTACT)) {
 			jndi = XCAPDatebaseLocalIfc.UAB_CONTACTS_LOCAL_JNDI;
 			userInfo = msisdn;
-		} else if(auid.equals(Constants.APP_USAGE_SINGSPACE_CONTACT)){
+		} else if(auid.equals(Constants.APP_USAGE_SYNC_CONTACT)){
 			jndi = XCAPDatebaseLocalIfc.SING_SPACE_CONTACTS_LOCAL_JNDI;
 			userInfo = userId;
 		}else{
@@ -95,7 +95,7 @@ public class XCAPServlet extends HttpServlet {
 			case POST:
 				resp.setContentType("text/xml");
 				// call ifc
-				if (auid.equals(Constants.APP_USAGE_CONTACT) || auid.equals(Constants.APP_USAGE_SINGSPACE_CONTACT)) {
+				if (auid.equals(Constants.APP_USAGE_CONTACT) || auid.equals(Constants.APP_USAGE_SYNC_CONTACT)) {
 					ResultData data = xcapIfc.get(userInfo, nodeSelector);
 					String result = data.getXml();
 					if (data.getstatus() != HttpServletResponse.SC_OK) {
@@ -126,7 +126,7 @@ public class XCAPServlet extends HttpServlet {
 
 					if (auid.equals(Constants.APP_USAGE_CONTACT)) {
 						appSchema = Constants.XML_SCHEMA_UAB_CONTACT;
-					} else if(auid.equals(Constants.APP_USAGE_SINGSPACE_CONTACT)){
+					} else if(auid.equals(Constants.APP_USAGE_SYNC_CONTACT)){
 						appSchema = Constants.XML_SCHEMA_SINGSPACES_CONTACT;
 					}else{
 						// other app usage.

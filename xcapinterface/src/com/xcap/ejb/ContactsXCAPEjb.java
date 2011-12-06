@@ -21,7 +21,6 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.Converter;
 import org.apache.log4j.Logger;
-import org.jboss.annotation.ejb.LocalBinding;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -45,9 +44,9 @@ import com.xcap.ifc.error.XCAPErrors;
  */
 @Stateless
 @Local(value = XCAPDatebaseLocalIfc.class)
-@LocalBinding(jndiBinding = XCAPDatebaseLocalIfc.UAB_CONTACTS_LOCAL_JNDI)
-public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
-	public final static Logger log = Logger.getLogger(UABContactsAppEjb.class);
+//@LocalBinding(jndiBinding = XCAPDatebaseLocalIfc.UAB_CONTACTS_LOCAL_JNDI)
+public class ContactsXCAPEjb implements XCAPDatebaseLocalIfc {
+	public final static Logger log = Logger.getLogger(ContactsXCAPEjb.class);
 
 	final static String NODE_CONTACTS = "contacts";
 	final static String NODE_CONTACT = "contact";
@@ -603,8 +602,8 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 	 */
 	private ResultData getSecondLevelXml(String userInfo, String condition1) throws Exception {
 		log.info("getSecondLevelXml, condition1:" + condition1);
-		if (condition1.startsWith(UABContactsAppEjb.NODE_CONTACT)) {
-			if (condition1.equals(UABContactsAppEjb.NODE_CONTACT)) {
+		if (condition1.startsWith(NODE_CONTACT)) {
+			if (condition1.equals(NODE_CONTACT)) {
 				long size = contactExchangeIfc.getContactListSizeByMsisdn(userInfo);
 				if (size == 0) {
 					log.info("was not found in the document.");
@@ -651,7 +650,7 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 			} else {
 				return new ResultData(ResultData.STATUS_404, "");
 			}
-		} else if (condition1.startsWith(UABContactsAppEjb.NODE_LIST)) {
+		} else if (condition1.startsWith(NODE_LIST)) {
 
 		}
 
@@ -723,17 +722,7 @@ public class UABContactsAppEjb implements XCAPDatebaseLocalIfc {
 			return (p != null && p.trim().length() != 0) ?  Long.valueOf(p) : null;
 		}
 	}
-	
-	/**
-	 * @param userId
-	 * @param contactId
-	 * @return null or a contact
-	 */
-	private Contact getById(String msisdn, long contactId) {
-		Contact contact = contactExchangeIfc.getContactById(contactId);
-		return contact != null && contact.getMsisdn().equals(msisdn) ? contact : null; 	
-	}
-	
+		
 	/**
 	 * @param userId
 	 * @param index
