@@ -323,7 +323,6 @@ public class TestSingPut extends TestBase{
 		}
 	}
 	
-	//--not test----------------------------------------------------------------------------------
 	/**
 	 * put tel item 
 	 */
@@ -342,6 +341,7 @@ public class TestSingPut extends TestBase{
 		}		
 	}
 
+	//--not test----------------------------------------------------------------------------------
 	/**
 	 * put tel item 
 	 */
@@ -374,7 +374,7 @@ public class TestSingPut extends TestBase{
 		String xml2 = "<tel><item type=\"first\">8888888</item></tel>";
 		String xml3 = "<tel><item>8888888</item></tel>";
 		try {
-			putReqClient(reqUrl, xml0);
+			putReqClient(reqUrl, xml3);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

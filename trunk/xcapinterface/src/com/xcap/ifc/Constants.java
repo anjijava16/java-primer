@@ -8,11 +8,11 @@ package com.xcap.ifc;
  */
 public class Constants {
 	public final static String APP_USAGE_CONTACT = "UABContacts";
-	public final static String APP_USAGE_SINGSPACE_CONTACT = "SingSpacesContacts";
+	public final static String APP_USAGE_SYNC_CONTACT = "SyncContacts";
 	
 	public final static String SCHEMA_DIR = "WEB-INF/classes/com/xcap/web/xmlschema";
 	public final static String XML_SCHEMA_UAB_CONTACT = "UABContacts.xsd";
-	public final static String XML_SCHEMA_SINGSPACES_CONTACT = "SingSpacesContacts.xsd";	
+	public final static String XML_SCHEMA_SINGSPACES_CONTACT = "SyncContacts.xsd";	
 	
 	public final static String USERS = "users";
 	public final static String INTERVAL_SIGN = "/~~/"; 

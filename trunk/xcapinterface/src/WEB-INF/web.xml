@@ -33,7 +33,7 @@
 		
 	<servlet>
 		<servlet-name>xcap</servlet-name>
-		<servlet-class>com.xcap.web.XCAPServlet</servlet-class>
+		<servlet-class>com.xcap.web.XCAPServlet</servlet-class>		
 	</servlet>
 
 	<servlet>
