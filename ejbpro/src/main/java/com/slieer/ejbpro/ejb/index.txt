@@ -1,2 +1,8 @@
 jboss Quartz计划任务
 http://blog.csdn.net/spamatrix/article/details/4984495
+
+HelloMDB布署
+<!--  write to messaging\destinations-service.xml
+	or create file what name is xx-service.xml, 
+	e.g. src\doc\HelloMDB-service.xml,and copy JBOSS_HOME/server/default/deploy.
+-->

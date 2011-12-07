@@ -3,6 +3,8 @@ package com.slieer.ejbpro.ejb.webservice;
 import javax.ejb.Stateless;
 import javax.jws.WebService;
 
+import com.slieer.ejbpro.ifc.Car;
+
 
 @Stateless
 @WebService(name = "CarWebService")

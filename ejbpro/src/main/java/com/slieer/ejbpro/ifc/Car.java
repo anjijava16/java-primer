@@ -1,4 +1,4 @@
-package com.slieer.ejbpro.ejb.webservice;
+package com.slieer.ejbpro.ifc;
 
 public class Car {
 

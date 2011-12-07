@@ -1,4 +1,4 @@
-<project name="ejb-1.0" default="compile" basedir=".">
+<project name="EjbPro-1.0" default="compile" basedir=".">
 	<property file="build.properties"/>
 	<!-- set global properties for this build -->
     <property name="src" location="src/main"/>
