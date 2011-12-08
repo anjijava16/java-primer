@@ -19,13 +19,10 @@ import com.slieer.ejbpro.ifc.Book.Category;
 		name = "Catalog", 
 		targetNamespace = "http://ns.soacookbook.com/ws/catalog")
 @Stateless
-@Local
+@Local(CatalogLocalIfc.class)
 public class CatalogEJB implements CatalogLocalIfc {
-	Logger LOG = Logger.getLogger(CatalogEJB.class);
+	final static Logger LOG = Logger.getLogger(CatalogEJB.class);
 
-	/* (non-Javadoc)
-	 * @see com.slieer.ejbpro.ejb.webservice.CatalogLocalInfo#getBook(java.lang.String)
-	 */
 	@Override
 	@WebMethod
 	@SOAPBinding(style = SOAPBinding.Style.DOCUMENT, 

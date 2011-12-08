@@ -15,8 +15,8 @@ import com.slieer.ejbpro.web.MDBean;
 
 public class HelloMessageClient {
 	static Logger log = Logger.getLogger(HelloMessageClient.class);
-	InitialContext  ctx = null;
-	{
+	static InitialContext  ctx = null;
+	static {
 		Properties properties = new Properties();
 		properties.setProperty("java.naming.factory.initial", "org.jnp.interfaces.NamingContextFactory");
 		properties.setProperty("java.naming.provider.url", "localhost:1099");
@@ -25,6 +25,12 @@ public class HelloMessageClient {
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@Test
+	public void testHello() throws Exception{
+		HelloStatelessRemoteIfc timer = (HelloStatelessRemoteIfc) ctx.lookup(HelloStatelessRemoteIfc.HELLO_REMOTE_JNDI);
+		System.out.println(timer.hello());		
 	}
 	
 	@Test

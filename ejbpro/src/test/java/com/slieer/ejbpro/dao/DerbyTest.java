@@ -15,7 +15,7 @@ public class DerbyTest {
 				Class.forName(driver).newInstance();
 				@SuppressWarnings("unused")
 				Connection conn = DriverManager.getConnection(protocol + "derbyDB;create=true", props);
-			
+				System.out.println(conn);
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

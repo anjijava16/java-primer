@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project name="EjbPro-1.0" default="compile" basedir=".">
 	<property file="build.properties"/>
 	<!-- set global properties for this build -->
@@ -26,7 +27,7 @@
     <target name="compile" depends="init"
             description="compile the source " >
         <!-- Compile the java code from ${src} into ${build} -->
-        <javac srcdir="${src}/java" debug="on" encoding="utf-8" destdir="${build}">
+        <javac srcdir="${src}/java" debug="on" encoding="utf-8" destdir="${build}" source="1.6" target="1.6" optimize="true">
             <compilerarg value="-Xlint:unchecked"/>
             <classpath>
             	<fileset dir="${jboss.lib.dir}">
@@ -78,7 +79,7 @@
 	<target name="deploy" depends="dist">
 	    <copy todir="${jboss.lib.dir}">
 	      <fileset dir="${dist}">
-	        <include name="${xcap_ifc.jar}"/>	        
+	        <include name="${ejbpro_ifc.jar}"/>	        
 	      </fileset>
 	    </copy>
 		
