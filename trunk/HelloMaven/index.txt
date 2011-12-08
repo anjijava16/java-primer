@@ -1,0 +1,24 @@
+http://www.juvenxu.com/mvn-in-action/
+
+
+编译： mvn clean compile
+
+单元测试：mvn clean test
+
+打包: mvn clean package
+
+Maven本地仓库: mvn clean install
+
+
+显示所有骨架: mvn archetype:generate
+
+
+插件一、由于历史原因，Maven的核心插件之一compiler插件默认只支持编译Java 1.3，因此我们需要配置该插件使其支持Java 5 :
+
+maven-compiler-plugin
+
+
+插件二、默认打包生成的jar是不能够直接运行的，因为带有main方法的类信息不会添加到manifest中。为了生成可执行的jar文件，我们需要借助maven-shade-plugin，配置该插件如下：
+
+maven-shade-plugin
+
