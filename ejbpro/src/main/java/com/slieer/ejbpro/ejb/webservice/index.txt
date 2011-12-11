@@ -5,3 +5,6 @@ JAXM1.1只包含基于消息传递的API
 完整的JAXM API存在于javax.xml.soap和javax.xml.messaging二个包
 
 JAX-WS 2.0——Java API for XML-based Web services。
+
+
+wsimport -keep -verbose http://localhost:8080/ejbpro_ejb/CatalogService/Catalog?wsdl

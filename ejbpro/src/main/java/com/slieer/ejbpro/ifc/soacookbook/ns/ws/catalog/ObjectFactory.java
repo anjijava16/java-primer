@@ -1,5 +1,5 @@
 
-package com.soacookbook.ns.ws.catalog;
+package com.slieer.ejbpro.ifc.soacookbook.ns.ws.catalog;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlElementDecl;

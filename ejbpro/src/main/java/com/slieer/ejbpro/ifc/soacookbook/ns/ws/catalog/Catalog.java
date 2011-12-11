@@ -1,5 +1,5 @@
 
-package com.soacookbook.ns.ws.catalog;
+package com.slieer.ejbpro.ifc.soacookbook.ns.ws.catalog;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -19,8 +19,8 @@ import javax.xml.ws.ResponseWrapper;
  */
 @WebService(name = "Catalog", targetNamespace = "http://ns.soacookbook.com/ws/catalog")
 @XmlSeeAlso({
-    com.soacookbook.ns.ws.catalog.ObjectFactory.class,
-    com.soacookbook.ns.catalog.ObjectFactory.class
+		com.slieer.ejbpro.ifc.soacookbook.ns.ws.catalog.ObjectFactory.class,
+		com.slieer.ejbpro.ifc.soacookbook.ns.catalog.ObjectFactory.class
 })
 public interface Catalog {
 
