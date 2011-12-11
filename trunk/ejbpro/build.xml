@@ -10,7 +10,8 @@
 	<property name="jboss.lib.endorsed.dir"  value="${jboss.lib.endorsed}"/>
 	<property name="jboss.client.lib.dir"  value="${jboss.client.lib}"/>
 	<property name="jboss.common.lib.dir"  value="${jboss.common.lib}"/>
-	<property name="jboss.default.lib.dir"  value="${jboss.default.lib}"/>
+	
+	<property name="jboss.deploy.lib"  value="${jboss.deploy.lib}"/>
 	<property name="jboss.deploy.dir"  value="${jboss.deploy}"/>
 	
 	<property name="ejbpro_ifc.jar"  value="ejbpro_ifc.jar"/>
@@ -42,7 +43,7 @@
             	<fileset dir="${jboss.common.lib.dir}">
             	    <include name="**/*.jar"/>
             	</fileset>
-            	<fileset dir="${jboss.default.lib.dir}">
+            	<fileset dir="${jboss.deploy.lib}">
             	    <include name="**/*.jar"/>
             	</fileset>
             	
@@ -77,7 +78,7 @@
     </target>
 	
 	<target name="deploy" depends="dist">
-	    <copy todir="${jboss.lib.dir}">
+	    <copy todir="${jboss.deploy.lib}">
 	      <fileset dir="${dist}">
 	        <include name="${ejbpro_ifc.jar}"/>	        
 	      </fileset>

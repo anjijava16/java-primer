@@ -8,8 +8,18 @@
 		<servlet-class>com.slieer.ejbpro.web.MDBeanServlet</servlet-class>
 	</servlet>
 	
+	<servlet>
+		<servlet-name>webserviceTest</servlet-name>
+		<servlet-class>com.slieer.ejbpro.web.WebServiceInjectionServlet</servlet-class>
+	</servlet>
+	
 	<servlet-mapping>
 		<servlet-name>MDBeanServlet</servlet-name>
 		<url-pattern>MDB-servlet</url-pattern>
 	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>webserviceTest</servlet-name>
+		<url-pattern>/WSTest</url-pattern>
+	</servlet-mapping>	
 </web-app>

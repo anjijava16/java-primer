@@ -1,5 +1,5 @@
 
-package com.soacookbook.ns.ws.catalog;
+package com.slieer.ejbpro.ifc.soacookbook.ns.ws.catalog;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -23,13 +23,13 @@ public class CatalogService
 {
 
     private final static URL CATALOGSERVICE_WSDL_LOCATION;
-    private final static Logger logger = Logger.getLogger(com.soacookbook.ns.ws.catalog.CatalogService.class.getName());
+    private final static Logger logger = Logger.getLogger(CatalogService.class.getName());
 
     static {
         URL url = null;
         try {
             URL baseUrl;
-            baseUrl = com.soacookbook.ns.ws.catalog.CatalogService.class.getResource(".");
+            baseUrl = CatalogService.class.getResource(".");
             url = new URL(baseUrl, "http://localhost:8080/ejbpro_ejb/CatalogService/Catalog?wsdl");
         } catch (MalformedURLException e) {
             logger.warning("Failed to create URL for the wsdl Location: 'http://localhost:8080/ejbpro_ejb/CatalogService/Catalog?wsdl', retrying as a local file");
@@ -69,3 +69,4 @@ public class CatalogService
     }
 
 }
+

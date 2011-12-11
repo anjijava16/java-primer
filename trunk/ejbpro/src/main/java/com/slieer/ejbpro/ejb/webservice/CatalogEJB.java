@@ -54,5 +54,16 @@ public class CatalogEJB implements CatalogLocalIfc {
 		LOG.info("Returning book: " + book.getTitle());
 		return book;
 	}
-	// ...
+
+	 @WebMethod
+   public @WebResult(name="title") String 
+           getTitle(
+           @WebParam(name="id") String id)  {
+       
+       if ("12345".equals(id)) return "Hamlet";
+       if ("98765".equals(id)) return "King Lear";
+       if ("55555".equals(id)) return "Macbeth";
+           
+       return "--Item not in catalog--";
+   }
 }
