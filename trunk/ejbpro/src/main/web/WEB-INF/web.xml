@@ -21,5 +21,6 @@
 	<servlet-mapping>
 		<servlet-name>webserviceTest</servlet-name>
 		<url-pattern>/WSTest</url-pattern>
-	</servlet-mapping>	
+	</servlet-mapping>
+	
 </web-app>
