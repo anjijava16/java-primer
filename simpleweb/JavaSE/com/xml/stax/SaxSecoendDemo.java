@@ -1,4 +1,4 @@
-package com.xml;
+package com.xml.stax;
 
 import java.io.File;
 

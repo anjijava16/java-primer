@@ -6,39 +6,11 @@
 
   <dependencies>
   	<dependency>
-  		<groupId>commons-logging</groupId>
-  		<artifactId>commons-logging</artifactId>
-  		<version>1.1.1</version>
-  		<type>jar</type>
-  		<optional>false</optional>
-  	</dependency>
-  	<dependency>
-  		<groupId>commons-collections</groupId>
-  		<artifactId>commons-collections-testframework</artifactId>
-  		<version>3.2.1</version>
-  		<type>jar</type>
-  		<scope>test</scope>
-  		<optional>false</optional>
-  	</dependency>
-  	<dependency>
   		<groupId>junit</groupId>
   		<artifactId>junit</artifactId>
   		<version>4.9</version>
   		<type>jar</type>
   		<scope>test</scope>
-  		<optional>false</optional>
-  	</dependency>
-  	<dependency>
-  		<groupId>commons-beanutils</groupId>
-  		<artifactId>commons-beanutils</artifactId>
-  		<version>20030211.134440</version>
-  		<type>jar</type>
-  		<optional>false</optional>
-  	</dependency>
-  	<dependency>
-  		<groupId>commons-collections</groupId>
-  		<artifactId>commons-collections</artifactId>
-  		<version>3.2.1</version>
   		<optional>false</optional>
   	</dependency>
 
@@ -75,11 +47,6 @@
 	  <version>2.3.18</version>
 	</dependency>	
 	<dependency>
-	    <groupId>org.apache.commons</groupId>
-	    <artifactId>commons-digester3</artifactId>
-	    <version>3.0</version>
-	</dependency>
-	<dependency>
 		<groupId>org.apache.poi</groupId>
 		<artifactId>poi</artifactId>
 		<version>3.7</version>
@@ -94,6 +61,12 @@
 		<scope>compile</scope>
 	</dependency>
 	<dependency>
+		<groupId>kxml2</groupId>
+		<artifactId>kxml2</artifactId>
+		<version>2.3.0</version>
+		<scope>compile</scope>
+	</dependency>
+	<dependency>
 		<groupId>commons-io</groupId>
 		<artifactId>commons-io</artifactId>
 		<version>2.1</version>
@@ -101,10 +74,34 @@
 		<scope>compile</scope>
 	</dependency>
 	<dependency>
-		<groupId>kxml2</groupId>
-		<artifactId>kxml2</artifactId>
-		<version>2.3.0</version>
-		<scope>compile</scope>
+	    <groupId>org.apache.commons</groupId>
+	    <artifactId>commons-digester3</artifactId>
+	    <version>3.0</version>
+	</dependency>
+  	<dependency>
+  		<groupId>commons-logging</groupId>
+  		<artifactId>commons-logging</artifactId>
+  		<version>1.1.1</version>
+  		<type>jar</type>
+  		<optional>false</optional>
+  	</dependency>
+  	<dependency>
+  		<groupId>commons-beanutils</groupId>
+  		<artifactId>commons-beanutils</artifactId>
+  		<version>20030211.134440</version>
+  		<type>jar</type>
+  		<optional>false</optional>
+  	</dependency>
+  	<dependency>
+  		<groupId>commons-collections</groupId>
+  		<artifactId>commons-collections</artifactId>
+  		<version>3.2.1</version>
+  		<optional>false</optional>
+  	</dependency>
+	<dependency>
+		<groupId>commons-lang</groupId>
+		<artifactId>commons-lang</artifactId>
+		<version>2.6</version>
 	</dependency>
   </dependencies>
 

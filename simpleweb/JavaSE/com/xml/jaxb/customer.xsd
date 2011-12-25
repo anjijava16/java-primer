@@ -1,6 +1,9 @@
 <xs:schema targetNamespace="http://www.w3school.com.cn" xmlns="http://www.w3school.com.cn"
 	xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
+	<xs:element name="customer" type="Customer" />
+	<xs:element name="address" type="Address" />
+
 	<xs:complexType name="Customer">
 		<xs:sequence>
 			<xs:element name="name" type="xs:string" />
@@ -22,8 +25,5 @@
 			<xs:minInclusive value="10000" />
 			<xs:maxInclusive value="99999" />
 		</xs:restriction>
-	</xs:simpleType>
-	
-	<xs:element name="customer" type="Customer" />
-	<xs:element name="address" type="Address" />
+	</xs:simpleType>	
 </xs:schema> 
