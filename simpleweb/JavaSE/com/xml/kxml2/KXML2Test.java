@@ -11,7 +11,7 @@ import org.xmlpull.v1.XmlPullParser;
 
 public class KXML2Test {
 	@Test
-	public void t() throws Exception {
+	public void readTest() throws Exception {
 		URL url = this.getClass().getResource("/");
 		String xmlFile = url.getPath() + "com/xml/unformattedXML.xml";
 		File file = new File(xmlFile);
@@ -24,7 +24,7 @@ public class KXML2Test {
 		while (eventType != XmlPullParser.END_DOCUMENT) {
 			switch (eventType) {
 			case XmlPullParser.START_DOCUMENT:
-				
+				System.out.println(parser.getText());
 				break;
 			case XmlPullParser.END_DOCUMENT:
 				
