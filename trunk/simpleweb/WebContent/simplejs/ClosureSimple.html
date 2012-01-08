@@ -19,6 +19,7 @@
 		var someString = 'Hai!';
 		var content = document.getElementById('content');
 		function innerFunction() {
+			//closure
 			content.innerHTML = someNum + ': ' + someString;
 			content = null; // IE memory leak for DOM reference
 		}
