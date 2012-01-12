@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,18 @@ public class StringTest {
 
 		UrlParser.test();
 
+	}
+	
+	@Test
+	public void asArray(){
+		List<String>idList = new ArrayList<String>();
+		idList.add("1");
+		idList.add("11");
+		idList.add("12");
+		idList.add("13");
+		
+		String[] array = new String[idList.size()];
+		idList.toArray(array);		
 	}
 	
 	@Test
