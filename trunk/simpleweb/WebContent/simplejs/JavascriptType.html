@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>javascript type test</title>
+</head>
+<body>
+	<script>
+	var type = {
+		/*它只在区别对象和原始类型的时候才有用
+			typeof null得到object，
+			typeof undefined得到undefined，
+			typeof 数组对象得到object，
+			typeof 函数得到function
+		*/
+		simpleType : ((function(){
+			console.info('typeof {} -->' + typeof {});  //object
+			console.info('typeof [] -->' + typeof []);  //object
+			console.info('typeof new Date -->' + typeof new Date);  //object
+		})(),
+		
+		ObjectType : function(){
+			[] instanceof Array; // true 
+			[] instanceof Object; // true 
+			[] instanceof RegExp; // false 
+			new Date() instanceof Date; // true 
+		},
+		
+		isArray : function (arr){ 
+			return typeof arr == "object" && arr.constructor == Array; 
+		},
+		
+		isArray : function(arr){ 
+			return Object.prototype.toString.call(arr) === "[object Array]"; 
+		},
+		
+		/*跨原型链调用toString(), 得到国外多个javaScript大师的认可 */
+		test : function(){
+			Object.prototype.toString.call([]); // 返回 "[object Array]" 
+			Object.prototype.toString.call(/reg/ig); // 返回 "[object RegExp]" 
+			
+	        var d=new Date();
+	    	alert(Object.prototype.toString.apply(d));//[object Date]
+	    	var a=[];
+	    	alert(Object.prototype.toString.apply(a));//[object Array]
+		}
+		
+		/*详细出处参考：http://www.jb51.net/article/21109.htm*/
+	}
+
+	function getType(x){
+		if(x==null){
+			return "null";
+		}
+		var t= typeof x;
+		if(t!="object"){
+			return t;
+		}
+		var c=Object.prototype.toString.apply(x);
+		c=c.substring(8,c.length-1);
+		if(c!="Object"){
+			return c;
+		}
+		if(x.constructor==Object){
+			return c
+		}
+		if("classname" in x.prototype.constructor
+				&& typeof x.prototype.constructor.classname=="string"){
+			return x.constructor.prototype.classname;
+		}
+		return "<unknown type>";
+	}
+
+	</script>
+</body>
+</html>
