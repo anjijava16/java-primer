@@ -1,17 +1,22 @@
 package simple.foundation;
 
-public class Finally {
+import org.junit.Test;
 
-	/**
-	 * @param args
-	 *          add by zxx ,Dec 9, 2008
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		System.out.println(Finally.test());
-		;
+public class Finally {
+	Finally t = new Finally();
+	
+	@Test
+	public void test(){
+		System.out.println(t.get1());
 	}
-	static int test() {
+	
+	@Test
+	public void test1(){
+		int b = t.get();
+		System.out.println(b);    // 2		
+	}
+	
+	int get1() {
 		int x = 1;
 		try {
 			return x;
@@ -19,4 +24,14 @@ public class Finally {
 			++x;
 		}
 	}
+
+	//finally block does not complete normally
+	int get() {
+		try {
+			return 1;
+		} finally {
+			return 2;
+		}
+	}
+	
 }
