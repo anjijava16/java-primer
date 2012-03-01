@@ -61,4 +61,29 @@ public class HelloMessageClient {
 		}
 
 	}
+	
+	@Test
+	public void statelessBeanCallMDB(){
+		try {
+			HelloStatelessRemoteIfc stateless = (HelloStatelessRemoteIfc) ctx.lookup(HelloStatelessRemoteIfc.HELLO_REMOTE_JNDI);
+			stateless.testMDB();
+		} catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	@Test
+	public void ejbMyThread(){
+		HelloStatelessRemoteIfc stateless = null;
+		try {
+			stateless = (HelloStatelessRemoteIfc) ctx.lookup(HelloStatelessRemoteIfc.HELLO_REMOTE_JNDI);
+			stateless.ejbMyThread();
+
+		} catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

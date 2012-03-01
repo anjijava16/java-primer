@@ -10,6 +10,13 @@ import javax.ejb.Stateless;
 import javax.ejb.Timeout;
 import javax.ejb.Timer;
 import javax.ejb.TimerService;
+import javax.jms.JMSException;
+import javax.jms.Queue;
+import javax.jms.QueueConnection;
+import javax.jms.QueueConnectionFactory;
+import javax.jms.QueueSender;
+import javax.jms.QueueSession;
+import javax.jms.TextMessage;
 
 import org.apache.log4j.Logger;
 import org.jboss.ejb3.annotation.LocalBinding;
@@ -61,4 +68,38 @@ public class HelloStatelessEjb implements HelloStatelessLocalIfc, HelloStateless
 		count++;
 	}
 
+	@Override
+	public void testMDB() {
+		try {
+			Queue queue = (Queue) ctx.lookup("queue/HelloQueue");
+			QueueConnectionFactory factory = (QueueConnectionFactory) ctx.lookup("ConnectionFactory");
+			QueueConnection cnn;
+			cnn = factory.createQueueConnection();
+			QueueSession session = cnn.createQueueSession(false, QueueSession.AUTO_ACKNOWLEDGE);
+			TextMessage msg = session.createTextMessage("Hello World");
+			QueueSender sender = session.createSender(queue);
+			sender.send(msg);
+			System.out.println("Message sent successfully to remote queue.");
+		} catch (JMSException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+	
+	/***
+	 * http://stackoverflow.com/questions/533783/why-spawning-threads-in-j2ee-container-is-discouraged
+	 */
+	public void ejbMyThread(){
+		Runnable r = new Runnable(){
+
+			@Override
+			public void run() {
+				System.out.println("------------ejbMyThread");
+			}
+			
+		};
+		
+		new Thread(r).start();
+	}
 }

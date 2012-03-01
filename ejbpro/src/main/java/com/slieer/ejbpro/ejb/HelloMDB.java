@@ -1,9 +1,14 @@
 package com.slieer.ejbpro.ejb;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
+import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
+import javax.jms.TextMessage;
 
 /*
 <!--  write to messaging\destinations-service.xml
@@ -30,9 +35,42 @@ mbean code="org.jboss.mq.server.jmx.Queue"
 )
 public class HelloMDB implements MessageListener {
 
+	int i = 0;
 	public void onMessage(Message arg0) {
-		System.out.println("----------------");
-		System.out.println("Received message");
+		System.out.println("----------------class instance variable:" + i++);
+		int j = 0;
+		j++;
+		System.out.println("local variable:" + j);
+		TextMessage t = (TextMessage)arg0;
+		try {
+			String text = t.getText();
+			System.out.println("Received message" + text);
+			
+		} catch (JMSException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		URL url = null;
+		try {
+			url = new URL("http://baidu.com");
+			HttpURLConnection con = (HttpURLConnection)url.openConnection();
+			
+			System.out.print("baidu ResponseCode: " + con.getResponseCode());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		Runnable r = new Runnable(){
+			@Override
+			public void run() {
+				System.out.println(".............MDB. thread..........");
+			}
+			
+		};
+		
+		Thread th = new Thread();
+		th.start();
 		System.out.println("----------------");
 	}
 }
