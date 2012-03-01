@@ -6,4 +6,8 @@ public interface HelloStatelessRemoteIfc {
 	public String hello();
 	
 	public void scheduleTimer(long milliseconds);  
+	
+	public void testMDB();
+	
+	public void ejbMyThread();
 }

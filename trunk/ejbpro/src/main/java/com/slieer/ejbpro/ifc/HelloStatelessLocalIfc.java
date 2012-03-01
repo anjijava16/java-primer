@@ -6,4 +6,6 @@ public interface HelloStatelessLocalIfc {
 	public String hello();
 	
 	public void scheduleTimer(long milliseconds);  
+	
+	public void testMDB();
 }
