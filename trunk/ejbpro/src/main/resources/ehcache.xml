@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache>
+	<!-- 配置默认缓存 -->
+	<defaultCache maxElementsInMemory="500" eternal="true"
+		overflowToDisk="false" memoryStoreEvictionPolicy="LFU" />
+
+	<!-- 配置个性化缓存 -->
+	<cache name="classInfoCache" maxElementsInMemory="500" eternal="true"
+		overflowToDisk="false" memoryStoreEvictionPolicy="LFU" />
+
+	<!-- EHCACHE的缓存配置属性 -->
+	<!-- diskExpiryThreadIntervalSeconds:磁盘过期线程运行的频率（以秒为单位），也就是磁盘辞旧的缓存清理过期项目的频率 
+		（默认120秒） 
+		diskPersistent：磁盘缓存在VM重新启动时是否保持 eternal：元素是否永恒，如果是永恒的，就永远不会过期（必须设置） 
+		maxElementsInMemory:内存能够被缓存的最大元素数量（必须设置）
+		memoryStoreEvictionPolicy:
+			当达到maxElementsInMemory时，如何强制进行驱逐，默认使用"最近使用（LRU）" 策略，
+			还可以使用"先入先出(FIFO)"和"较少使用(LFU)"策略。（默认是LRU） name：缓存名称，对<cache>必须设置
+		overflowToDisk:当内存缓存达到maxElementsInMemory时，是否可以溢出到磁盘。(必须设置) 
+		
+		timeToIdleSeconds:导致元素过期的访问间隔(以秒为单位)。设置为0表示元素可以永远空闲(默认值是0) 
+		timeToLiveSeconds:元素在缓存里可以存在的时间(以秒为单位)。设置为0表示元素可以在缓存里永远存在而不过期(默认值为0) 
+		-->
+</ehcache>
