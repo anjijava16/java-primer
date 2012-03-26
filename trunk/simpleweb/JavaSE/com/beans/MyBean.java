@@ -1,6 +1,6 @@
 package com.beans;
 
-public class MyBean {
+class MyBean {
 	private String id = null;
 
 	private String name = null;

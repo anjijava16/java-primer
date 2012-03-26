@@ -7,6 +7,7 @@ import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,9 @@ import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.Map.Entry;
 
+import org.apache.commons.logging.Log;
 import org.junit.Test;
 
 import simple.foundation.StringTest;
@@ -67,7 +70,45 @@ public class CollectionTest {
 		System.out.println("single parameter.");
 	}
 	
-	public static void main(String[] args) {
-		arrayToList();
+	static Object[] arrayLen(){
+		return new Object[]{null, null};
 	}
+	
+	
+	static void mapEntry(){
+		HashMap<Long, Boolean>purchasedGoodsIdsMap = new HashMap<Long, Boolean>();
+		purchasedGoodsIdsMap.put(1L, false);
+		
+		Set<Entry<Long, Boolean>>  entrySet = purchasedGoodsIdsMap.entrySet();
+		
+		Long[] ids = new Long[entrySet.size()];
+		int index = 0;
+		Iterator<Entry<Long, Boolean>> it = entrySet.iterator();
+		while(it.hasNext()){
+			Entry<Long,Boolean> entry = it.next();
+			if(! entry.getValue()){
+				System.out.println("......");
+				ids[index++] = entry.getKey();
+			}
+		}
+		
+	}
+	
+	public static void main(String[] args) {
+		//arrayToList();
+		//System.out.println(arrayLen().length);
+		//mapEntry();
+		
+		List<Long> ids = new ArrayList<Long>();
+		ids.add(1L);
+		ids.add(11L);
+		ids.add(111L);
+		
+		Long[] idArr = new Long[ids.size()];
+		ids.toArray(idArr);
+		
+		System.out.println(idArr);
+	}
+	
+	
 }

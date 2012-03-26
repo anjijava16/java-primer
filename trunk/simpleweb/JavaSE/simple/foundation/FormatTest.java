@@ -18,6 +18,15 @@ public class FormatTest {
 	}
 	
 	@Test
+	public void dateFormat1(){
+		String DATE_FORMAT = "yyMMddHHmmss";
+		DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+		String d = dateFormat.format(new Date());
+		System.out.println(d);
+		
+	}	
+	
+	@Test
 	public void dateFormat(){
 		String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 		DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);

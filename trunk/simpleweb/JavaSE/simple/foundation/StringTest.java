@@ -22,11 +22,20 @@ public class StringTest {
 		try {
 			// char[] arr = str.toCharArray();
 			// System.out.println(en(str));
+			
+			//jsonEncode();
+			//decode();
+			
+			strs[1] = "abce";
+			
+			for(String str : strs){
+				System.out.println(str);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		UrlParser.test();
+		//UrlParser.test();
 
 	}
 	
@@ -184,8 +193,10 @@ public class StringTest {
 	/**
 	 * URL 解码测试
 	 */
+	@Test
 	public static void decode() {
-		String url = "%20/contacts/list%5B@name=%22close-friends%22%5D/contact%5B@id=%22aa%22%5D/name";
+		String url = "%5B%7B%22type%22%3A%22book_package%22%2C%22items%22%3A%5B%7B%22rpid%22%3A6%2C%22bookid%22%3A308147%7D%2C%7B%22rpid%22%3A6%2C%22bookid%22%3A133092%7D%5D%7D%5D";
+			///"%20/contacts/list%5B@name=%22close-friends%22%5D/contact%5B@id=%22aa%22%5D/name";
 		try {
 			String str = URLDecoder.decode(url, "utf-8");
 			System.out.println(str);
@@ -194,4 +205,15 @@ public class StringTest {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void jsonEncode(){
+		String s = "\"[{\"type\":\"book_package\",\"item\":[{\"rpid\":6,\"bookid\":308147},{\"rpid\":6,\"bookid\":133092}]}]\"";
+		String str = s.replace("\"", "\\\"");
+		System.out.println("str:" + str);
+	}
+	
+	public static final String[] strs = new String[]{"a","b","c"};
+	
+	public static final String TT_STRING = "a";
+	
 }
