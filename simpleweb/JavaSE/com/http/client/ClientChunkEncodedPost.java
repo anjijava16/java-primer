@@ -1,4 +1,4 @@
-package com.http;
+package com.http.client;
 
 import java.io.BufferedReader;
 import java.io.File;

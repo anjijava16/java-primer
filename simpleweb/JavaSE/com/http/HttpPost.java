@@ -4,11 +4,13 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.Scanner;
 
+import org.junit.Test;
+
 public class HttpPost {
-	public static void main(String[] args) {
+	@Test
+	public void javaSEAPIHPPTPostTest(String[] args) {
 		String url = "http://localhost:8080/simpleweb/PutServlet?name=zhaixiaobin&sex=man"; 
 		String data = "address=china&company=borqs&job=coder[{a:\"b\",}]";
 		
@@ -36,8 +38,5 @@ public class HttpPost {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		
-		
-	}
+	}	
 }

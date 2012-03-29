@@ -3,23 +3,53 @@ package com.http.client;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
 import org.junit.Test;
 
 public class HttpPutTest {
 	String url = "http://localhost:8080/simpleweb/PutServlet";
+	
+	/**
+	 * Http client post方式
+	*/
+	public void httpClientPostTest(String[] args) throws Exception {
+		HttpPost httppost = new HttpPost(url);
+		
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("pwd", "2544"));
+		httppost.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
 
+		HttpResponse response = new DefaultHttpClient().execute(httppost);
+		if (response.getStatusLine().getStatusCode() == 200) {// 如果状态码为200,就是正常返回
+			String result = EntityUtils.toString(response.getEntity());
+			System.out.println(result);
+			// 打印输出
+		}
+	}	
+	
+	/**
+	 * javase api http post Test
+	 * @throws Exception
+	 */
 	@Test
 	public void put() throws Exception {
 		String file = "E:/BorqsWorkspace/workspace/simpleweb/JavaSE/com/http/client/HttpclientTutorial.java";
