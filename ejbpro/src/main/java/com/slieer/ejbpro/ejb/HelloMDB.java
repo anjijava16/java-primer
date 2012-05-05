@@ -69,7 +69,7 @@ public class HelloMDB implements MessageListener {
 			
 		};
 		
-		Thread th = new Thread();
+		Thread th = new Thread(r);
 		th.start();
 		System.out.println("----------------");
 	}

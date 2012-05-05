@@ -1,4 +1,4 @@
-package org.webservices.jbossWS;
+package com.slieer.ejbpro.web;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
