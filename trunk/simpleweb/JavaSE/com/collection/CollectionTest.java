@@ -94,6 +94,31 @@ public class CollectionTest {
 		
 	}
 	
+	public void ff(Long... l){
+		System.out.println(l);
+		System.out.println(Arrays.asList(l));    //[1, 2, 3, 4]
+	}
+	
+	public void f(long... l){
+		System.out.println(l);
+		System.out.println(Arrays.asList(l));
+	}
+	
+	@Test
+	public void testF(){
+		Long[] p = new Long[]{1L,2L,3L,4L};
+		long[] p1 = new long[]{1L,2L,3L,4L};
+		
+		ff(p);
+		f(p1);
+		
+		f();
+		f(null);
+		
+		ff();
+		//ff(null);   //null Exception
+	}
+	
 	public static void main(String[] args) {
 		//arrayToList();
 		//System.out.println(arrayLen().length);
@@ -108,6 +133,10 @@ public class CollectionTest {
 		ids.toArray(idArr);
 		
 		System.out.println(idArr);
+		
+		if(idArr instanceof Long[]){
+			System.out.println("Long[]");
+		}
 	}
 	
 	

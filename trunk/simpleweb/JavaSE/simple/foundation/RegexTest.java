@@ -18,7 +18,29 @@ public class RegexTest {
 		System.out.println(secondLevelUrlValidate("method[1]"));
 	}
 	
-	
+	@Test
+	public void domainNameRegex(){
+		String url = "http://www.omscn.com/payment/test.jsp";
+		Pattern p = Pattern.compile("www.\\S+.com");
+		//p = Pattern.compile("\\S+", Pattern.CASE_INSENSITIVE);
+		Matcher m = p.matcher(url);
+		if(m.find()){
+			System.out.println(m.group());
+		}else{
+			System.out.println("not find.");
+		}
+		
+		String bookId = "com.skyworth.mpt.48730";
+		p = Pattern.compile("\\d+");
+		//p = Pattern.compile("\\S+", Pattern.CASE_INSENSITIVE);
+		m = p.matcher(bookId);
+		if(m.find()){
+			System.out.println(m.group());
+		}else{
+			System.out.println("not find.");
+		}
+		
+	}
 	
 	/**
 	 *   method or method[1] 
