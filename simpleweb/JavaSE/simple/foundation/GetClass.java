@@ -14,6 +14,13 @@ import java.util.Date;
 public class GetClass extends Date {
 	public static void main(String[] args) {
 		new GetClass().test();
+		
+		float f = 3.002f;
+		Object[] o = new Object[]{1, f};
+		
+		Object oo = o[0];
+		Object oo1 = o[1];
+		System.out.println();
 	}
 
 	public void test() {

@@ -31,6 +31,10 @@ public class StringTest {
 			for(String str : strs){
 				System.out.println(str);
 			}
+			
+			
+			String a = 1 + "xxxx" + "b";
+			System.out.println(a);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
