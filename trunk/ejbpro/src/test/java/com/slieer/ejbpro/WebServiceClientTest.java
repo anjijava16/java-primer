@@ -1,4 +1,4 @@
-package org.webservices.jbossWS;
+package com.slieer.ejbpro;
 
 import java.net.MalformedURLException;
 import java.net.URL;
