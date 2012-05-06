@@ -10,6 +10,8 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
+import org.jboss.ejb3.annotation.ResourceAdapter;
+
 /*
 <!--  write to messaging\destinations-service.xml
 	or create file what name is xx-service.xml, 
@@ -27,12 +29,19 @@ mbean code="org.jboss.mq.server.jmx.Queue"
 
 
 查看已发布的web service: http://127.0.0.1:8080/jbossws/
-*/
 @MessageDriven(activationConfig = { 
 		@ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
 		@ActivationConfigProperty(propertyName = "destination", propertyValue = "queue/HelloQueue") 
 		}
 )
+*/
+
+@MessageDriven(name = "MDBExample",
+activationConfig =
+      {
+         @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
+         @ActivationConfigProperty(propertyName = "destination", propertyValue = "queue/HelloQueue")
+      })
 public class HelloMDB implements MessageListener {
 
 	int i = 0;

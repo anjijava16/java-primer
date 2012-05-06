@@ -3,7 +3,12 @@ package com.slieer.ejbpro;
 import java.util.Date;
 import java.util.Properties;
 
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.Destination;
 import javax.jms.JMSException;
+import javax.jms.MessageProducer;
+import javax.jms.Session;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
@@ -86,4 +91,35 @@ public class HelloMessageClient {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void main(String[] args) {
+
+		try {
+
+			//InitialContext init = new InitialContext();
+
+			ConnectionFactory cf = (ConnectionFactory) ctx.lookup("ConnectionFactory");
+
+			Connection con = cf.createConnection();
+
+			Session session = con
+
+			.createSession(false, Session.AUTO_ACKNOWLEDGE);
+
+			Destination dest = (Destination) ctx.lookup("/queue/queueA");
+
+			MessageProducer prd = session.createProducer(dest);
+
+			prd.send(session.createTextMessage("fudongnihao------"));
+
+			session.close();
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+
+	}
+		
 }

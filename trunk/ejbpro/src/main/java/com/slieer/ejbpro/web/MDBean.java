@@ -13,7 +13,7 @@ import javax.naming.NamingException;
 //jsp call.
 public class MDBean {
 	public static void callMDB(InitialContext ctx) throws NamingException, JMSException {
-		Queue queue = (Queue) ctx.lookup("queue/HelloQueue");
+		Queue queue = (Queue) ctx.lookup("org.hornetq.HelloQueue");
 		QueueConnectionFactory factory = (QueueConnectionFactory) ctx.lookup("ConnectionFactory");
 		QueueConnection cnn = factory.createQueueConnection();
 		QueueSession session = cnn.createQueueSession(false, QueueSession.AUTO_ACKNOWLEDGE);
