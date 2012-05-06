@@ -11,7 +11,7 @@ import javax.jws.soap.SOAPBinding;
  */
 @WebService    
 @SOAPBinding(style = SOAPBinding.Style.RPC)    
-public class JSEBean01    {       
+public class JSEBean01 {       
 	@WebMethod       
 	public String echo(String input){               
 		System.out.println("------" + input);

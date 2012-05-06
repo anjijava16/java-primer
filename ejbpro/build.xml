@@ -8,8 +8,8 @@
 	
 	<property name="jboss.lib.dir"  value="${jboss.home}/lib"/>
 	<property name="jboss.lib.endorsed.dir"  value="${jboss.home}/lib/endorsed"/>
-	<property name="jboss.client.lib.dir"  value="${jboss.home}/client}"/>
-	<property name="jboss.common.lib.dir"  value="${jboss.home}/common/lib}"/>
+	<property name="jboss.client.lib.dir"  value="${jboss.home}/client"/>
+	<property name="jboss.common.lib.dir"  value="${jboss.home}/common/lib"/>
 	
 	<property name="jboss.deploy.lib"  value="${jboss.home}/server/default/lib"/>
 	<property name="jboss.deploy.dir"  value="${jboss.home}/server/default/deploy"/>

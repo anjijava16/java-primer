@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+HelloMDB-service.xml-->
+<!--
 <server>
 	<mbean code="org.jboss.mq.server.jmx.Queue"
 		name="jboss.mq.destination:service=Queue,name=HelloQueue">
@@ -8,4 +11,4 @@
 			jboss.mq:service=DestinationManager
       </depends>
 	</mbean>
-</server>  
+</server>-->
