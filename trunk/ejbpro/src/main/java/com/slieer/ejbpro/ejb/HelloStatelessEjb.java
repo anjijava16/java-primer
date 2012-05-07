@@ -68,14 +68,28 @@ public class HelloStatelessEjb implements HelloStatelessLocalIfc, HelloStateless
 		count++;
 	}
 
+	/**
+	 * 消息队列使用完后应该关闭,不然会抛出以下 wrn.
+	 * 
+	 * 13:57:14,938 WARN  [org.hornetq.jms.client.HornetQConnection] I'm closing a JMS connection you left open. Please make sure you close all JMS connections explicitly before letting them go out of scope!
+13:57:14,939 WARN  [org.hornetq.jms.client.HornetQConnection] The JMS connection you didn't close was created here:: java.lang.Exception
+	at org.hornetq.jms.client.HornetQConnection.<init>(HornetQConnection.java:152)
+	at org.hornetq.jms.client.HornetQQueueConnection.<init>(HornetQQueueConnection.java:35)
+
+	 * 
+	 * 
+	 */
 	@Override
 	public void testMDB() {
+		QueueConnection cnn = null;;
+		QueueSession session = null;
+		
 		try {
 			Queue queue = (Queue) ctx.lookup("queue/HelloQueue");
 			QueueConnectionFactory factory = (QueueConnectionFactory) ctx.lookup("ConnectionFactory");
-			QueueConnection cnn;
 			cnn = factory.createQueueConnection();
-			QueueSession session = cnn.createQueueSession(false, QueueSession.AUTO_ACKNOWLEDGE);
+			
+			session = cnn.createQueueSession(false, QueueSession.AUTO_ACKNOWLEDGE);
 			TextMessage msg = session.createTextMessage("Hello World");
 			QueueSender sender = session.createSender(queue);
 			sender.send(msg);
@@ -83,6 +97,19 @@ public class HelloStatelessEjb implements HelloStatelessLocalIfc, HelloStateless
 		} catch (JMSException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally{
+			try {
+				if (session != null) {
+					session.close();
+				}
+				
+				if(cnn != null){
+					cnn.close();
+				}
+			} catch (JMSException e) {
+				e.printStackTrace();
+			}
+			
 		}
 
 	}

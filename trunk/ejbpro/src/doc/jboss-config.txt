@@ -1,0 +1,6 @@
+1、modify deploy/hornetq.sar/hornetq-jms.xml
+
+	<queue name="HelloQueue">
+	      <entry name="/queue/HelloQueue"/>
+	</queue>
+   
