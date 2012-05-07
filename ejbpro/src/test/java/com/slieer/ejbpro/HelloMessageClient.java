@@ -6,7 +6,6 @@ import java.util.Properties;
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
-import javax.jms.JMSException;
 import javax.jms.MessageProducer;
 import javax.jms.Session;
 import javax.naming.InitialContext;
@@ -16,6 +15,7 @@ import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import com.slieer.ejbpro.ifc.HelloStatelessRemoteIfc;
+import com.slieer.ejbpro.ifc.InterceptorTestRemoteIfc;
 import com.slieer.ejbpro.web.MDBean;
 
 public class HelloMessageClient {
@@ -40,15 +40,7 @@ public class HelloMessageClient {
 	
 	@Test
 	public void mdbTest(){
-		try {
-			MDBean.callMDB(ctx);
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JMSException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		MDBean.callMDB(ctx);
 	}
 	
 	@Test
@@ -79,6 +71,9 @@ public class HelloMessageClient {
 		
 	}
 	
+	/**
+	 * 在bean 中自定义线程 
+	 */
 	@Test
 	public void ejbMyThread(){
 		HelloStatelessRemoteIfc stateless = null;
@@ -92,34 +87,17 @@ public class HelloMessageClient {
 		}
 	}
 	
-	public static void main(String[] args) {
-
+	@Test
+	public void InterceptorTest(){
 		try {
-
-			//InitialContext init = new InitialContext();
-
-			ConnectionFactory cf = (ConnectionFactory) ctx.lookup("ConnectionFactory");
-
-			Connection con = cf.createConnection();
-
-			Session session = con
-
-			.createSession(false, Session.AUTO_ACKNOWLEDGE);
-
-			Destination dest = (Destination) ctx.lookup("/queue/queueA");
-
-			MessageProducer prd = session.createProducer(dest);
-
-			prd.send(session.createTextMessage("fudongnihao------"));
-
-			session.close();
-
-		} catch (Exception e) {
-
+			//InterceptorTestRemoteIfc ifc = (InterceptorTestRemoteIfc)ctx.lookup("InterceptorTest");
+			
+			InterceptorTestRemoteIfc ifc2 = (InterceptorTestRemoteIfc)ctx.lookup("SampleEJB");
+			
+			//ifc.doSomething("hello");
+			ifc2.doSomething("second hello");
+		} catch (NamingException e) {
 			e.printStackTrace();
-
 		}
-
 	}
-		
 }
