@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<script>
+
+		var o = Object.create(null);
+		//alert(o);
+		console.log(new Object());
+
+		o.a = "hello";
+		o.func = function(){
+			console.info('in func.');
+		}
+
+		o.func();
+		console.info(o.a);
+
+		var o1 = {};
+		var o2 = Object.create(Object.prototype);
+		if(o1 == o2){
+			console.info('o1 == o2.');
+		}else{
+			console.info('o1 != o2');
+		}
+
+		if(o1 === o2){
+			console.info('o1 === o2');
+		}
+
+
+		var o10 = Object.create(
+			{}, 
+			{ 
+				p: { value: 42} 
+			},
+			{
+				p1 : { value: 42, writable: true, enumerable: true, configurable: true }
+			}
+			/** ,
+			p2 : function(){
+				console.info('p2......');
+			}*/
+		)  
+		
+		
+	</script>
+</body>
+</html>

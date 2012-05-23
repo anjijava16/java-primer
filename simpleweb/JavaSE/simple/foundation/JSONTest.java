@@ -8,7 +8,7 @@ public class JSONTest {
 	@Test
 	public void f(){
 		String json = "{\"code\":0,\"info\":\"Diliver success~\"}";
-		JSONObject j = JSONObject.fromString(json);
+		JSONObject j = JSONObject.fromObject(json);
 		int i = (Integer)j.get("code");
 		System.out.println(i);
 	}

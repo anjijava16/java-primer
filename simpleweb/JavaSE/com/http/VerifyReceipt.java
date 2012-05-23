@@ -36,7 +36,7 @@ public class VerifyReceipt {
 	        //Here I'm using Grails' org.codehaus.groovy.grails.web.json.JSONObject
 	        Map<String, String> map = new HashMap<String, String>();
 	        map.put("receipt-data", encodedReceipt);
-	        JSONObject jsonObject = JSONObject.fromBean(map);
+	        JSONObject jsonObject = JSONObject.fromObject(map);
 	 
 	        //Write the JSON query object to the connection output stream
 	        PrintStream ps = new PrintStream(connection.getOutputStream());
@@ -56,7 +56,7 @@ public class VerifyReceipt {
 	        String response = sb.toString();
 	 
 	        //Deserialize response
-	        JSONObject result = JSONObject.fromString((response));
+	        JSONObject result = JSONObject.fromObject((response));
 	        status = result.getInt("status");
 	        if (status == 0) {
 	            //provide content
