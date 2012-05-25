@@ -81,6 +81,12 @@ tbody th {
 					    break;
 				    case 'delRow' :
 				    	console.info('del r');
+				    	try{
+					    	tab[0].tBodies[0].deleteRow(0);
+					    	//tab[0].deleteRow(1);
+						}catch(e){
+							console.error('rows length is zero.' + e);
+						}
 					    break;
 				    case 'tbodyEmpty' :
 					    $('#tab tbody').empty();
