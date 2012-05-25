@@ -14,4 +14,12 @@ public class LoggerTest {
 	public void log(){
 		log.info("--");
 	}
+	
+	@Test
+	public void randTest(){
+		System.out.println(Math.random());
+		System.out.println(Math.random());
+		System.out.println(Math.random());
+		System.out.println(Math.random());
+	}
 }

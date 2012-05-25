@@ -26,6 +26,13 @@ tbody th {
 </style>
 </head>
 <body>
+    <div>
+        <p id='para'>
+	        <a id="delTbody" href="javascript:;">del tbody</a>
+	        <a id='delRow' href="javascript:;">del row</a>
+	        <a id='tbodyEmpty' href="javascript:;">tbody empty</a>
+        </p>
+    </div>
 	<table id='tab'>
 		<thead>
 			<tr>
@@ -61,6 +68,33 @@ tbody th {
 			console.info(body.toString());
 			tab.append(body);
 		})();
+
+		  $(document).ready(function () {
+			    $('#para').click(function(event){
+				    console.info("para ......" + event);
+
+				    var id = event.target.id;
+				    switch(id){
+				    case 'delTbody' :
+				    	console.info('del t');
+				    	$("#tab tbody").remove();
+					    break;
+				    case 'delRow' :
+				    	console.info('del r');
+					    break;
+				    case 'tbodyEmpty' :
+					    $('#tab tbody').empty();
+					    break;
+				    }
+				});
+
+			  /*
+			    $('#delRow').click(function(){
+				    console.info('del r');
+                    $('table tbody').empty();
+				});
+			  */
+		  });
 	</script>
 </body>
 </html>
