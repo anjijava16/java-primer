@@ -1,0 +1,1 @@
+src/hornetq 及其子目录完全独立于ejbpro
