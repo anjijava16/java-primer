@@ -43,6 +43,19 @@ tbody th {
 	</table>
 	<script type="text/javascript" src="../../jslib/jquery-1.7.1.js"></script>
 	<script type="text/javascript">
+	  (function(w){
+		  // ie8 or ie9 console problem solution.	  
+		  if(! w.console){
+				//alert(".....");
+				w.console = {
+					info : function(){},
+					error : function(){},
+					log : function(){}
+				};
+		  }
+	  })(window);
+
+	
 		var tab = $('#tab');
 		
 		var jsonArr = [{'name' : 'zhai', 'sex' : 'F'},
@@ -51,7 +64,8 @@ tbody th {
 					{'name' : 'jia1', 'sex' : 'F'}
 					];
 
-		(function(){console.info('OK');
+		(function(){
+			console.info('OK');
 			var body = $("<tbody></tbody>");
 
 			for(var i = 0; i < jsonArr.length; i++){
@@ -71,7 +85,7 @@ tbody th {
 
 		  $(document).ready(function () {
 			    $('#para').click(function(event){
-				    console.info("para ......" + event);
+				    //console.info("para ......" + event);
 
 				    var id = event.target.id;
 				    switch(id){
@@ -101,6 +115,7 @@ tbody th {
 				});
 			  */
 		  });
+		  
 	</script>
 </body>
 </html>
