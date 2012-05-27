@@ -20,12 +20,20 @@
 	//有重复记录的情况，有一些怪异情况
     var maps = '[{"value":"0.01","key":"2012-02"},{"value":"2432.21","key":"2012-03"},{"value":"0.00","key":"2012-01"},' 
    			          + '{"value":"22.21","key":"2011-03"},{"value":"2432.21","key":"2011-01"},{"value":"0.01","key":"2012-04"},' 
-			          + '{"value":"0.01","key":"2012-05"},{"value":"0.01","key":"2012-02"}]';
+			          + '{"value":"0.01","key":"2012-05"},{"value":"0.02","key":"2012-02"}]';
 
-    //无重复记录的情况，value==0记录被去掉 
-    maps = '[{"value":"0.01","key":"2012-02"},{"value":"2432.21","key":"2012-03"},{"value":"0.00","key":"2012-01"},' 
-        + '{"value":"22.21","key":"2011-08"},{"value":"2432.21","key":"2011-01"},{"value":"0.01","key":"2012-04"},' 
-        + '{"value":"0.01","key":"2012-05"},{"value":"0.01","key":"2012-07"}]';
+	 (function(w){
+		  // ie8 or ie9 console problem solution.	  
+		  if(! w.console){
+				//alert(".....");
+				w.console = {
+					info : function(){},
+					error : function(){},
+					log : function(){}
+				};
+		  }
+	  })(window);
+
     
     window.onload = function(){
         var tab = document.getElementById('tab');
