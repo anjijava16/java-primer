@@ -25,7 +25,7 @@ public class StringTest {
 			
 			//jsonEncode();
 			//decode();
-			
+			/*
 			strs[1] = "abce";
 			
 			for(String str : strs){
@@ -35,6 +35,10 @@ public class StringTest {
 			
 			String a = 1 + "xxxx" + "b";
 			System.out.println(a);
+			*/
+		    
+		    String i = "1\'";
+		    Long.parseLong(i);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

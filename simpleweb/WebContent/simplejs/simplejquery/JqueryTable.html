@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>Jquery Table Test</title>
 <style type="text/css">
 table {
 	border: 1px solid black;
@@ -23,16 +23,20 @@ table th {
 tbody th {
 	background-color: #06C;
 }
+
+.trhover {
+	background: #B0E3FE;
+}
 </style>
 </head>
 <body>
-    <div>
-        <p id='para'>
-	        <a id="delTbody" href="javascript:;">del tbody</a>
-	        <a id='delRow' href="javascript:;">del row</a>
-	        <a id='tbodyEmpty' href="javascript:;">tbody empty</a>
-        </p>
-    </div>
+	<div>
+		<p id='para'>
+			<a id="delTbody" href="javascript:;">del tbody</a> <a id='delRow'
+				href="javascript:;">del row</a> <a id='tbodyEmpty'
+				href="javascript:;">tbody empty</a>
+		</p>
+	</div>
 	<table id='tab'>
 		<thead>
 			<tr>
@@ -41,81 +45,13 @@ tbody th {
 			</tr>
 		</thead>
 	</table>
-	<script type="text/javascript" src="../../jslib/jquery-1.7.1.js"></script>
+	<script type="text/javascript" src="../../jslib/jquery-1.7.1.js" ></script>
+	<script type="text/javascript" src="JqueryTab.js"></script>
 	<script type="text/javascript">
-	  (function(w){
-		  // ie8 or ie9 console problem solution.	  
-		  if(! w.console){
-				//alert(".....");
-				w.console = {
-					info : function(){},
-					error : function(){},
-					log : function(){}
-				};
-		  }
-	  })(window);
-
-	
-		var tab = $('#tab');
-		
-		var jsonArr = [{'name' : 'zhai', 'sex' : 'F'},
-					{'name' : 'lsie', 'sex' : 'M'},
-					{'name' : 'abcd', 'sex' : 'M'},
-					{'name' : 'jia1', 'sex' : 'F'}
-					];
-
-		(function(){
-			console.info('OK');
-			var body = $("<tbody></tbody>");
-
-			for(var i = 0; i < jsonArr.length; i++){
-				var j = jsonArr[i];
-				var td1 = $('<td>' + j.name + '</td>');
-				var td2 = $('<td>' + j.sex + '</td>');
-
-				var tr = $('<tr></tr>');
-				tr.append(td1);
-				tr.append(td2);
-				body.append(tr);
-			}
-
-			console.info(body.toString());
-			tab.append(body);
-		})();
-
-		  $(document).ready(function () {
-			    $('#para').click(function(event){
-				    //console.info("para ......" + event);
-
-				    var id = event.target.id;
-				    switch(id){
-				    case 'delTbody' :
-				    	console.info('del t');
-				    	$("#tab tbody").remove();
-					    break;
-				    case 'delRow' :
-				    	console.info('del r');
-				    	try{
-					    	tab[0].tBodies[0].deleteRow(0);
-					    	//tab[0].deleteRow(1);
-						}catch(e){
-							console.error('rows length is zero.' + e);
-						}
-					    break;
-				    case 'tbodyEmpty' :
-					    $('#tab tbody').empty();
-					    break;
-				    }
-				});
-
-			  /*
-			    $('#delRow').click(function(){
-				    console.info('del r');
-                    $('table tbody').empty();
-				});
-			  */
-		  });
-		  
+		$(document).ready(function() {
+		    new Op.constructTab();
+		    new Op.tabEvent();
+		});
 	</script>
 </body>
 </html>
