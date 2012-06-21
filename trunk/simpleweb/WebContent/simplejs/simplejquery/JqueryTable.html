@@ -43,6 +43,11 @@ tbody th {
 				<th>name</th>
 				<th>sex</th>
 			</tr>
+            <tr>
+                <th>your name</th>
+                <th>your gender</th>
+            </tr>
+			
 		</thead>
 	</table>
 	<script type="text/javascript" src="../../jslib/jquery-1.7.1.js" ></script>
@@ -52,6 +57,7 @@ tbody th {
 		    new Op.constructTab();
 		    new Op.tabEvent();
 		});
+		alert($('#tab')[0].tHead);
 	</script>
 </body>
 </html>
