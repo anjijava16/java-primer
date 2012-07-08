@@ -128,3 +128,4 @@ var Equals = (function() {
 	return equals;
 })();
 		
+alert(a.x);
