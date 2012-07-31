@@ -38,14 +38,49 @@ public class StringTest {
 			*/
 		    
 		    String i = "1\'";
-		    Long.parseLong(i);
+		    //Long.parseLong(i);
+		    
+		    String id = "1111";
+		    String[] idArr = id.split(",");
+		    System.out.println(idArr.length);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		//UrlParser.test();
+		
+		new StringTest().processContact();
 
 	}
+	
+    /**
+     * jxfgongsi@gmail.com 处理为 jxfgong**@**.com
+     * 18680328649 处理为 18680****49
+     * @param contact
+     * @return
+     */
+    public void processContact(){
+        String email = "jxfgongsi@gmail.com";
+        String phone = "18680328649";
+        
+        StringBuilder contact = new StringBuilder(email);
+        //StringBuilder contact = new StringBuilder(phone);
+        String result = "";
+        if(contact != null){
+            int index = contact.indexOf("@");
+            if(index == -1){
+                //phone No
+                result = contact.replace(5, 9, "****").toString();
+            }else{
+                //email
+                int point = contact.indexOf(".", index);
+                StringBuilder first = contact.replace(index -2, index, "**");
+                //System.out.println(first );
+                result = first.replace(index+1, point, "**").toString();
+            }
+        }
+        System.out.println(result);
+    }	
 	
 	@Test
 	public void asArray(){
@@ -69,7 +104,7 @@ public class StringTest {
 			e1.printStackTrace();
 		}		
 	}
-	
+		
 	/**
 	 * 可以看出java se 默认支持两种script.
 	 **/
@@ -202,7 +237,7 @@ public class StringTest {
 	 * URL 解码测试
 	 */
 	@Test
-	public static void decode() {
+	public void decode() {
 		String url = "%5B%7B%22type%22%3A%22book_package%22%2C%22items%22%3A%5B%7B%22rpid%22%3A6%2C%22bookid%22%3A308147%7D%2C%7B%22rpid%22%3A6%2C%22bookid%22%3A133092%7D%5D%7D%5D";
 			///"%20/contacts/list%5B@name=%22close-friends%22%5D/contact%5B@id=%22aa%22%5D/name";
 		try {
