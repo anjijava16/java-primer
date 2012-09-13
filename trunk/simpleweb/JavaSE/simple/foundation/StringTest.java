@@ -18,6 +18,8 @@ public class StringTest {
 	static String encode = "utf-8";
 
 	public static void main(String[] args) {
+	    String x = null + "a";
+	    System.out.println(x);
 		// String str = "aaaa";
 		try {
 			// char[] arr = str.toCharArray();
