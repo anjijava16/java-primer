@@ -20,8 +20,8 @@ public class Test {
 	public static void sudaTest(){
 	    String key="a32b7b3c1b73c9296e651b5008c97209";
 	    String cid="71";
-        String startDate = "2012-08-27";
-        String endDate = "2012-08-27";
+        String startDate = "2012-09-17";
+        String endDate = "2012-09-18";
         
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DAY_OF_MONTH, -1);
