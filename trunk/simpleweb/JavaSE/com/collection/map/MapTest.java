@@ -1,7 +1,9 @@
 package com.collection.map;
 
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.TreeMap;
@@ -16,9 +18,25 @@ final public class MapTest {
 		
 	}
 	
+	/**
+	 * 
+	 */
 	@Test
 	public void treeMapTest(){
-		
+	    TreeMap<String, String> tmp = new TreeMap<String, String>();
+	    tmp.put("a", "aaa");
+	    tmp.put("cd", "accc");
+	    tmp.put("b", "bbb");
+	    tmp.put("c", "ccc");
+	    tmp.put("d", "cdc");
+	    Iterator<String> iterator_2 = tmp.keySet().iterator();
+	    while (iterator_2.hasNext()) {
+	        Object key = iterator_2.next();
+	        System.out.println("tmp.get(key) is :" + tmp.get(key));
+	    }
+	    
+	    
+	    tmp.entrySet();
 	}
 	
 	public static void main(String[] args) {
