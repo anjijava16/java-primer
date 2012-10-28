@@ -50,6 +50,8 @@ var jsonTable = {
 		        			}else {
 		        				tdHtml = "<td>" +  val + "</td>";		        				
 		        			}
+		        		}else{
+		        			tdHtml = "<td>" + val == 0 ? "0" : "&nbsp;" + "</td>";
 		        		}
 		            	tr.append(tdHtml);
 		            }
