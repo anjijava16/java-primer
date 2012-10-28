@@ -2,8 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-<script src="../jslib/jquery-1.7.1.js"></script>
+<title>JSONTable test</title>
 <style type="text/css">
 .cellphone {
     width: 70%;
@@ -29,6 +28,8 @@
 </head>
 <body>
     <table id='tab' class="cellphone"></table>
+    <script src="../jslib/jquery-1.7.1.js"></script>
+    <script type="text/javascript" src="JSONTable_0.2.js"></script>
 	<script type="text/javascript">
     var jsonData ={ 
         title : {'count' : '名次', 'prize' : '奖品', 'rank' : '排名','rankstr' : 'rankstr_', 'type' : 't'},
@@ -48,41 +49,15 @@
 	    		{"count":5000,"prize":"5000蜜蜂币","rank":12,"rankstr":null,"type":1},
 	    		{"count":5000,"prize":"5000蜜蜂币","rank":13,"rankstr":null,"type":1}
     		]	    
-    }; 
-
-    var jsonTable = {
-    	jsonData : {},
-    	validateDataFormat : function(){
-        },
-        
     };
-    function f(){
-        var tab = $('#tab');
-        var colOrder = [];
-        //construct title.
-        var thead = '<thead><tr>'
-        for(var titleKey in jsonData.title){
-        	thead = thead.concat("<th>" + jsonData.title[titleKey] + "</th>");
-        	colOrder.push(titleKey);
-        }
-        thead = thead.concat('</tr></thead>');
-        tab.append(thead);
-
-        //construct body.
-        var tabBody = $('<tbody></tbody>');
-        for(var i = 0; i < jsonData.data.length; i++){
-            var tr = $('<tr></tr>');
-        	var row = jsonData.data[i];
-        	for(var j=0; j < colOrder.length; j++){
-            	var td = "<td>" + row[colOrder[j]] + "</td>";
-            	tr.append(td);
-            }
-            tabBody.append(tr);
-        }
-        tab.append(tabBody);
-    }
-
-    f();
-    </script>
+    jsonTable.init = {
+    	    tabId : 'tab', 
+    	    jData : {
+        	    title : jsonData.title, 
+        	    data : jsonData.data
+        	}
+    };
+    jsonTable.construct();
+   </script>
 </body>
 </html>
