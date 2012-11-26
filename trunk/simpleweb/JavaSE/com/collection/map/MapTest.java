@@ -1,6 +1,5 @@
 package com.collection.map;
 
-import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -16,6 +15,17 @@ final public class MapTest {
 	
 	final static class Ob{
 		
+	}
+	
+	@Test
+	public void testMap(){
+	    Map<String, Long> a = new HashMap<String, Long>();
+	    a.put("2", 2L);
+	    a.put("22", 2L);
+	    a.put("233", 2L);
+	    
+	    //null exception error.
+	    long x = a.get(232423);
 	}
 	
 	/**

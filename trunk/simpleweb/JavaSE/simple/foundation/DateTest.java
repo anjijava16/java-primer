@@ -19,6 +19,10 @@ public class DateTest {
         Date lastMonth = cal.getTime();
 
         System.out.println(yearMonth + ",," + lastMonth.toLocaleString());
+        
+        
+        Date date = new Date();
+        System.out.println(date.getTime());
     }
 
 }

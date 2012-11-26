@@ -2,13 +2,33 @@ package simple.foundation;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.Arrays;
+import java.util.List;
 
 public class URL {
     public static void main(String[] args) {
         //f();
-        ffff();
+        //ffff();
+        split();
     }
 
+    static void split(){
+        final String[] urls = {
+            "http://www.qqgb.com/Program/Java/JavaFAQ/JavaJ2SE/Program_146959.html",
+            "ftp://baike.baidu.com/view/230199.htm?fr=ala0_1",
+            "www.google.cn/gwt/x?u=http%3A%2F%2Fanotherbug.blog.chinajavaworld.com%2Fentry%2F4550%2F0%2F&btnGo=Go&source=wax&ie=UTF-8&oe=UTF-8",
+            "http://zh.wikipedia.org:80/wiki/Special:Search?search=tielu&go=Go"
+        };
+        String[] ar = urls[0].split("/");
+        List<String> l = Arrays.asList(ar);
+        System.out.println(l);
+        
+        String host1 = ar[2].concat("/");
+        int begin = urls[0].indexOf(host1) + host1.length();
+        System.out.println(urls[0].substring(begin));
+        
+    }
+    
     static void ffff (){
         String s = "%E4%B8%BB%E9%A2%98";
         String ss;
