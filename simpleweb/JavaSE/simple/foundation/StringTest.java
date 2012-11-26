@@ -45,6 +45,10 @@ public class StringTest {
 		    String id = "1111";
 		    String[] idArr = id.split(",");
 		    System.out.println(idArr.length);
+		    
+		    String fileName ="中国";
+		    fileName = new String(fileName.getBytes("utf-8"));
+		    System.out.println(fileName);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import net.sf.json.JSONObject;
+
 import org.apache.commons.lang.time.FastDateFormat;
 import org.junit.Test;
 
@@ -62,5 +64,17 @@ public class FormatTest {
 				"one", "two", "three");
 
 		System.out.println(result);
+	}
+	
+	/**
+	 * 请最前面的{ ，不被解析。
+	 */
+	@Test
+	public void format(){
+        String resultFormat = "'{'\"md5\":\"{0}\",\"len\":\"{1,number,#}\"'}'";
+        String result = MessageFormat.format(resultFormat, "AAAFS22D", 121312312);
+        System.out.println(result);
+        JSONObject ob = JSONObject.fromObject(result);
+        System.out.println(ob.getLong("len"));
 	}
 }

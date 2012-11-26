@@ -85,6 +85,7 @@ var jsonTable = {
 			}
 		};
 		if(c.validate){
+			tab.empty();
 			c.tHead();
 			c.tBody();
 		}
