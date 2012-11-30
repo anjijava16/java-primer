@@ -4,30 +4,45 @@
 <meta charset="UTF-8">
 <title>JSONTable test</title>
 <style type="text/css">
-.cellphone {
-    width: 70%;
+table{
+    table-layout:fixed;
+}
+
+.tab {
+    width: 80%;
     border: 1px solid #c0c0c0;
     border-collapse: collapse;
     margin:0 auto 0 auto; 
 }
 
-.cellphone th {
+.tab th {
     background: #5ea4ce;
     text-align: center;
     border: 1px solid #c0c0c0;
     font-weight:bold;
 }
 
-.cellphone td {
+.tab td {
     padding-left: 5px;
     text-align: left;
     border: 1px solid #c0c0c0;
 }
 
+.tab tr td:hover {
+    background-color: blue;
+}
+
+.tab tr:nth-child(odd){
+    background : green;
+}
+
+.tab tr:nth-child(even){
+    background: yellow;
+}
 </style>
 </head>
 <body>
-    <table id='tab' class="cellphone"></table>
+    <table id='tab' class="tab"></table>
     <script src="../jslib/jquery-1.7.1.js"></script>
     <script type="text/javascript" src="json_table_0.2.js"></script>
 	<script type="text/javascript">
