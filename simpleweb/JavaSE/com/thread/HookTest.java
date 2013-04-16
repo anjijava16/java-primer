@@ -1,6 +1,10 @@
 package com.thread;
 
-
+/**
+ * 钩子线程(Hook thread)会在程序正常退出，或终止时调用。 
+ * @author slieer
+ *
+ */
 public class HookTest {
 
 	public static void main(String[] args) {

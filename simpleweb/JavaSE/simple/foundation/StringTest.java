@@ -5,6 +5,7 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -56,6 +57,55 @@ public class StringTest {
 		//UrlParser.test();
 		
 		new StringTest().processContact();
+
+	}
+	
+
+	public String testStringSplit(){
+	    String fileName = "/mnt/sdb/sdb1/台湾阿里山视频";
+	    
+	    String[] arr = fileName.split("/");
+	    if(arr.length <= 4){
+	        return fileName;
+	    }else{
+	        String dirDepth1 = arr[0];
+	        String dirDepth2 = arr[1];
+	        String dirDepth3 = arr[2];
+	        String dirDepth4 = arr[3];
+	        String dirDepthEnd = arr[arr.length -1];
+	        
+	        System.out.println(dirDepth1);
+	        System.out.println(dirDepth2);
+	        System.out.println(dirDepth3);
+	        System.out.println(dirDepth4);
+	        System.out.println(dirDepthEnd);
+	        
+	        String shortPath = new StringBuilder()
+	            .append("/").append(dirDepth1)
+	            .append("/").append(dirDepth2)
+	            .append("/").append(dirDepth3)
+	            .append("/").append("...")
+	            .append("/").append(dirDepthEnd)
+	            .toString();
+	        
+	        return shortPath;
+	    }
+	}
+	
+	@Test
+	public void testNummStrArr(){
+		String[] arr = new String[]{"a", "b", null, null};
+		//[Ljava.lang.String;@bfbdb0
+		System.out.println(arr);
+		//[a, b, null, null]
+		System.out.println(Arrays.asList(arr));
+		System.out.println(arr.length);
+		
+		int intArr[] = new int[]{1,2,34,5,33};
+		System.out.println(Arrays.asList(intArr));
+
+		Integer[] intObjArr = new Integer[]{1,2,34,5,33};
+		System.out.println(Arrays.asList(intObjArr));
 
 	}
 	
