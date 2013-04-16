@@ -1,4 +1,4 @@
-package simple.foundation;
+package simple.foundation.file;
 
 import java.io.File;
 import java.net.URL;

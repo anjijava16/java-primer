@@ -1,4 +1,4 @@
-package com.xml.apache.digester;
+package com.xml.apache.digester.academy.test;
 
 import java.io.File;
 import java.io.IOException;
