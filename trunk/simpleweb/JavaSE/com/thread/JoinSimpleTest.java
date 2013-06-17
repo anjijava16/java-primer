@@ -3,7 +3,7 @@ package com.thread;
 /**
  * 让一个线程执行结束，再去执行另外一个线程，最后才让主线程结束。
  * @author slieer
- * Create Date2013-5-30
+ * Create Date 2013-5-30
  * version 1.0
  */
 class ThreadTesterA implements Runnable {
