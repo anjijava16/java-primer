@@ -1,6 +1,11 @@
 package com.thread;
 
 
+/**
+ * 两个线程，从同一个队列中取数，然后计算平方数。
+ * @author slieer 2013-6-17
+ *
+ */
 public class WorkQueueTest {
 	
 	public static void main(String...args){
@@ -13,9 +18,9 @@ public class WorkQueueTest {
 
 		// Create a set of worker threads
 		final int numWorkers = 2;
-		Worker[] workers = new Worker[numWorkers];
+		WorkQueue.Worker[] workers = new WorkQueue.Worker[numWorkers];
 		for (int i=0; i<workers.length; i++) {
-		    workers[i] = new Worker(queue);
+		    workers[i] = new WorkQueue.Worker(queue);
 		    workers[i].start();
 		}
 
@@ -27,7 +32,7 @@ public class WorkQueueTest {
 
 		// Add special end-of-stream markers to terminate the workers
 		for (int i=0; i<workers.length; i++) {
-		    queue.addWork(Worker.NO_MORE_WORK);
-		}		
+		    queue.addWork(WorkQueue.Worker.NO_MORE_WORK);
+		}
 	}
 }
