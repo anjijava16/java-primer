@@ -60,6 +60,17 @@ public class StringTest {
 
 	}
 	
+	@Test
+	public void testBlank(){
+	    if("" == ""){
+	        System.out.println("Yes ==");
+	    }
+	    
+	    String blank = new String("");
+	    if(blank == ""){
+	        System.out.println("Yes ==");
+	    }
+	}
 
 	public String testStringSplit(){
 	    String fileName = "/mnt/sdb/sdb1/台湾阿里山视频";
