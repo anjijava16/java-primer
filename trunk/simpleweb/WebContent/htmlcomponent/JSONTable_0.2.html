@@ -63,7 +63,7 @@ table{
 	    		{"count":5000,"prize":"5000蜜蜂币","rank":11,"rankstr":null,"type":1},
 	    		{"count":5000,"prize":"5000蜜蜂币","rank":12,"rankstr":null,"type":1},
 	    		{"count":5000,"prize":"5000蜜蜂币","rank":13,"rankstr":null,"type":1}
-    		]	    
+    		]
     };
 /*
     jsonTable.init = {
@@ -84,6 +84,7 @@ jsonTable.init = {
  }; 
 */ 
 
+/*
 jsonTable.init = {
         tabId : 'tab', 
         jData : {
@@ -91,9 +92,9 @@ jsonTable.init = {
             data : jsonData.data
         }
 }; 
+*/
 
-
-/*
+/*//列值包装
     jsonTable.init = {
             tabId : 'tab', 
             jData : {
@@ -114,7 +115,39 @@ jsonTable.init = {
             }
     };
 */
+    /**
+    手动调整列显示顺序
+    添加虚拟列,序号
+    */
+    jsonTable.init = {
+            tabId : 'tab', 
+            jData : {
+                title : (function(){
+                	var titleJsonArray = jsonTable.titleDataTransform(jsonData.title);
+                	var col1 = {"operator" : '查看详情'};
+                	var col2 = {'orderNum' : '序号'};
+                	titleJsonArray.splice(0, 0, col2);
+                	titleJsonArray.push(col1);
+                    return titleJsonArray;
+                    })(), 
+                data : jsonData.data
+            },
 
+            dataFormat : {
+            	operator : function(){
+                	return "详情";
+                },
+                orderNum : function(){
+                    return jsonTable.constants.auto;
+                }
+            }
+    };
+
+/*0.3 feature list:
+ * 刷新数据
+ * 流行的分页集成
+ *
+ */
     jsonTable.construct();
    </script>
 </body>
