@@ -126,22 +126,47 @@ public class DESUtil {
         return key;
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args){
         //KeyGenerator keyGenerator = KeyGenerator.getInstance(Algorithm);
+                   //server:usybm+scr%2Ft*%2Fye%2Fp
+         String deviceId = "usybm%2Bscr%252Ft*%252Fye%252Fp";
 
-        String str = "12345678";
-        File inFile = new File("E:/BorqsWorkspace/workspace/MyGoogleCode/java-primer/simpleweb/JavaSE/com/security/coder/index.txt");
-        File outFile = new File("3des");
-        if(!outFile.exists()){
-            outFile.createNewFile();
+        String in = "C:/Users/slieer/Downloads/KankeTV_DiyoMate4.0.apz";
+        String out = "C:/Users/slieer/Downloads/KankeTV_DiyoMate4.0.de.apz";
+
+        try {
+            decrypt(deviceId, new File(in), new File(out));
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
-        System.out.println(outFile.getAbsoluteFile());
+    }
+    
+    
+    public static void main_(String[] args) throws Exception {
+        String deviceId = "usybm+scr%2Ft*%2Fye%2Fp";
         
-        encrypt(str, inFile, outFile);
+        String in = "E:/BorqsWorkspace/172.16.1.203_thunk/android/ott/Codes/AppStore/AppStore_DY/KankeTV_DiyoMate4.0.apz";
+        String outEn = "E:/BorqsWorkspace/172.16.1.203_thunk/android/ott/Codes/AppStore/AppStore_DY/KankeTV_DiyoMate4.0.en.apz";
         
-        inFile = outFile;
-        outFile = new File("3desDec");
-        decrypt(str, inFile, outFile);
+        String outDe = "E:/BorqsWorkspace/172.16.1.203_thunk/android/ott/Codes/AppStore/AppStore_DY/KankeTV_DiyoMate4.0.de.apz";
+        
+        File inFile = new File(in);
+        File outEnFile = new File(outEn);
+        File outDeFile = new File(outDe);
+        
+        if(!outEnFile.exists()){
+            outEnFile.createNewFile();
+        }
+        
+        if(!outDeFile.exists()){
+            outDeFile.createNewFile();
+        }
+        //System.out.println(outFile.getAbsoluteFile());
+        
+        encrypt(deviceId, inFile, outEnFile);
+        
+        decrypt(deviceId, outEnFile, outDeFile);
     }
 
 }

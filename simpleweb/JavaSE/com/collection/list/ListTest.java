@@ -11,4 +11,15 @@ public class ListTest {
 	static class Ob{
 		
 	}
+	
+	public static void main(String[] args) {
+        List list = new ArrayList();
+        
+        list.add(1);
+        list.add(1);
+        list.add(2);
+        list.add(1);
+        list.add(1);
+        
+    }
 }

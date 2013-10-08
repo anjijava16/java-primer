@@ -16,10 +16,6 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
-import android.content.Context;
-
-import com.redian.s001.appstore.service.BootStartupService.APK;
-
 public class KXML2Test {
     @Test
     public void readTest() throws Exception {
@@ -127,7 +123,7 @@ public class KXML2Test {
         }
     }
 
-    private static List<APK> parseUpdataAPKXML(InputStream is, Context context)
+    private static List<APK> parseUpdataAPKXML(InputStream is)
             throws Exception {
         List<APK> list = null;
 
@@ -150,7 +146,7 @@ public class KXML2Test {
             case XmlPullParser.START_TAG:
                 // 判断如果其实节点为student
                 String text = safeNextText(xmlPullParser);
-                log.i(nodeName + "=" + text);
+                //log.i(nodeName + "=" + text);
                 if ("widget".equals(nodeName)) {
                     // 实例化student对象
                     apk = new APK();
