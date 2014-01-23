@@ -3,6 +3,7 @@ package simple.foundation;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.LineNumberReader;
 import java.util.Scanner;
 
 import org.junit.Test;
@@ -60,6 +61,18 @@ public class ProcessTest {
         }
     }
 
+    public void execCamm() throws Exception{
+        String command = " stat  /usr/local/mobee/data/appstore/app/2013/09/com.mipt.explorer/filemanager_01.02.02.apk";
+        Process process = Runtime.getRuntime().exec(command);
+
+        InputStreamReader ir=new InputStreamReader(process.getInputStream());
+        LineNumberReader input = new LineNumberReader (ir);
+        String line = null;
+        while ((line = input.readLine ()) != null){
+         System.out.println(line);
+        }
+    }
+    
     public static void main(String[] args) {
     }
 }
